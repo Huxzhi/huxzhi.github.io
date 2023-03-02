@@ -1,0 +1,1 @@
+import{_ as e,X as n,Y as t,Z as c}from"./framework-7bff9a9e.js";const o={},_=c("p",null,"主动回忆 和 题目分类",-1),s=[_];function r(a,l){return n(),t("div",null,s)}const f=e(o,[["render",r],["__file","laern-function.html.vue"]]);export{f as default};
