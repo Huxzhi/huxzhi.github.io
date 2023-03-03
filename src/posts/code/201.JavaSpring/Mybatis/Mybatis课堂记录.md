@@ -36,7 +36,7 @@ date: 2022-01-02 15:58
 - MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。
 - MyBatis 本是 apache 的一个 [开源项目](https://baike.baidu.com/item/开源项目/3406069) iBatis,
   2010 年这个 [项目](https://baike.baidu.com/item/项目/477803) 由 apache software foundation
-  迁移到了 [google code](https://baike.baidu.com/item/google code/2346604)，并且改名为 MyBatis 。
+  迁移到了 [google code](https://baike.baidu.com/item/google%20code/2346604)，并且改名为 MyBatis 。
 - 2013 年 11 月迁移到 [Github](https://baike.baidu.com/item/Github/10145341) 。
 
 如何获得 Mybatis？

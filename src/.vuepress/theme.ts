@@ -14,10 +14,10 @@ export default hopeTheme({
 
   logo: "/logo.svg",
 
-  repo: "Huxzhi/vuepress",
+  repo: "Huxzhi/huxzhi.github.io",
 
   docsDir: "src",
-  docsBranch: 'master',
+  docsBranch: 'main',
   blog: {
     medias: {
       Email: "huxzhi@gmail.com",
