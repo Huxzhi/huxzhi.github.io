@@ -49,16 +49,15 @@ jobs:
           ref: gh-pages
           fetch-depth: 0
 
-      - name: Configuration environment
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.GITHUB }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 8.141.48.181 >> ~/.ssh/known_hosts
-          git config --global user.name 'huxzhi'
-          git config --global user.email 'huxzhi@gmail.com'
+      # - name: Configuration environment
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     echo "${{ secrets.GITHUB }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan 8.141.48.181 >> ~/.ssh/known_hosts
+      #     git config --global user.name 'huxzhi'
+      #     git config --global user.email 'huxzhi@gmail.com'
       - name: Deploy
         run: |
-          ssh git@8.141.48.181 "git config --global --add safe.directory /var/www"
           git push -f git@8.141.48.181:/var/www gh-pages
           ssh git@8.141.48.181 "cd /var/www && git reset --hard HEAD"
