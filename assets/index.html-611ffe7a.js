@@ -1,0 +1,1 @@
+import{_ as t,X as n,Y as o,a0 as c,Z as e}from"./framework-c2b0d87a.js";const s={},_=e("p",null,"此处是 Huxzhi 存放的一些代码笔记。",-1),a=e("p",null,"详细看左侧目录",-1);function r(l,d){return n(),o("div",null,[_,c(" more "),a])}const m=t(s,[["render",r],["__file","index.html.vue"]]);export{m as default};

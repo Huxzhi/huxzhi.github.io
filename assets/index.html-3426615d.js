@@ -1,0 +1,1 @@
+import{_ as e,X as t,Y as n,Z as _}from"./framework-c2b0d87a.js";const c={},o=_("p",null,"2022-12-27 开始学习 TS，为之后 vue3 做准备",-1),s=[o];function r(a,l){return t(),n("div",null,s)}const i=e(c,[["render",r],["__file","index.html.vue"]]);export{i as default};
