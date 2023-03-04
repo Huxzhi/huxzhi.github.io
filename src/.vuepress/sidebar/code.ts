@@ -5,15 +5,22 @@ export const code = arraySidebar([
   {
     text: "基础介绍",
     icon: "module",
-    children: ["basic/", "windows/", "github/"],
+    children: ["计算机网络基础/"],
   },
   {
     text: "前端开发",
     icon: "code",
     children: [
-      "node-js/",
       "vue/",
       "react/",
+    ],
+  }, {
+    text: "后端开发",
+    icon: "code",
+    children: [
+      "java-spring/",
+      "nest-js/",
+   
     ],
   },
   {
@@ -22,15 +29,11 @@ export const code = arraySidebar([
     prefix: "language/",
     link: "language/",
     children: [
-      "learning",
+      "java",
       "js/",
       "typescript/",
-      "python/",
-      "json/",
-      "yaml/",
-      "linter/",
+      "编译原理/",
     ],
   },
-  "Android/",
-  "back-end/",
+
 ]);

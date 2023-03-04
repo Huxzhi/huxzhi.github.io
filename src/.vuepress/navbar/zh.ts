@@ -11,32 +11,8 @@ export const zhNavbar = navbar([
   {
     text: "代码笔记",
     icon: "code",
-    children: [
-      {
-        text: "代码笔记",
-        icon: "code",
-        link: "/code/",
-        activeMatch: "^/code/$",
-      },
-      {
-        text: "后端运维",
-        children: ["/linux/"],
-      },
-    ],
-  },
-  {
-    text: "软件教程",
-    icon: "software",
-    prefix: "/software/",
-    children: [
-      {
-        text: "软件教程",
-        icon: "software",
-        link: "",
-        activeMatch: "^/software/$",
-      },
-
-    ],
+    link: "/code/",
+   
   },
 
   {

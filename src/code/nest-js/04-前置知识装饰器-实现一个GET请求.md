@@ -5,7 +5,7 @@ title: 04-前置知识装饰器-实现一个GET请求
 
 ## 前提
 
-简单介绍 [15-装饰器 Decorator](../103.编程语言学习笔记/TypeScript/小满TypeScript基础教学/15-装饰器Decorator.md)
+简单介绍 [15-装饰器 Decorator](../language/typescript/小满TypeScript基础教学/15-装饰器Decorator.md)
 
 ## 装饰器工厂
 

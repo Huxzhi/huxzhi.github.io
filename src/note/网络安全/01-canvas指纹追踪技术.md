@@ -1,0 +1,68 @@
+# canvas指纹追踪技术
+
+Canvas：画布，
+
+什么是“浏览器指纹”：
+
+- 浏览器指纹，浏是指仅通过浏览器的各种信息，如系统字体、屏幕分辨率、浏览器插件等。视频中介绍的"navigater"对象就是能够获取浏览器指纹的一种方法。
+
+什么是“canvas 指纹”：
+
+- 这里的指纹不是指真的指纹识别技术，而是利用了 Canvas 在不同操作系统、不同浏览器上，产生的图片内容不完全相同来标识用户。对应视频就是后面展示的，在不同浏览器打开时画布生成的 test 的 base64 值是不一样的， 这个就是 canvas 指纹。
+
+利用“指纹追踪”，能做到什么：
+
+- 网站或者广告商通过这种技术可以在网络上精确的定位到每一个个体，这样就可以通过收集这些个体的数据，结合这个用户“对什么感兴趣”， “浏览了什么内容”， “点击了什么按钮”之类的数据更加精确的去推送广告和分析用户的行为。也就是现在俗话说的大数据推送。这个概念在视频刚开始的时候就有介绍。
+
+## 技术场景
+
+（常用于广告联盟）例如你在某个网站上看到某个商品没有登录过账号信息，过两天用同台电脑访问其他网站的时候却发现很多同类商品的广告。
+
+在过去我们可能使用 cookie 去追踪用户信息，不过弊端也很明显 cookie 可以被用户禁止掉，从而无法追踪，并且无法跨域访问。
+
+或者就是浏览器指纹（navigator）
+
+userAgent(用户代理)
+
+```
+'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'
+```
+
+language（浏览器的语言）
+
+```
+'zh-CN'
+```
+
+platform（操作系统）
+
+```
+"MacIntel"  //Mac英特尔
+```
+
+这些指纹不能对某个人进行唯一性标识，也无法对客户端进行唯一性判定，基于 HTML5 的诸多高级指纹对此提供了新思路
+
+canvas 指纹
+canvas 相信我们大家都用过，例如绘制一些图形，游戏等等，都会用到。它也可以用来跟踪用户当我们调用 toDataURL 转换 base64，他底层会获取设备，操作系统，浏览器，三合一的唯一标识，如果其他用户使用的这三个信息和你一样的话也是重复这个概率是很低的也不排除有可能。
+
+生成 canvas 指纹
+
+const uuid = () => {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const txt = 'test';
+ctx.fillText(txt, 10, 10)
+console.log(canvas.toDataURL())
+return md5(canvas.toDataURL())
+}
+
+> [!NOTE]- 生成的 Base64（google）
+> data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAGWElEQVR4Xu3ZTavtAxzF8XVnQiYGJAMpeQEGylBSSlJGJmaKUiKJoYcywoyJ8g5kIoW3QCJlxFCU5NmMrv4pMtm71arT/ZzR7dyz12+fzzl92+1zKT4IECBwQQQuXZDn6WkSIEAgguWXgACBCyNwarCeSPJWkj9O/A7vSfJdks9OfJwvJ0CAwD8CpwbriyR3JvnlRMPXk7yf5IMTH+fLCRAgcFaw3kzyWJL3krx4LDyZ5LYkXyd5NMktSV5OctXxKuzxJA8meS7JN0kub7zNnwABAucInPsK69cknya5N8m3SZ5O8kOS65PcmuSpJHckuTrJR0m8wjrnp+MxBAj8S+DcYN2Y5JMk7x5rl19RfZnklSTPJLk7yfdJnk3ylWD5rSNAoCFwTrDuSvJzks+TXP73j0nuS3JtkmuOz3+c5OHj848keS3Jh8f7WI3nbYMAgStQ4NRgvZTkgSQPJbn9eDX1e5Lfjve3bkryxvEXwZuTvHC853V/kleTPJ/knSvQ2bdMgEBB4NRg/d/J65L89J//uOGI1p+F52iCAAECfws0goWSAAECEwHBmjA7QoBAQ0CwGoo2CBCYCAjWhNkRAgQaAoLVULRBgMBEQLAmzI4QINAQEKyGog0CBCYCgjVhdoQAgYaAYDUUbRAgMBEQrAmzIwQINAQEq6FogwCBiYBgTZgdIUCgISBYDUUbBAhMBARrwuwIAQINAcFqKNogQGAiIFgTZkcIEGgICFZD0QYBAhMBwZowO0KAQENAsBqKNggQmAgI1oTZEQIEGgKC1VC0QYDARECwJsyOECDQEBCshqINAgQmAoI1YXaEAIGGgGA1FG0QIDAREKwJsyMECDQEBKuhaIMAgYmAYE2YHSFAoCEgWA1FGwQITAQEa8LsCAECDQHBaijaIEBgIiBYE2ZHCBBoCAhWQ9EGAQITAcGaMDtCgEBDQLAaijYIEJgICNaE2RECBBoCgtVQtEGAwERAsCbMjhAg0BAQrIaiDQIEJgKCNWF2hACBhoBgNRRtECAwERCsCbMjBAg0BASroWiDAIGJgGBNmB0hQKAhIFgNRRsECEwEBGvC7AgBAg0BwWoo2iBAYCIgWBNmRwgQaAgIVkPRBgECEwHBmjA7QoBAQ0CwGoo2CBCYCAjWhNkRAgQaAoLVULRBgMBEQLAmzI4QINAQEKyGog0CBCYCgjVhdoQAgYaAYDUUbRAgMBEQrAmzIwQINAQEq6FogwCBiYBgTZgdIUCgISBYDUUbBAhMBARrwuwIAQINAcFqKNogQGAiIFgTZkcIEGgICFZD0QYBAhMBwZowO0KAQENAsBqKNggQmAgI1oTZEQIEGgKC1VC0QYDARECwJsyOECDQEBCshqINAgQmAoI1YXaEAIGGgGA1FG0QIDAREKwJsyMECDQEBKuhaIMAgYmAYE2YHSFAoCEgWA1FGwQITAQEa8LsCAECDQHBaijaIEBgIiBYE2ZHCBBoCAhWQ9EGAQITAcGaMDtCgEBDQLAaijYIEJgICNaE2RECBBoCgtVQtEGAwERAsCbMjhAg0BAQrIaiDQIEJgKCNWF2hACBhoBgNRRtECAwERCsCbMjBAg0BASroWiDAIGJgGBNmB0hQKAhIFgNRRsECEwEBGvC7AgBAg0BwWoo2iBAYCIgWBNmRwgQaAgIVkPRBgECEwHBmjA7QoBAQ0CwGoo2CBCYCAjWhNkRAgQaAoLVULRBgMBEQLAmzI4QINAQEKyGog0CBCYCgjVhdoQAgYaAYDUUbRAgMBEQrAmzIwQINAQEq6FogwCBiYBgTZgdIUCgISBYDUUbBAhMBARrwuwIAQINAcFqKNogQGAiIFgTZkcIEGgICFZD0QYBAhMBwZowO0KAQENAsBqKNggQmAgI1oTZEQIEGgKC1VC0QYDARECwJsyOECDQEBCshqINAgQmAoI1YXaEAIGGgGA1FG0QIDAREKwJsyMECDQEBKuhaIMAgYmAYE2YHSFAoCEgWA1FGwQITAQEa8LsCAECDQHBaijaIEBgIiBYE2ZHCBBoCAhWQ9EGAQITAcGaMDtCgEBDQLAaijYIEJgICNaE2RECBBoCgtVQtEGAwERAsCbMjhAg0BAQrIaiDQIEJgKCNWF2hACBhoBgNRRtECAwERCsCbMjBAg0BASroWiDAIGJwF8KLDiXEGIUiwAAAABJRU5ErkJggg==
+
+每个浏览器的信息不用生成的 base64 串也不同但是图片是一样的
+
+如果太长可以进行 MD5 压缩 或者  crypto
+
+如何防止跟踪
+
+安装浏览器插件，谷歌应用商店有随机修改 canvas 指纹的插件（CanvasFingerprintBlock），其原理是，每次随机往 canvas 画布里面注入一个随机的噪音（人肉眼是看不到的），从而影响 base64 加密结果

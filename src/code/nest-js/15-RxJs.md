@@ -5,7 +5,7 @@ title: 15-RxJs
 
 **为什么要介绍 RxJs 应为 在 Nestjs 已经内置了 RxJs 无需安装 并且 Nestjs 也会有一些基于 Rxjs 提供的 API**
 
-[3.b 声明式编程和命令式编程的比较](../../Personal/MindLink/3.b%20声明式编程和命令式编程的比较.md)
+ 声明式编程和命令式编程的比较
 
 
 > [!NOTE] 个人理解

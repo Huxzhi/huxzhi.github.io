@@ -1,0 +1,3 @@
+[submodule "src/.vuepress/public/file"]
+	path = src/.vuepress/public/file
+	url = https://github.com/Huxzhi/blog-files.git

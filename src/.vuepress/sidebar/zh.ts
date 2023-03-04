@@ -1,7 +1,5 @@
 import { sidebar } from "vuepress-theme-hope";
 import { code } from "./code.js";
-import {  software } from "./software.js";
-import {  linux } from "./linux.js";
 export const zhSidebar = sidebar({
   "/": [
     // "", //对应主页不需要侧边栏
@@ -14,8 +12,15 @@ export const zhSidebar = sidebar({
     },
    
   ],
+  "/code/language" :"structure",
+  "/code/java-spring": "structure",
+  "/code/nest-js" :"structure", 
+  "/code/oracle总结" :"structure", 
+  "/code/tools" :"structure", 
   "/code/vue" :"structure",
-  "/code/": code,
-  "/linux/": linux,
-  "/software/": software,
+  "/code/linux": "structure",
+  "/code/website" :"structure",
+  "/code/计算机网络基础" :"structure",
+  "/code/": code, //固定
+
 });

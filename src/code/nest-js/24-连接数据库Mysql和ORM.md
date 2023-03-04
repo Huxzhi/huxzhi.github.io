@@ -14,7 +14,7 @@ https://cubox.pro/share/fVv43q
 sudo apt-get install mysql-server # 中途需要选择一下y
 ```
 
-个人配置 [Mysql 8.0](../../Personal/环境变量/Mysql%208.0.md)
+个人配置 Mysql 8.0
 
 ## 2.ORM 框架（typeOrm）
 

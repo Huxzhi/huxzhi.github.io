@@ -1953,4 +1953,4 @@ Redis 数据库来做缓存！K-V
 
 # 14、下一步：
  [Java Spring](https://docs.spring.io/spring-framework/docs/current/reference/html/overview.html#overview)
-- 笔记： [SpringBoot2 课堂笔记](../SpringBoot2/SpringBoot2课堂笔记.md)
+- 笔记： [SpringBoot2 课堂笔记](./SpringBoot2课堂笔记.md)
