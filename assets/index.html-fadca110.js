@@ -1,0 +1,1 @@
+import{_ as e,X as t,Y as n,a0 as a,Z as o}from"./framework-c2b0d87a.js";const c={},r=o("p",null,"为了毕业设计而开始学 Java spring ，两个月时间，做了一个 学生缴费管理系统",-1);function s(_,l){return t(),n("div",null,[r,a(" more ")])}const i=e(c,[["render",s],["__file","index.html.vue"]]);export{i as default};

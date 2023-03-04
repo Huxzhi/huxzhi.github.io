@@ -1,0 +1,37 @@
+import{_ as n,X as s,Y as a,a2 as e}from"./framework-c2b0d87a.js";const t={},p=e(`<p><strong>1.新建一个文件夹Store</strong></p><p><strong>2.新建文件[name].ts</strong></p><p><strong>3.定义仓库Store</strong></p><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> defineStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;pinia&#39;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p><strong>4.我们需要知道存储是使用定义的<code>defineStore()</code>，并且它需要一个唯一的名称，作为第一个参数传递</strong></p><p>我这儿名称抽离出去了 新建文件store-namespace/index.ts</p><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token keyword">enum</span> Names <span class="token punctuation">{</span>    Test <span class="token operator">=</span> <span class="token string">&#39;TEST&#39;</span><span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>store 引入</p><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> defineStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;pinia&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Names <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;./store-namespace&#39;</span>
+ 
+<span class="token keyword">export</span> <span class="token keyword">const</span> useTestStore <span class="token operator">=</span> <span class="token function">defineStore</span><span class="token punctuation">(</span>Names<span class="token punctuation">.</span>Test<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+ 
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这个名称，也称为id，是必要的，Pania 使用它来将商店连接到 devtools。将返回的函数命名为use...是可组合项之间的约定，以使其使用习惯。</p><p><strong>5.定义值</strong></p><p><strong>State 箭头函数 返回一个对象 在对象里面定义值</strong></p><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> defineStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;pinia&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Names <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;./store-namespace&#39;</span>
+ 
+<span class="token keyword">export</span> <span class="token keyword">const</span> useTestStore <span class="token operator">=</span> <span class="token function">defineStore</span><span class="token punctuation">(</span>Names<span class="token punctuation">.</span>Test<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+     <span class="token function-variable function">state</span><span class="token operator">:</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span><span class="token punctuation">{</span>
+         <span class="token keyword">return</span> <span class="token punctuation">{</span>
+             current<span class="token operator">:</span><span class="token number">1</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> defineStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;pinia&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Names <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;./store-namespace&#39;</span>
+ 
+<span class="token keyword">export</span> <span class="token keyword">const</span> useTestStore <span class="token operator">=</span> <span class="token function">defineStore</span><span class="token punctuation">(</span>Names<span class="token punctuation">.</span>Test<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+     <span class="token function-variable function">state</span><span class="token operator">:</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span><span class="token punctuation">{</span>
+         <span class="token keyword">return</span> <span class="token punctuation">{</span>
+             current<span class="token operator">:</span><span class="token number">1</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token comment">//类似于computed 可以帮我们去修饰我们的值</span>
+     getters<span class="token operator">:</span><span class="token punctuation">{</span>
+ 
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token comment">//可以操作异步 和 同步提交state</span>
+     actions<span class="token operator">:</span><span class="token punctuation">{</span>
+ 
+     <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,14),o=[p];function c(i,l){return s(),a("div",null,o)}const u=n(t,[["render",c],["__file","02-初始化仓库Store.html.vue"]]);export{u as default};

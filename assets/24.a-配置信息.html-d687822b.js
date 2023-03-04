@@ -1,0 +1,24 @@
+import{_ as e,X as t,Y as p,Z as n,$ as s,a1 as o,a2 as c,G as l}from"./framework-c2b0d87a.js";const i={},u={href:"https://docs.nestjs.com/techniques/configuration#configuration",target:"_blank",rel:"noopener noreferrer"},r=c(`<h2 id="配置和使用" tabindex="-1"><a class="header-anchor" href="#配置和使用" aria-hidden="true">#</a> 配置和使用</h2><p>app.module.ts</p><div class="language-typescript line-numbers-mode" data-ext="ts"><pre class="language-typescript"><code><span class="token decorator"><span class="token at operator">@</span><span class="token function">Module</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  imports<span class="token operator">:</span> <span class="token punctuation">[</span>
+    ConfigModule<span class="token punctuation">.</span><span class="token function">forRoot</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      envFilePath<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&#39;.env.development&#39;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      ignoreEnvFile<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      isGlobal<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    TypeOrmModule<span class="token punctuation">.</span><span class="token function">forRoot</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      type<span class="token operator">:</span> <span class="token string">&#39;mysql&#39;</span><span class="token punctuation">,</span> <span class="token comment">//数据库类型</span>
+      username<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">DB_USER</span><span class="token punctuation">,</span> <span class="token comment">//账号</span>
+      password<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">DB_PASSWD</span><span class="token punctuation">,</span> <span class="token comment">//密码</span>
+      host<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">DB_HOST</span><span class="token punctuation">,</span> <span class="token comment">//host</span>
+      port<span class="token operator">:</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">DB_PORT</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token number">3306</span><span class="token punctuation">,</span> <span class="token operator">/</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">AppModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="配置文件" tabindex="-1"><a class="header-anchor" href="#配置文件" aria-hidden="true">#</a> 配置文件</h2><p>.env.development</p><div class="language-text line-numbers-mode" data-ext="text"><pre class="language-text"><code>DB_HOST=127.0.0.1
+
+DB_PORT=3306
+
+DB_USER=root
+
+DB_PASSWD=123456
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,6);function d(k,v){const a=l("ExternalLinkIcon");return t(),p("div",null,[n("p",null,[s("官方资料 "),n("a",u,[s("Configuration"),o(a)])]),r])}const b=e(i,[["render",d],["__file","24.a-配置信息.html.vue"]]);export{b as default};
