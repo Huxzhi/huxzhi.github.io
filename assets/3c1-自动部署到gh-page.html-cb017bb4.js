@@ -1,0 +1,1 @@
+import{_ as e,X as _,Y as t,Z as c}from"./framework-c2b0d87a.js";const o={},s=c("p",null,"太散了，其实 抓住几个核心方向就行了，剩下的就是解决手段，性能无非是，资源加载问题、文件大小问题、代码逻辑问题、交互体验问题。 然后按这4个方向不断的定优化指标的事",-1),n=[s];function a(r,l){return _(),t("div",null,n)}const f=e(o,[["render",a],["__file","3c1-自动部署到gh-page.html.vue"]]);export{f as default};
