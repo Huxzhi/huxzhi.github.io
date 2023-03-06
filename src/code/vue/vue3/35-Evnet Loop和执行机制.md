@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-09 15:49
 title: 35-Evnet Loop和执行机制
 ---

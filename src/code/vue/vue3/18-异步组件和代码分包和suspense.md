@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-04 14:33
 title: 18-异步组件和代码分包和suspense
 ---

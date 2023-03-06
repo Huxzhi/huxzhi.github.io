@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-13 15:30
 title: 05-Actions，getters
 ---

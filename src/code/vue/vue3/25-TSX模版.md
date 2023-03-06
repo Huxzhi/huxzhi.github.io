@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-05 19:20
 title: 25-TSX模版
 ---

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-05 16:29
 title: 22-transition-group过度列表
 ---

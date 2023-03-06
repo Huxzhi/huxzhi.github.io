@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-04 18:45
 title: 20-keep-alive缓存组件
 ---

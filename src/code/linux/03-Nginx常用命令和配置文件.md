@@ -1,4 +1,5 @@
 ---
+category: linux
 date: 2023-01-17 20:11
 title: 03-Nginx常用命令和配置文件
 ---

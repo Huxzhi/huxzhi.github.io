@@ -5,7 +5,7 @@ icon: page
 date: 2023-01-16 19:55
 # 一个页面可以有多个分类
 category:
-  - 使用手册
+  - linux
 # 一个页面可以有多个标签
 tag:
   - linux

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-06 16:23
 title: 27-自定义指令directive
 ---

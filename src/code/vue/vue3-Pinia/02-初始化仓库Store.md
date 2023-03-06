@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-13 12:13
 title: 02-初始化仓库Store
 ---

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-07 22:16
 title: 32-详解Scoped和样式穿透
 ---

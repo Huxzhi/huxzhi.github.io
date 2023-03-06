@@ -1,9 +1,10 @@
 ---
-title: Vue 笔记
+breadcrumb: false
+category: vue3
 icon: code
 star: true
 sticky: 20
-breadcrumb: false
+title: Vue 笔记
 ---
 
 跟着小满学 vue

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-01 12:14
 title: 01-配置环境和Node.js
 ---

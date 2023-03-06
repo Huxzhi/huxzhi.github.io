@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-12 20:07
 title: 01-介绍Pinia
 ---

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-12 19:55
 title: 46-proxy解决跨域
 ---

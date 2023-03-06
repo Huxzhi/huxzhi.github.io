@@ -1,8 +1,9 @@
 ---
-title: 01-Vue.js
-index: false 
+category: vue3
 icon: discover
+index: false
 order: 1
+title: 01-Vue.js
 ---
 
 ## 小满zs教程-vue-vite-Ts

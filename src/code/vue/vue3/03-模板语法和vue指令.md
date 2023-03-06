@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-01 12:36
 title: 03-模板语法和vue指令
 ---

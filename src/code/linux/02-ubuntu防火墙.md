@@ -1,4 +1,5 @@
 ---
+category: linux
 date: 2023-01-17 20:41
 title: 02-ubuntu防火墙
 ---

@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-01 16:02
 title: 04-Vue核心虚拟Dom和diff算法
 ---

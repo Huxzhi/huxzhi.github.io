@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-13 15:05
 title: 04-解构store
 ---

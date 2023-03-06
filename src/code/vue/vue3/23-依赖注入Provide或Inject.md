@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-05 17:08
 title: 23-依赖注入Provide或Inject
 ---

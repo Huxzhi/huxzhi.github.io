@@ -1,4 +1,5 @@
 ---
+category: vue3
 date: 2023-01-02 21:14
 title: Setup 语法糖
 ---
