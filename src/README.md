@@ -24,9 +24,9 @@ projects:
     link: https://你的书籍链接
 
   - icon: article
-    name: 文章名称
-    desc: 文章详细描述
-    link: https://你的文章链接
+    name: front-matter-helper
+    desc: 快速添加 front-matter 信息
+    link: https://github.com/Huxzhi/frontmatter-helper
 
 
 footer: 一般路过页脚
