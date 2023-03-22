@@ -18,6 +18,7 @@ export const zhSidebar = sidebar({
   "/code/oracle总结" :"structure", 
   "/code/tools" :"structure", 
   "/code/vue" :"structure",
+  "/code/react" :"structure",
   "/code/linux": "structure",
   "/code/website" :"structure",
   "/code/计算机网络基础" :"structure",
