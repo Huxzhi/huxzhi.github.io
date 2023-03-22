@@ -1,0 +1,22 @@
+import{_ as n,X as s,Y as a,a2 as e}from"./framework-c2b0d87a.js";const t={},p=e(`<h1 id="_32-css3-相对长度-rem" tabindex="-1"><a class="header-anchor" href="#_32-css3-相对长度-rem" aria-hidden="true">#</a> 32-css3-相对长度 rem</h1><p>rem 是 CSS 3 中新增的一种相对长度单位。当使用 rem 单位时，根节点 <code>&lt;html&gt;</code> 的字体大小（font-size）决定了 rem 的尺寸。</p><p>rem 单位类似于 em 单位，em 单位表示父元素字体大小，不同之处在于，rem 的基准是相对于 <code>&lt;html&gt;</code> 元素的字体大小。下面通过代码对比 em 和 rem 的区别。 （1）使用 em 单位，示例代码如下。</p><div class="language-css line-numbers-mode" data-ext="css"><pre class="language-css"><code><span class="token selector">div</span> <span class="token punctuation">{</span>
+ <span class="token property">font-size</span><span class="token punctuation">:</span> 12px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector">div &gt; p</span> <span class="token punctuation">{</span>
+ <span class="token property">width</span><span class="token punctuation">:</span> 10em<span class="token punctuation">;</span>    <span class="token comment">/* 结果为120px */</span>
+ <span class="token property">height</span><span class="token punctuation">:</span> 10em<span class="token punctuation">;</span>   <span class="token comment">/* 结果为120px */</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>上述代码中，em 单位是相对于父元素计算的，子元素的 1em 等于 12px，因此 10em 就相当于 120px。</p><p>（2）使用 rem 单位，示例代码如下。</p><div class="language-css line-numbers-mode" data-ext="css"><pre class="language-css"><code><span class="token selector">html</span> <span class="token punctuation">{</span>
+ <span class="token property">font-size</span><span class="token punctuation">:</span> 14px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector">div</span> <span class="token punctuation">{</span>
+ <span class="token property">font-size</span><span class="token punctuation">:</span> 12px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector">div &gt; p</span> <span class="token punctuation">{</span>
+ <span class="token property">width</span><span class="token punctuation">:</span> 10rem<span class="token punctuation">;</span>    <span class="token comment">/* 结果为140px */</span>
+ <span class="token property">height</span><span class="token punctuation">:</span> 10rem<span class="token punctuation">;</span>   <span class="token comment">/* 结果为140px */</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>上述代码中，rem 单位是相对于 <code>&lt;html&gt;</code> 元素计算的，因此 10rem 的结果为 140px。</p><p>与 em 单位相比，rem 单位的优势在于，只通过修改 <code>&lt;html&gt;</code> 的文字大小，就可以改变整个页面中的元素大小，使用起来更加方便。</p><h2 id="设置移动端的适配" tabindex="-1"><a class="header-anchor" href="#设置移动端的适配" aria-hidden="true">#</a> 设置移动端的适配</h2><div class="language-jsx line-numbers-mode" data-ext="jsx"><pre class="language-jsx"><code><span class="token comment">// 设置移动端的适配</span>
+
+<span class="token comment">// 除以几视口的宽度就是多少rem，现在我们设置视口的总宽度为750rem</span>
+document<span class="token punctuation">.</span>documentElement<span class="token punctuation">.</span>style<span class="token punctuation">.</span>fontSize <span class="token operator">=</span> <span class="token number">100</span> <span class="token operator">/</span> <span class="token number">750</span> <span class="token operator">+</span> <span class="token string">&#39;vw&#39;</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,11),c=[p];function i(o,l){return s(),a("div",null,c)}const d=n(t,[["render",i],["__file","32-css3-相对长度rem.html.vue"]]);export{d as default};

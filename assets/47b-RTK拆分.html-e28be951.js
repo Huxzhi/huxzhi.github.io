@@ -1,0 +1,15 @@
+import{_ as s,X as n,Y as a,a2 as e}from"./framework-c2b0d87a.js";const t="/assets/image-2023-03-19_16-14-11-421-47b-RTK拆分-d47c3671.png",o={},p=e('<h1 id="_47b-拆分rtk" tabindex="-1"><a class="header-anchor" href="#_47b-拆分rtk" aria-hidden="true">#</a> 47b-拆分RTK</h1><p>将 stuReducer 和 schoolReducer 拆分出去，结构更清晰了</p><figure><img src="'+t+`" alt="" tabindex="0" loading="lazy"><figcaption></figcaption></figure><div class="language-javascript line-numbers-mode" data-ext="js"><pre class="language-javascript"><code><span class="token comment">//使用RTK来构建store</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>configureStore<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;@reduxjs/toolkit&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>stuReducer<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;./stuSlice&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>schoolReducer<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;./schoolSlice&quot;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 创建store 用来创建store对象，需要一个配置对象作为参数</span>
+<span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token function">configureStore</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+   <span class="token literal-property property">reducer</span><span class="token operator">:</span><span class="token punctuation">{</span>
+       <span class="token literal-property property">student</span><span class="token operator">:</span>stuReducer<span class="token punctuation">,</span>
+       <span class="token literal-property property">school</span><span class="token operator">:</span>schoolReducer
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> store<span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,4),c=[p];function i(r,l){return n(),a("div",null,c)}const d=s(o,[["render",i],["__file","47b-RTK拆分.html.vue"]]);export{d as default};
