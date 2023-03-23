@@ -1,0 +1,1 @@
+import{_ as t,X as n,Y as _,Z as e}from"./framework-c2b0d87a.js";const c={},o=e("p",null,"也是跟着小满学的，马上要出2.0了，之后再更新",-1),s=e("p",null,"上网时，没有注意到的事情cd",-1),l=[o,s];function r(a,d){return n(),_("div",null,l)}const f=t(c,[["render",r],["__file","index.html.vue"]]);export{f as default};
