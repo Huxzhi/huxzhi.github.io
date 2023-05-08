@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-13 16:30
 title: 07-pinia插件
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 pinia 和 vuex 都有一个通病 页面刷新状态会丢失

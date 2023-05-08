@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-18 16:21
 title: 46-Redux
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 46-Redux

@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-04 18:45
 title: 20-keep-alive缓存组件
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## 内置组件 keep-alive

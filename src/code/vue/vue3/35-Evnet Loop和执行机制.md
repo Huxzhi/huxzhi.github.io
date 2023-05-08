@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-09 15:49
 title: 35-Evnet Loop和执行机制
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## JS 执行机制

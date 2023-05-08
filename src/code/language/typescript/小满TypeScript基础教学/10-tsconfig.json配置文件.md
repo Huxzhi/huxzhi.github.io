@@ -1,7 +1,7 @@
 ---
 date: 2022-12-30 22:10
 title: 10-tsconfig.json配置文件
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## 生成tsconfig.json 文件

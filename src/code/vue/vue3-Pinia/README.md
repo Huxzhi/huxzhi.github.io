@@ -5,5 +5,5 @@ icon: discover
 index: false
 order: 2
 title: 02-Pinia.js
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---

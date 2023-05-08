@@ -5,7 +5,7 @@ summary: 在上一篇《玩转 Obsidian05：如何进行阅读及摘要》中介
 tag: null
 title: 2d3-玩转Obsidian06：如何用渐进式总结笔记，把知识交给未来的自己
 url: https://sspai.com/post/69025
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ### **专栏文章 首页推荐**

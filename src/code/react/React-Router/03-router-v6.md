@@ -4,7 +4,7 @@ category:
   - react-router-v6
 date: 2023-03-22 10:30
 title: 03-router-v6
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 03-router-v6

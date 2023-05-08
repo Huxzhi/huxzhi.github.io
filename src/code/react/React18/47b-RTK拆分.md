@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-19 15:11
 title: 47b-RTK拆分
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 47b-拆分RTK

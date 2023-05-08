@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-08 16:28
 title: 33-css Style完整新特性
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 上一章已经讲过了 [:deep()](32-详解Scoped和样式穿透.md#^e3f2d4) ,其实还有两个选择器可以补充

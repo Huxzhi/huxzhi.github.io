@@ -3,7 +3,7 @@ alias: Strapi
 category: react18
 date: 2023-03-22 16:44
 title: 43a-Strapi-无头内容管理系统
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 43a-Strapi-无头内容管理系统

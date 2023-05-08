@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-04 19:56
 title: 19-DOM对象和useRef
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## 获取原生的 DOM 对象

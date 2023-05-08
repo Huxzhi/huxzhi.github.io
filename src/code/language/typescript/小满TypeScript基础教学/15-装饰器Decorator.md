@@ -1,7 +1,7 @@
 ---
 date: 2022-12-31 17:24
 title: 15-装饰器Decorator
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## Decorator  装饰器 是一项实验性特性

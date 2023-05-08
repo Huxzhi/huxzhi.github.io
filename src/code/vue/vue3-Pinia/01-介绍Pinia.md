@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-12 20:07
 title: 01-介绍Pinia
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ![](./_images/image-2023-01-12_20-08-17-554-01-介绍Pinia.png)

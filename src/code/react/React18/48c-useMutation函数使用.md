@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-20 12:48
 title: 48c-useMutation函数使用
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## build 请求的构建器 delStudent

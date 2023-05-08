@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-15 21:57
 title: 07-数组map
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## 数组的方法

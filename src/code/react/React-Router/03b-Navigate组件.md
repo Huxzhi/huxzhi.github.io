@@ -4,7 +4,7 @@ category:
   - react-router-v6
 date: 2023-03-22 11:30
 title: 03b-Navigate组件
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 03b-Navigate组件

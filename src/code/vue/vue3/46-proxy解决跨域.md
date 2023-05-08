@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-12 19:55
 title: 46-proxy解决跨域
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # Vue3 proxy 解决跨域

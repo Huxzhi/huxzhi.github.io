@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-16 19:14
 title: 09-HelloReact
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ## React 就是用来代替 DOM 的

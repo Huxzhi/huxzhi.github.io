@@ -3,7 +3,7 @@ alias: RTKQ
 category: react18
 date: 2023-03-19 16:44
 title: 48-RTK-Query
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 ==RTKQ 给我们提供发送请求的方式（简单封装过的 fetch）==

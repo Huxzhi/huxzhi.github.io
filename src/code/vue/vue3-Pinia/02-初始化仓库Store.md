@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-13 12:13
 title: 02-初始化仓库Store
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 **1.新建一个文件夹Store**

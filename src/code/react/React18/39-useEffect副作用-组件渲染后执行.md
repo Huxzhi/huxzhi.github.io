@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-15 17:30
 title: 39-useEffect副作用-组件渲染后执行
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 39-useEffect 副作用

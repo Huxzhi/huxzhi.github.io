@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-09 21:29
 title: 39-Vue开发桌面程序Electron
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 Electron 官网 [Electron  Build cross-platform desktop apps with JavaScript, HTML, and CSS.](https://www.electronjs.org/)

@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-11 19:03
 title: 43-webpack构建Vue3项目
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 **为什么要手写 webpack 不用 cli （脑子有病）并不是 其实是为了加深我们对 webpack 的了解方便以后灵活运用 webpack 的技术**

@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-13 15:05
 title: 04-解构store
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 在 Pinia 是不允许直接解构是会失去响应性的

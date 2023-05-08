@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-26 20:23
 title: 14-创建React项目
-updated: 2023-05-08 09:06
+updated: 2023-05-08 09:12
 ---
 
 # 创建React项目
