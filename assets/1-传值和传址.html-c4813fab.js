@@ -1,0 +1,1 @@
+import{_,X as t,Y as a,Z as e,$ as s}from"./framework-c2b0d87a.js";const c={},o=e("h1",{id:"_1-传值和传址",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#_1-传值和传址","aria-hidden":"true"},"#"),s(" 1-传值和传址")],-1),n=e("p",null,"基本类型 传值 引用对象 传址",-1),r=[o,n];function d(i,l){return t(),a("div",null,r)}const f=_(c,[["render",d],["__file","1-传值和传址.html.vue"]]);export{f as default};

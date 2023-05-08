@@ -1,0 +1,1 @@
+import{_ as e,X as t,Y as r}from"./framework-c2b0d87a.js";const c={};function _(n,o){return t(),r("div")}const s=e(c,[["render",_],["__file","20-Object.definePropert.html.vue"]]);export{s as default};

@@ -1,0 +1,11 @@
+import{_ as n,X as s,Y as a,a2 as e}from"./framework-c2b0d87a.js";const t={},p=e(`<div class="language-javascript line-numbers-mode" data-ext="js"><pre class="language-javascript"><code> <span class="token comment">//1+2+3</span>
+ <span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token parameter">num1<span class="token punctuation">,</span> num2</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+     <span class="token keyword">let</span> num <span class="token operator">=</span> num1 <span class="token operator">+</span> num2
+     <span class="token keyword">if</span><span class="token punctuation">(</span>num2 <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">&gt;</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+         <span class="token keyword">return</span> num
+     <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+         <span class="token keyword">return</span> <span class="token function">add</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> num2 <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+     <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+ <span class="token keyword">let</span> sum <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,1),o=[p];function c(l,u){return s(),a("div",null,o)}const r=n(t,[["render",c],["__file","19d-js递归求和.html.vue"]]);export{r as default};
