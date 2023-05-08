@@ -1,7 +1,7 @@
 ---
 date: 2023-02-11 19:42
 title: 2a-GTD 沉浸阅读
-updated: 2023-03-06 15:46
+updated: 2023-05-08 09:06
 ---
 
 > GTD（Getting Things Done ）把事情处理完

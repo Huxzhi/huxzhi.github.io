@@ -1,13 +1,14 @@
 ---
 title: 搭建个人网站
 icon: page
-date: 2023-02-20
+date: 2023-02-20 08:00
 category:
   - think
 tag:
   - 编程
 sticky: true
 star: true
+updated: 2023-05-08 09:06
 ---
 ## 创建一个 自己的 vite
 

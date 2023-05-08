@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-19 22:07
 title: 48b-useQuery函数使用
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 # 48b-useQuery 函数使用

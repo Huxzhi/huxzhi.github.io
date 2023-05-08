@@ -3,7 +3,7 @@ alias: RTK
 category: react18
 date: 2023-03-19 10:25
 title: 47-Redux-Toolkit使用
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 # 47-Redux Toolkit（RTK）

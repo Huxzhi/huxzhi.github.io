@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-26 20:25
 title: 15-Component组件
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 # 15-Component组件

@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-16 19:00
 title: 08-React简介
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 url: https://www.lilichao.com/index.php/2022/03/18/react%e5%85%a5%e9%97%a8/
 ---
 

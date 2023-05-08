@@ -4,7 +4,7 @@ category:
   - react-router-v5
 date: 2023-03-20 16:39
 title: 02-router-v5
-updated: 2023-03-20 19:50
+updated: 2023-05-08 09:06
 ---
 
 # 02-router-v5

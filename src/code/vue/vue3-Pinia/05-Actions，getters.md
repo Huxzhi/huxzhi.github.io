@@ -2,6 +2,7 @@
 category: vue3
 date: 2023-01-13 15:30
 title: 05-Actions，getters
+updated: 2023-05-08 09:06
 ---
 
 # Actions（支持同步异步）

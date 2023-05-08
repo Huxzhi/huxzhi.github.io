@@ -1,6 +1,7 @@
 ---
 date: 2022-12-31 15:53
 title: 11-namespace命名空间
+updated: 2023-05-08 09:06
 ---
 
 我们在工作中无法避免全局变量造成的污染，TypeScript 提供了 namespace 避免这个问题出现

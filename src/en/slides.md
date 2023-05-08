@@ -2,6 +2,8 @@
 title: Slide page
 icon: slides
 layout: Slide
+date: 2023-05-08 09:06
+updated: 2023-05-08 09:06
 ---
 
 <!-- markdownlint-disable MD024 MD033 MD051 -->

@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-18 10:09
 title: 44-使用await
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 `useEffect(() => {})` 只能用同步函数，可以定义一个 `const` 保存 异步函数

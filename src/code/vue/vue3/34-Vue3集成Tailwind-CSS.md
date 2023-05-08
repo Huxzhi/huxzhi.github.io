@@ -2,6 +2,7 @@
 category: vue3
 date: 2023-01-08 17:00
 title: 34-Vue3集成Tailwind CSS
+updated: 2023-05-08 09:06
 ---
 
 # Tailwind CSS

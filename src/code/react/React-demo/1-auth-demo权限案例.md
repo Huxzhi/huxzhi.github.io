@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-22 12:48
 title: 1-auth-demo权限案例
-updated: 2023-03-22 20:03
+updated: 2023-05-08 09:06
 ---
 
 # 01-auth-demo 权限案例

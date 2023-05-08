@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-19 15:10
 title: 47a-RTK应用
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 # 47a-RTK 使用

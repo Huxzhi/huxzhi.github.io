@@ -1,7 +1,7 @@
 ---
 date: 2023-03-04 22:14
 title: 3c1a-git-commit规范化提交和生成日志
-updated: 2023-03-06 15:46
+updated: 2023-05-08 09:06
 url: https://www.bilibili.com/video/BV193411C7XE
 ---
 

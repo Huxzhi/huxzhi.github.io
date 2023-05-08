@@ -1,6 +1,7 @@
 ---
 date: 2022-12-30 19:03
 title: 08-symbol类型
+updated: 2023-05-08 09:06
 ---
 
 Symbols  · [TypeScript 中文网 · TypeScript——JavaScript 的超集 ts 官网](https://www.tslang.cn/docs/handbook/symbols.html)

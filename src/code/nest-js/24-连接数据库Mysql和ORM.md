@@ -1,6 +1,7 @@
 ---
 date: 2023-02-03 16:31
 title: 24-连接数据库Mysql和ORM
+updated: 2023-05-08 09:06
 ---
 
 Nestjs 集成数据库，由于企业用的 Mysql 居多 我们就用 Nestjs 连接 Mysql

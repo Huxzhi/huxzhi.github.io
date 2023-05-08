@@ -6,7 +6,7 @@ tag:
 - Git
 - deploy
 title: 3c2-github自动部署阿里云ECS
-updated: 2023-03-06 15:46
+updated: 2023-05-08 09:06
 ---
 
 本文介绍如何利用 Git 和 GitHub Action，自动部署代码到服务器。

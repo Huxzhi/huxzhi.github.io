@@ -2,6 +2,7 @@
 category: vue3
 date: 2023-01-06 16:03
 title: 26-深入v-model
+updated: 2023-05-08 09:06
 ---
 
 # v-model

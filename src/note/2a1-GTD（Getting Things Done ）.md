@@ -3,7 +3,7 @@ date: 2023-03-02 16:50
 tag: 自我管理
 title: 2a1-GTD（Getting Things Done ）
 url: https://www.bilibili.com/video/BV1wE411176Q
-updated: 2023-03-06 15:45
+updated: 2023-05-08 09:06
 ---
 
 <BiliBili bvid="BV1wE411176Q" />

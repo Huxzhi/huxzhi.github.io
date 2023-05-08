@@ -1,7 +1,7 @@
 ---
 title: JavaScript 廖雪峰
 date: 2022-01-13 10:28
-updated: 2023-03-11 16:33
+updated: 2023-05-08 09:06
 ---
 
 # JavaScript 廖雪峰

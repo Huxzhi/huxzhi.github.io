@@ -4,7 +4,7 @@ category:
   - react-router-v6
 date: 2023-03-22 11:35
 title: 03c-NavLink组件
-updated: 2023-03-22 12:27
+updated: 2023-05-08 09:06
 ---
 
 style 接受一个回调函数 ，会给一个对象 `{isActive: Boolean}`，

@@ -2,6 +2,7 @@
 category: vue3
 date: 2023-01-01 12:14
 title: 01-配置环境和Node.js
+updated: 2023-05-08 09:06
 ---
 
 ## 1.安装nodejs（建议装14，16，版本稳定）

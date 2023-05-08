@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-12 19:12
 title: 30-Fragment
-updated: 2023-03-20 16:36
+updated: 2023-05-08 09:06
 ---
 
 ## JSX 必须有且只有一个根元素

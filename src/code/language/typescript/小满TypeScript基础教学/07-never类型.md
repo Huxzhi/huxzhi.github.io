@@ -1,6 +1,7 @@
 ---
 date: 2022-12-30 18:26
 title: 07-never类型
+updated: 2023-05-08 09:06
 ---
 
 TypeScript 将使用 never 类型来表示不应该存在的状态(很抽象是不是)

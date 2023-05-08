@@ -1,6 +1,7 @@
 ---
 date: 2023-01-29 19:59
 title: 15-RxJs
+updated: 2023-05-08 09:06
 ---
 
 **为什么要介绍 RxJs 应为 在 Nestjs 已经内置了 RxJs 无需安装 并且 Nestjs 也会有一些基于 Rxjs 提供的 API**

@@ -2,6 +2,7 @@
 category: linux
 date: 2023-01-17 20:41
 title: 02-ubuntu防火墙
+updated: 2023-05-08 09:06
 ---
 
 ## ubuntu防火墙的安装，开启，关闭和添加规则等操作
