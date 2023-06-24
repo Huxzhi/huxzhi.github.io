@@ -1,1 +1,0 @@
-import{_ as t,X as o,Y as _,Z as a,a1 as n,a3 as c,G as r,$ as s}from"./framework-c2b0d87a.js";const l={};function m(u,d){const e=r("RouterLink");return o(),_("div",null,[a("p",null,[n(e,{to:"/note/2b3-%E8%B6%85%E5%BC%BA%E7%AC%94%E8%AE%B0%E6%9C%AF.html"},{default:c(()=>[s("2b3-超强笔记术")]),_:1})])])}const i=t(l,[["render",m],["__file","2b-怎么记笔记.html.vue"]]);export{i as default};

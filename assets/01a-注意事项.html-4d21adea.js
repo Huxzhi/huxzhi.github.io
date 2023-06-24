@@ -1,0 +1,1 @@
+import{_,X as t,Y as s,Z as e}from"./framework-c2b0d87a.js";const l={},n=e("p",null,"自己写全局变量的时候才明白",-1),o=e("ul",null,[e("li",null,"getters 在渲染之前完成计算，优先级高，但是不能传参数")],-1),c=[n,o];function a(r,i){return t(),s("div",null,c)}const d=_(l,[["render",a],["__file","01a-注意事项.html.vue"]]);export{d as default};

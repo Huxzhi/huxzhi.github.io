@@ -1,1 +1,0 @@
-import{_,X as e,Y as t,Z as c}from"./framework-c2b0d87a.js";const o={},s=c("p",null,"需要花钱 90/年",-1),n=[s];function r(a,l){return e(),t("div",null,n)}const f=_(o,[["render",r],["__file","3c4-首屏优化和CDN加速.html.vue"]]);export{f as default};
