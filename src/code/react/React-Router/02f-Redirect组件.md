@@ -4,7 +4,7 @@ category:
   - react-router-v5
 date: 2023-03-22 09:49
 title: 02f-Redirect组件
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 02f-Redirect 组件

@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-13 16:27
 title: 06-API
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 1.$reset

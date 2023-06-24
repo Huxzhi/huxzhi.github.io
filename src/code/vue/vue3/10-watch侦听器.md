@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-02 17:48
 title: 10-watch侦听器
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 watch 需要侦听特定的数据源，并在单独的回调函数中执行副作用

@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-11 15:43
 title: 25-根据index删除数据
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 25-根据 index 删除数据

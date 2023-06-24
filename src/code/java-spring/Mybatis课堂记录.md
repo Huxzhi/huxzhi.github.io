@@ -2,7 +2,7 @@
 title: Mybatis课堂记录
 date: 2022-01-02 15:58
 
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 # Mybatis-9.28.2019
 
@@ -1954,4 +1954,4 @@ Redis 数据库来做缓存！K-V
 
 # 14、下一步：
  [Java Spring](https://docs.spring.io/spring-framework/docs/current/reference/html/overview.html#overview)
-- 笔记： [SpringBoot2 课堂笔记](./SpringBoot2课堂笔记.md)
+- 笔记： [SpringBoot2 课堂笔记](SpringBoot2课堂笔记.md)

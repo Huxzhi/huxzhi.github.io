@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-22 16:36
 title: 1b-使用redux保存状态信息
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 01b-使用 redux 保存状态信息

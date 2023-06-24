@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-07 22:16
 title: 32-详解Scoped和样式穿透
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 主要是用于修改很多 vue 常用的组件库（ [了解 UI 库 ElementUI，AntDesigin 等](31-了解UI库ElementUI，AntDesigin等.md) ），虽然配好了样式但是还是需要更改其他的样式

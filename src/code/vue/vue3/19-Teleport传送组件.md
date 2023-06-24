@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-04 18:25
 title: 19-Teleport传送组件
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 Teleport Vue 3.0 新特性之一。

@@ -5,7 +5,7 @@ date: 2023-03-22 23:55
 icon: code
 star: true
 title: React 笔记
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 sticky: 21
 ---
 
@@ -21,11 +21,11 @@ react的基础，路由 和 权限案例，react的hook介绍
 
 ### 基础
 
-- 简介 [08-React 简介](./React18/08-React简介.md)
-- 路由管理 [03-router-v6](./React-Router/03-router-v6.md)
+- 简介 [08-React 简介](React18/08-React简介.md)
+- 路由管理 [03-router-v6](React-Router/03-router-v6.md)
 
 ### 进阶
 
 demo 介绍
-- [1-auth-demo 权限案例](./React-demo/1-auth-demo权限案例.md)
-- [2-hook 介绍](./React-demo/2-hook-demo.md)
+- [1-auth-demo 权限案例](React-demo/1-auth-demo权限案例.md)
+- [2-hook 介绍](React-demo/2-hook-demo.md)

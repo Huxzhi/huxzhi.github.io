@@ -6,7 +6,7 @@ star: true
 sticky: 20
 title: Vue 笔记
 date: 2023-05-08 09:06
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 跟着小满学 vue
@@ -17,7 +17,7 @@ updated: 2023-05-08 09:12
 
 ## 目录
 
-- [01-vue3 前端渐进式框架](./vue3/00-%E5%AD%A6%E4%B9%A0Vue3-%E4%BB%8B%E7%BB%8D.md)
-- [02-Pinia 全局状态管理工具](./vue3-Pinia/01-介绍Pinia)
-- [03-router 路由管理](./vue3-router4/01-安装.md)
+- [01-vue3 前端渐进式框架](vue3/00-学习Vue3-介绍.md)
+- [02-Pinia 全局状态管理工具](vue3-Pinia/01-介绍Pinia.md)
+- [03-router 路由管理](vue3-router4/01-安装.md)
 <!-- more -->

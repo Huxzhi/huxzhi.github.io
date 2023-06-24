@@ -1,7 +1,7 @@
 ---
 date: 2023-03-25 19:21
 title: 15-router、routes和route三者区别
-updated: 2023-05-08 10:11
+updated: 2023-05-13 22:56
 ---
 
 # 15-router、routes 和 route 三者区别

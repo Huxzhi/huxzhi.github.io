@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-02 20:23
 title: 13-实操组件和认识less和scoped
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 概览

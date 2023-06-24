@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-12 20:07
 title: 01-介绍Pinia
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 ![](./_images/image-2023-01-12_20-08-17-554-01-介绍Pinia.png)
@@ -19,7 +19,7 @@ Pinia.js 有如下特点：
 - 无需手动添加 store，store 一旦创建便会自动添加；
 - 支持Vue3 和 Vue2
 
-官方文档[Pinia](https://pinia.vuejs.org/ "Pinia")
+官方文档[Pinia](https://pinia.vuejs.org/zh/) 直接看官方就好，[看一下注意事项](01a-注意事项.md)
 
 git 地址 [https://github.com/vuejs/pinia](https://github.com/vuejs/pinia "https://github.com/vuejs/pinia")
 

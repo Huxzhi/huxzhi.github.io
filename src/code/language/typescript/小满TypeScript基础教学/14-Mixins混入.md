@@ -1,7 +1,7 @@
 ---
 date: 2022-12-31 16:44
 title: 14-Mixins混入
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 TypeScript 混入 `Mixins`

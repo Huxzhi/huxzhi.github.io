@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-01 12:22
 title: 02-Vite目录和Vue单文件组件和npm run dev 详解
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # Vite 目录

@@ -1,7 +1,7 @@
 ---
 date: 2023-03-27 08:42
 title: 24-Vue-router与location.href有什么区别
-updated: 2023-03-27 08:45
+updated: 2023-05-13 22:56
 ---
 
 # 24-Vue-router 与 location.href 有什么区别

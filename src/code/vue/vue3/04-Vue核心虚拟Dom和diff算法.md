@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-01 16:02
 title: 04-Vue核心虚拟Dom和diff算法
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 为什么要学习源码

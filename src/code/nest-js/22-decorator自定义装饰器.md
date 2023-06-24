@@ -1,7 +1,7 @@
 ---
 date: 2023-02-02 21:27
 title: 22-decorator自定义装饰器
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 在 Nestjs 中我们使用了大量装饰器 decorator ，所以 Nestjs 也允许我们去自定义装饰器。

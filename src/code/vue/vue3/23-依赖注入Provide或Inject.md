@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-05 17:08
 title: 23-依赖注入Provide或Inject
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 ## Provide / Inject

@@ -1,7 +1,7 @@
 ---
 date: 2023-03-05 14:36
 title: 3c3-nginx配置https
-updated: 2023-03-11 23:18
+updated: 2023-05-13 22:56
 ---
 
 # nginx配置https

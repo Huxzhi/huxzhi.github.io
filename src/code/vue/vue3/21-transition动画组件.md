@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-04 19:20
 title: 21-transition动画组件
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 Vue 提供了 transition 的封装组件，在下列情形中，可以给任何元素和组件添加进入/离开过渡:

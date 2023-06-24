@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-06 16:23
 title: 27-自定义指令directive
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 **directive-自定义指令（属于破坏性更新）**

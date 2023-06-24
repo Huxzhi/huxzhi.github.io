@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-14 17:25
 title: 37-Too-many-re-renders和React-StrictMode
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 37-Too many re-renders

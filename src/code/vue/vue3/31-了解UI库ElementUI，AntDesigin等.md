@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-07 21:54
 title: 31-了解UI库ElementUI，AntDesigin等
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 **vue**作为一款深受广大群众以及尤大崇拜者的喜欢，特此列出在 github 上开源的 vue 优秀的 UI 组件库供大家参考

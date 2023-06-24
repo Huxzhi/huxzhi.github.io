@@ -1,7 +1,7 @@
 ---
 date: 2023-03-26 16:02
 title: 21-vue2-v-model原理-双向绑定
-updated: 2023-03-26 16:26
+updated: 2023-05-13 22:56
 ---
 
 [26-深入v-model](../../vue/vue3/26-深入v-model.md)

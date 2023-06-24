@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-18 09:34
 title: 43-fetch发送请求
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 43-fetch 发送请求

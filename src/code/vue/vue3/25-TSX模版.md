@@ -2,7 +2,7 @@
 category: vue3
 date: 2023-01-05 19:20
 title: 25-TSX模版
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 **完整版用法** 请看  [@vue/babel-plugin-jsx - npm](https://www.npmjs.com/package/@vue/babel-plugin-jsx "@vue/babel-plugin-jsx - npm")

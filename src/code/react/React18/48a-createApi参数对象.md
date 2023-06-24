@@ -2,7 +2,7 @@
 category: react18
 date: 2023-03-19 16:45
 title: 48a-createApi参数对象
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 48a-createApi 参数对象

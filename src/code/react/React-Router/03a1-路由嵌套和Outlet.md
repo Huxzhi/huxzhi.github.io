@@ -4,7 +4,7 @@ category:
   - react-router-v6
 date: 2023-03-22 11:18
 title: 03a1-路由嵌套和Outlet
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 # 03a1-路由嵌套 和 Outlet

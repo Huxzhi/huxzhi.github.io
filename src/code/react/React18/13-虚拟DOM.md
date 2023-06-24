@@ -2,7 +2,7 @@
 category: react18
 date: 2023-02-18 22:11
 title: 13-虚拟DOM
-updated: 2023-05-08 09:12
+updated: 2023-05-13 22:56
 ---
 
 在 React 我们操作的元素被称为 React 元素，并不是真正的原生 DOM 元素，
