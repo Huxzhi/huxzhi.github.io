@@ -4,7 +4,7 @@ import { enSidebar, zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
   hostname: "https://huxzhi.github.io",
-  
+
   author: {
     name: "Huxzhi",
     url: "https://huxzhi.fun",
@@ -17,11 +17,12 @@ export default hopeTheme({
   repo: "Huxzhi/huxzhi.github.io",
 
   docsDir: "src",
-  docsBranch: 'main',
+  docsBranch: "main",
   blog: {
     medias: {
       Email: "huxzhi@gmail.com",
       GitHub: "https://github.com/Huxzhi",
+      Gpg: "19AD538C3B1DF75E",
     },
   },
 
@@ -86,7 +87,7 @@ export default hopeTheme({
     // git:true,
     copyright: true,
 
-    components:{
+    components: {
       /** 
        * 需要被注册的组件。
        * expsamle
@@ -98,14 +99,14 @@ export default hopeTheme({
        * 
        * @see  https://vuepress-theme-hope.github.io/v2/components/zh/config.html#components
        */
-      components:["BiliBili","YouTube","Badge"],
-    
+      components: ["BiliBili", "YouTube", "Badge"],
+
       rootComponents: {
-        
         // 该插件提供了一个全局组件 Notice 供你向访问者显示一些通知。
-        notice:[
-          { // 
-            path:"/en/",
+        notice: [
+          {
+            //
+            path: "/en/",
             title: "切换中文",
             content: "获得更好的体验 <br> 也可以点击🔝 语言切换",
             actions: [
@@ -117,9 +118,9 @@ export default hopeTheme({
               { text: "cancel" },
             ],
             fullscreen: false,
-          }
-        ]
-      }
+          },
+        ],
+      },
     },
 
     comment: {
