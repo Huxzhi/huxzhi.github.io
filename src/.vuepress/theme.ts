@@ -22,7 +22,6 @@ export default hopeTheme({
     medias: {
       Email: "huxzhi@gmail.com",
       GitHub: "https://github.com/Huxzhi",
-      Gpg: "19AD538C3B1DF75E",
     },
   },
 

@@ -3,10 +3,9 @@ breadcrumb: false
 category: vue3
 icon: code
 star: true
-sticky: 20
 title: Vue 笔记
 date: 2023-05-08 09:06
-updated: 2023-05-13 22:56
+updated: 2023-07-31 21:42
 ---
 
 跟着小满学 vue

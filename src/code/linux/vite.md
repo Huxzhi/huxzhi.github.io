@@ -6,9 +6,8 @@ category:
   - think
 tag:
   - 编程
-sticky: true
 star: true
-updated: 2023-05-13 22:56
+updated: 2023-07-31 21:41
 ---
 ## 创建一个 自己的 vite
 
