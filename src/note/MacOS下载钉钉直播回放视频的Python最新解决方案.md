@@ -22,6 +22,9 @@ ffmpeg version 6.0 Copyright (c) 2000-2023 the FFmpeg developers built with Appl
 
 ## 自动化脚本使用
 
+
+完整代码 :  https://github.com/Huxzhi/DingTalk-playback-download
+
 在浏览器端 点击视频, 找到直播回放, 点开, 向后拖拽一下进度条, 按 F12 进入界面查看网络请求，过滤 `m3u8` 的信息，查找 Preview 的内容
 
 第一步，看一下 `header` 是来自哪里的机房
