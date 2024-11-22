@@ -1,0 +1,7 @@
+---
+import Home from "../components/Home.astro";
+import { getPageList } from "./api/post/list";
+const posts = await getPageList();
+---
+
+<Home posts={posts.slice(0, 10)} page={0} more={posts.length > 10} />

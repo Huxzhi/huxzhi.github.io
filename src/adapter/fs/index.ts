@@ -1,0 +1,23 @@
+import { toMeta } from "@/shared/transform";
+import type { ReadPageByPath, WritePage } from "../helper";
+
+const PREFIX = location.origin;
+
+export const readPageByPath: ReadPageByPath = async (path) => {
+  // const path = `/pages/${_path}.json`;
+  const json = await (await fetch(`${PREFIX}/api/post/${path}`)).json();
+  return json;
+};
+
+export const writePage: WritePage = async (path, data, assets) => {
+  const form = new FormData();
+  assets.forEach((asset, i) => {
+    if (i === 0) {
+      form.set("assets", asset.file);
+    } else form.append("assets", asset.file);
+  });
+  const meta = toMeta({ ...data, updateTime: Date.now() });
+  const rawString = JSON.stringify({ ...meta, ...JSON.parse(data.content) });
+  form.append("content", rawString);
+  await fetch(`${PREFIX}/api/post/${path}`, { method: "POST", body: form });
+};

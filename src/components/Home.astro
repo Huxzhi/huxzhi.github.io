@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { ShortPageData } from "../shared/type";
+
+interface Props {
+  posts: ShortPageData[];
+  page: number;
+  more: boolean;
+}
+
+const { posts, page, more } = Astro.props;
+---
+
+<script>
+  import { mount } from "../components/RelativeTime";
+
+  mount("data-acc-time");
+</script>
+<Layout title="Welcome to Astro.">
+  <div class="w-full h-40 bg-black text-white font-bold text-3xl flex items-center justify-center">Urodele</div>
+  <main>
+    <div class="content">
+      {
+        posts.map((item) => (
+          <>
+            <div class="pt-8 pb-2">
+              <a href={`/post/${item.id}`} class="px-4 pb-4 flex justify-between items-center group">
+                <div class="flex flex-col">
+                  <h1 class="page-title w-[fit-content] text-lg transition-all font-semibold group-hover:underline">
+                    {item.title}
+                  </h1>
+                  <p class="text-text text-opacity-60 text-sm">{item.intro}</p>
+                </div>
+                {item.cover && <img class="w-16 h-16 rounded object-cover" src={item.cover.src} alt={item.cover.alt} />}
+              </a>
+              <div class="flex pt-2 gap-2 px-4">
+                {item.tags.map((tag) => (
+                  <a href={`/tag/${encodeURIComponent(tag)}`} class="text-sm text-gray hover:text-black">
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+              <div data-acc-time={item.createTime} class="text-end text-xs text-gray" />
+            </div>
+            <hr />
+          </>
+        ))
+      }
+    </div>
+    {
+      more && (
+        <a href={`/${page + 1}`} class="mt-4 text-blue">
+          Load More
+        </a>
+      )
+    }
+  </main>
+</Layout>
