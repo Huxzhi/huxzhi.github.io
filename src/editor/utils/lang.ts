@@ -1,4 +1,4 @@
-export default function hljsDefineVue(hljs: any) {
+export function hljsDefineVue(hljs: any) {
   return {
     subLanguage: "xml",
     contains: [
@@ -37,6 +37,31 @@ export default function hljsDefineVue(hljs: any) {
         begin: /^(\s*)(<style lang=["']stylus["'](\sscoped)?>)/gm,
         end: /^(\s*)(<\/style>)/gm,
         subLanguage: "stylus",
+        excludeBegin: true,
+        excludeEnd: true,
+      },
+    ],
+  };
+}
+
+export function hljsDefineHTML(hljs: any) {
+  return {
+    subLanguage: "xml",
+    contains: [
+      hljs.COMMENT("<!--", "-->", {
+        relevance: 10,
+      }),
+      {
+        begin: /^(\s*)(<script>)/gm,
+        end: /^(\s*)(<\/script>)/gm,
+        subLanguage: "javascript",
+        excludeBegin: true,
+        excludeEnd: true,
+      },
+      {
+        begin: /^(\s*)(<style(\sscoped)?>)/gm,
+        end: /^(\s*)(<\/style>)/gm,
+        subLanguage: "css",
         excludeBegin: true,
         excludeEnd: true,
       },

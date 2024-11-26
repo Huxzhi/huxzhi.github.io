@@ -5,8 +5,9 @@ import Document from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
-import { createLowlightCodeSSRPlugin } from "./lowlight";
+import { createLowlightCodeSSRPlugin, hydrate } from "./lowlight.tsx";
 import { createPlaceholderPlugin } from "./placeholder";
+import { createReactiveHtmlPlugin } from "./reactiveHtml";
 
 export const getBasicExtensions = () => {
   const CustomDocument = Document.extend({
@@ -29,8 +30,6 @@ export const getBasicExtensions = () => {
   return displayExtension;
 };
 
-export const getBasicSSRExtensions = () => [...getBasicExtensions(), createLowlightCodeSSRPlugin()];
-
 export const getSSRHTML = (json: JSONContent) => {
   const CustomDocument = Document.extend({
     content: "heading block*",
@@ -48,6 +47,8 @@ export const getSSRHTML = (json: JSONContent) => {
     Underline,
     createLowlightCodeSSRPlugin(),
     createPlaceholderPlugin(),
+    createReactiveHtmlPlugin(),
   ];
-  return generateHTML(json, displayExtension);
+  const hydrateReactive = hydrate();
+  return generateHTML(json, displayExtension) + hydrateReactive;
 };

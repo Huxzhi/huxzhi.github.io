@@ -31,6 +31,12 @@ export default {
         },
       },
       {
+        title: "Quote",
+        command: ({ editor, range }: any) => {
+          (editor as Editor).chain().focus().deleteRange(range).setBlockquote().run();
+        },
+      },
+      {
         title: "Image",
         command: async ({ editor, range }: any) => {
           // const url = prompt("entre image url")
