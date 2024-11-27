@@ -1,11 +1,12 @@
 import * as React from "jsx-dom";
 import { getGlobalData } from "@/utils/data";
 import style from "./style.module.scss";
-const cn = (...args: string[]) => React.className(args)
+import { TAG_PIN } from "@/shared/tag";
+import { cn } from "@/utils/dom";
 
 export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
   const data = await getGlobalData();
-  const allTags = [...new Set(data.map((p) => p.tags).flat())];
+  const allTags = [...new Set([...data.map((p) => p.tags).flat(), TAG_PIN])];
   const modelValue: string[] = [...initial];
 
   const changeListeners: any[] = [];
@@ -13,7 +14,7 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
     const tagEditor = React.createRef();
     const tagsListWrapper = React.createRef();
     const createTag = (tag: string) => (
-      <div key={tag} class={cn("rounded px-3 py-1 cursor-pointer relative group", style['tag'])}>
+      <div key={tag} class={cn("rounded px-3 py-1 cursor-pointer relative group", style["tag"])}>
         <button
           class="opacity-0 transition-delay-[0.25s] group-hover:opacity-100 absolute bg-red top-0 right-0 w-3 h-3 rounded-full flex items-center justify-center"
           onClick={() => toRemove(tag)}>
@@ -59,13 +60,13 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
     };
 
     return (
-      <div ref={tagEditor} class={cn("flex text-sm px-4 gap-2 w-full max-w-[720px]", style['tag-editor'])}>
+      <div ref={tagEditor} class={cn("flex text-sm px-4 gap-2 w-full max-w-[720px]", style["tag-editor"])}>
         <div ref={tagsListWrapper} class="flex gap-2">
           {tagList()}
         </div>
-        <div class={cn("relative", style['add-tag'])}>
+        <div class={cn("relative", style["add-tag"])}>
           <button class="rounded text-gray hover:bg-gray-200 px-2 py-1 cursor-pointer">#Add a Tag</button>
-          <div class={cn("absolute z-[50]", style['tag-selector'])}>
+          <div class={cn("absolute z-[50]", style["tag-selector"])}>
             <div class="flex flex-col bg-modal shadow-md rounded p-2 gap-2 text-sm">
               <div class="flex items-center justify-center gap-2">
                 <input

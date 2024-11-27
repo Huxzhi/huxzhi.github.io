@@ -1,13 +1,14 @@
 ---
-import Home from "../components/Home.astro";
+import { sortByPin } from "@/shared/tag";
+import Home from "@/components/Home.astro";
 import { getPageList } from "./api/post/list";
 
 const page = Number((Astro.params as any).page);
-const allPosts = await getPageList();
+const allPosts = sortByPin(await getPageList());
 const posts = allPosts.slice(page * 10, page * 10 + 10);
 
 export const getStaticPaths = async () => {
-  const posts = await getPageList();
+  const posts = sortByPin(await getPageList());
   const pages = Math.ceil(posts.length / 10);
   return Array.from({ length: pages }, (_, i) => i)
     .filter((v) => v !== 0)
