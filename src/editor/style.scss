@@ -117,7 +117,6 @@
         transition-delay: 0.1s;
         position: absolute;
         display: flex;
-        // @apply bg-bg;
         border-radius: 9999px;
         padding: 1px 1px;
         font-size: 12px;
@@ -138,6 +137,19 @@
           cursor: pointer;
           border-radius: 9999px;
           padding: 0 1px;
+        }
+      }
+
+      // show full code in mobile
+
+      &:not(.preview-only) {
+        .playground {
+          @media (max-width: 768px) {
+            max-width: 0;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+          }
         }
       }
 
@@ -166,6 +178,7 @@
     }
 
     .playground {
+      // transition: all ease 0.2s;
       background: white;
       flex: 1 1 0;
       margin: 1.5rem 0.25rem 0.25rem 0.25rem;
@@ -176,7 +189,7 @@
 
   pre {
     flex: 1 1 0;
-    transition: all ease 0.2s;
+    // transition: all ease 0.2s;
     background: transparent;
     color: #ffffff;
     font-family: 'JetBrainsMono', monospace;
