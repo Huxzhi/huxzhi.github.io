@@ -10,6 +10,20 @@
     }
 
     margin-bottom: 15vh;
+    // show full code in mobile
+
+    .wrapper {
+      &:not(.preview-only) {
+        .playground {
+          @media (max-width: 768px) {
+            max-width: 0;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+          }
+        }
+      }
+    }
   }
 
   .tiptap.ProseMirror {
@@ -137,19 +151,6 @@
           cursor: pointer;
           border-radius: 9999px;
           padding: 0 1px;
-        }
-      }
-
-      // show full code in mobile
-
-      &:not(.preview-only) {
-        .playground {
-          @media (max-width: 768px) {
-            max-width: 0;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-          }
         }
       }
 

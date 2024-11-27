@@ -11,6 +11,7 @@ import { debounce } from "@/utils/debounce";
 import { createSaver } from "@/utils/saver";
 import type { PageData } from "@/shared/type";
 import config from "urodele.config";
+import toast from "../Toast";
 
 const { readPageByPath, writePage } = adapter;
 
@@ -83,10 +84,9 @@ export const mount = async (selector: string, operationSelector: string) => {
     const [saveButtonRef, setSaveStatus] = useAttrRef({ disabled: false, "data-loading": false }, true);
 
     const toSave = async (draft = false) => {
-
       setSaveStatus((v) => {
-        v.blur()
-        return { disabled: true, "data-loading": true }
+        v.blur();
+        return { disabled: true, "data-loading": true };
       });
       try {
         const { path, data, assets, content } = await getCurrentDoc();
@@ -99,12 +99,15 @@ export const mount = async (selector: string, operationSelector: string) => {
             }
           }
         });
-
         await writePage(path, { ...data, content: JSON.stringify(content), draft }, assets);
+        toast(`${draft ? "Save" : "Publish"} success`);
         await saver.clean(pagePath);
         if (isCreate) {
-          location.replace(`/edit?path=${path}`)
+          location.replace(`/edit?path=${path}`);
         }
+      } catch (err) {
+        toast(`${draft ? "Save" : "Publish"} error: ${err}`, "error");
+        throw err;
       } finally {
         setSaveStatus({ disabled: false, "data-loading": false });
       }
@@ -114,14 +117,17 @@ export const mount = async (selector: string, operationSelector: string) => {
       <div class="group relative" tabIndex={-1}>
         <button ref={saveButtonRef} class="buttoned bg-blue-200 dark:bg-blue">
           <div class="i-ri:send-plane-fill"></div>
-          <div class='i-ri:arrow-down-s-fill'></div>
+          <div class="i-ri:arrow-down-s-fill"></div>
         </button>
-        <div class="absolute z-[50] top-full right-0 mt-1 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
+        <div
+          class="absolute z-[50] top-full right-0 mt-1 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
         flex flex-col gap-2 p-2 rounded bg-modal shadow text-sm">
           <button ref={saveButtonRef} class="buttoned bg-blue-200 dark:bg-blue" onClick={() => toSave()}>
             <div>Publish</div>
           </button>
-          <button ref={saveButtonRef} class="buttoned bg-yellow-200 dark:bg-yellow" onClick={() => toSave(true)}>Save as draft</button>
+          <button ref={saveButtonRef} class="buttoned bg-yellow-200 dark:bg-yellow" onClick={() => toSave(true)}>
+            Save as draft
+          </button>
         </div>
       </div>
     );
@@ -156,10 +162,7 @@ export const mount = async (selector: string, operationSelector: string) => {
     const render = () => (
       <div class="group relative text-lg" tabIndex={-1}>
         <button class={["text-button", changeSaved ? "text-green-500" : ""].join(" ")}>
-          <div
-            class={[
-              changeSaved ? "i-ri:check-line" : "i-svg-spinners:pulse",
-            ].join(" ")}></div>
+          <div class={[changeSaved ? "i-ri:check-line" : "i-svg-spinners:pulse"].join(" ")}></div>
         </button>
         <div class="absolute text-sm top-full right-0 gap-2 p-2 mt-1 z-[50] bg-modal flex flex-col justify-center w-[200px] shadow rounded transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
           {changeSaved ? (
@@ -183,15 +186,20 @@ export const mount = async (selector: string, operationSelector: string) => {
   };
 
   const RawButton = () => {
-    return <a
-      class="text-button text-lg"
-      href={`https://github.com/${config.github.login}/${config.github.repo}/blob/main/posts/${pagePath?.replace(/\/$/, "")}.json`}
-      target="_blank">
-      <div class="i-material-symbols:raw-on"></div>
-    </a>
-  }
+    return (
+      <a
+        class="text-button text-lg"
+        href={`https://github.com/${config.github.login}/${config.github.repo}/blob/main/posts/${pagePath?.replace(
+          /\/$/,
+          ""
+        )}.json`}
+        target="_blank">
+        <div class="i-material-symbols:raw-on"></div>
+      </a>
+    );
+  };
   opRoot.appendChild(AutoSaveIndicator());
-  opRoot.appendChild(RawButton())
+  opRoot.appendChild(RawButton());
   opRoot.appendChild(Save());
 };
 

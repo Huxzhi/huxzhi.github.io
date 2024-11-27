@@ -11,3 +11,11 @@ export function debounce<T extends (...args: any[]) => void>(
     timeoutId = setTimeout(() => func(...args), delay);
   };
 }
+
+export async function sleep(ms: number) {
+  return await new Promise<void>((res) => {
+    setTimeout(() => {
+      res();
+    }, ms);
+  });
+}
