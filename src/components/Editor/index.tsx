@@ -7,7 +7,7 @@ import { parseTitle, toFilename, toUniqueFilename } from "@/shared/transform";
 import { getGlobalData } from "@/utils/data";
 import { useAttrRef } from "@/utils/dom";
 import { createTagEditor } from "@/components/TagEditor/TagEditor";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "@/shared/debounce";
 import { createSaver } from "@/utils/saver";
 import type { PageData } from "@/shared/type";
 import config from "urodele.config";

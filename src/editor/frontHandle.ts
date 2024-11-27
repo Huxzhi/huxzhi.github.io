@@ -2,9 +2,8 @@ import { Extension } from "@tiptap/core";
 import { NodeSelection, Plugin, PluginKey, TextSelection } from "@tiptap/pm/state";
 import { Fragment, Slice, Node } from "@tiptap/pm/model";
 
-// @ts-ignore
+// @ts-expect-error: import private method
 import { __serializeForClipboard, EditorView } from "@tiptap/pm/view";
-import { h } from "./utils/h";
 import { createFrontMenu } from "./frontMenu.tsx";
 
 export interface GlobalFrontHandleOptions {
@@ -115,7 +114,7 @@ export function DragHandlePlugin(options: GlobalFrontHandleOptions & { pluginKey
 
       // select complete table instead of just a row
       if ((selection as NodeSelection).node.type.name === "tableRow") {
-        let $pos = view.state.doc.resolve(selection.from);
+        const $pos = view.state.doc.resolve(selection.from);
         selection = NodeSelection.create(view.state.doc, $pos.before());
       }
     }
@@ -184,7 +183,7 @@ export function DragHandlePlugin(options: GlobalFrontHandleOptions & { pluginKey
 
       function onDragHandleDrag(e: DragEvent) {
         hideDragHandle();
-        let scrollY = window.scrollY;
+        const scrollY = window.scrollY;
         if (e.clientY < options.scrollTreshold) {
           window.scrollTo({ top: scrollY - 30, behavior: "smooth" });
         } else if (window.innerHeight - e.clientY < options.scrollTreshold) {

@@ -6,13 +6,13 @@ export type PageData = {
   title: string;
   createTime: number;
   updateTime: number;
-  draft: boolean
+  draft: boolean;
   cover?: {
     src: string;
-    alt?: string
-  }
+    alt?: string;
+  };
 };
 
-export type PageDetail = (Omit<PageData, 'path' | 'id'> & { intro: string; html: string });
+export type PageDetail = Omit<PageData, "path" | "id"> & { intro: string; html: string };
 
-export type ShortPageData = Omit<PageData, 'content'> & { intro: string }
+export type ShortPageData = Omit<PageData, "content"> & { intro: string };

@@ -35,7 +35,7 @@ export const useMemoFn = <T>(fn: () => T) => {
   return run;
 };
 
-export const withCreated = <P extends any[], R extends any, F extends (...args: P) => R>(
+export const withCreated = <P extends any[], R, F extends (...args: P) => R>(
   fn: (onCreated: (f: (v: R) => void) => void) => F
 ) => {
   const createdFns: any[] = [];

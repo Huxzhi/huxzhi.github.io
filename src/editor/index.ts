@@ -2,21 +2,19 @@ import { Editor } from "@tiptap/core";
 import GlobalFrontHandle from "./frontHandle";
 import "./style.scss";
 import { generateHTML } from "@tiptap/html";
-import { h } from "./utils/h";
 
 import { createSlashCommandPlugin } from "./commands";
 import { createBubbleMenuPlugin } from "./bubbleMenu.tsx";
 import { createLowlightCodePlugin } from "./lowlight.tsx";
 import { createHandleImageProps } from "./image";
 import { getBasicExtensions } from "./extensions";
-import { createReactiveHtmlPlugin } from "./reactiveHtml.tsx";
 
 export const createEditor = (parent: HTMLElement, initialContent: string) => {
   const root = document.createElement("div");
   root.className = "ud-root";
   parent?.appendChild(root);
 
-  const basicExtension = [...getBasicExtensions(), createLowlightCodePlugin(), createReactiveHtmlPlugin()];
+  const basicExtension = [...getBasicExtensions(), createLowlightCodePlugin()];
   const extensions = [
     GlobalFrontHandle,
 

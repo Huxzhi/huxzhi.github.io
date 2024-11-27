@@ -182,10 +182,10 @@ export const createLowlightCodeSSRPlugin = () => {
       const lang = node.attrs?.language;
       const highlight = (lang: string, content: any) => {
         try {
-          return lowlight.highlight(lang, node.textContent);
+          return lowlight.highlight(lang, content);
         } catch (error) {
           console.error(`highlight ${lang} failed:`, error);
-          return lowlight.highlight("text", node.textContent);
+          return lowlight.highlight("text", content);
         }
       };
       const gen = lang ? highlight(lang, node.textContent) : lowlight.highlightAuto(node.textContent);

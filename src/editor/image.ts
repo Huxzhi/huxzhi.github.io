@@ -2,8 +2,8 @@ import { Editor } from "@tiptap/core";
 import type { EditorProps } from "@tiptap/pm/view";
 
 export const createHandlePaste: (getEditor: () => Editor) => EditorProps["handlePaste"] =
-  (getEditor) => (view, event, slice) => {
-    const editor = getEditor();
+  (_getEditor) => (view, event, _slice) => {
+    // const editor = getEditor();
     const items = event.clipboardData?.items ?? [];
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.startsWith("image/")) {
@@ -22,9 +22,9 @@ export const createHandlePaste: (getEditor: () => Editor) => EditorProps["handle
   };
 
 export const createHandleDrop: (getEditor: () => Editor) => EditorProps["handleDrop"] =
-  (getEditor) => (view, event, slice) => {
+  (_getEditor) => (view, event, _slice) => {
     event.preventDefault();
-    const editor = getEditor();
+    // const editor = getEditor();
     const coords = { left: event.clientX, top: event.clientY };
     const dropPos = view.posAtCoords(coords)?.pos;
     if (!dropPos) {

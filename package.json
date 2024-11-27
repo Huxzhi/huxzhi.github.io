@@ -39,13 +39,17 @@
     "typescript": "^5.6.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.15.0",
     "@iconify-json/game-icons": "^1.2.0",
     "@iconify-json/material-symbols": "^1.2.5",
     "@iconify-json/mdi-light": "^1.2.1",
     "@iconify-json/ri": "^1.2.3",
     "@iconify-json/svg-spinners": "^1.2.1",
     "@types/node": "^22.9.0",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
     "sass": "^1.81.0",
+    "typescript-eslint": "^8.16.0",
     "unocss": "^0.64.0",
     "unocss-preset-theme": "^0.14.1"
   }

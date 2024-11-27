@@ -19,9 +19,7 @@ export const mount = async (navSelector: string, dataSelector: string) => {
   root?.replaceChildren(
     ...[
       prev ? (
-        <a
-          href={`/post/${prev.id}?fromTag=${tag}`}
-          class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]">
+        <a href={`/post/${prev.id}?fromTag=${tag}`} class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]">
           <div class="i-ri:arrow-left-double-line w-5 h-5 flex-shrink-0" />
           <div>{prev.title}</div>
         </a>

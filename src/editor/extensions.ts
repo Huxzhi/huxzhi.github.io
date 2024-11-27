@@ -7,7 +7,6 @@ import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 import { createLowlightCodeSSRPlugin, hydrate } from "./lowlight.tsx";
 import { createPlaceholderPlugin } from "./placeholder";
-import { createReactiveHtmlPlugin } from "./reactiveHtml";
 
 export const getBasicExtensions = () => {
   const CustomDocument = Document.extend({
@@ -47,7 +46,6 @@ export const getSSRHTML = (json: JSONContent) => {
     Underline,
     createLowlightCodeSSRPlugin(),
     createPlaceholderPlugin(),
-    createReactiveHtmlPlugin(),
   ];
   const hydrateReactive = hydrate();
   return generateHTML(json, displayExtension) + hydrateReactive;

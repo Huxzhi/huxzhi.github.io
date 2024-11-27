@@ -2,7 +2,7 @@ import * as React from "jsx-dom";
 
 import { EditorView } from "@tiptap/pm/view";
 import { TextSelection } from "@tiptap/pm/state";
-import { Node, NodeRange } from "@tiptap/pm/model";
+import { NodeRange } from "@tiptap/pm/model";
 
 export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element | undefined) => {
   const onClickAdd = () => {
@@ -28,7 +28,7 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
   };
 
   let lastCPosition: number | undefined;
-  const onMouseover = (e: MouseEvent) => {
+  const onMouseover = (_e: MouseEvent) => {
     lastCPosition = undefined;
   };
   const menu = (
@@ -45,7 +45,7 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
           data-front-handle
           class="absolute z-[50] top-full left-0 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
             bg-white rounded shadow flex flex-col gap-2 p-1 text-sm">
-          {handleMenu.map((v, i) => (
+          {handleMenu.map((v) => (
             <button
               class="px-2 py-1"
               data-drag-handle

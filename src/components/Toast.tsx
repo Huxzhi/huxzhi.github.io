@@ -1,4 +1,4 @@
-import { sleep } from "@/utils/debounce";
+import { sleep } from "@/shared/debounce";
 import { cn } from "@/utils/dom";
 import * as React from "jsx-dom";
 

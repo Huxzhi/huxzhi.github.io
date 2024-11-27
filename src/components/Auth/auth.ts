@@ -1,19 +1,6 @@
+import { getLocalUser, setLocalUser, USER_KEY } from "@/shared/storage";
 import { Octokit } from "octokit";
 import config from "urodele.config";
-
-export const USER_KEY = "user_github";
-
-export type UserInfo = { name?: string; avatar: string; token: string; login: string; permissions?: { push?: boolean } };
-
-export const getLocalUser = () => {
-  if (typeof window == "undefined") return undefined;
-  const info = localStorage.getItem(USER_KEY) ?? undefined;
-  return info ? (JSON.parse(info) as UserInfo) : undefined;
-};
-export const setLocalUser = (v: UserInfo) => {
-  localStorage.setItem(USER_KEY, JSON.stringify(v));
-  return v;
-};
 
 export const getUserInfo = () => {
   const userInfo = getLocalUser();
@@ -29,7 +16,7 @@ export const login = async (token: string) => {
   const { data } = await oc.request("GET /user");
   const { data: repo } = await oc
     .request("GET /repos/{owner}/{repo}", {
-      owner: data.login,
+      owner: config.github.login,
       repo: config.github.repo,
     })
     .catch((error) => {
@@ -41,7 +28,7 @@ export const login = async (token: string) => {
       };
     });
   setLocalUser({
-    name: data.name ?? undefined,
+    name: data.name ?? "",
     avatar: data.avatar_url,
     login: data.login,
     token: token,

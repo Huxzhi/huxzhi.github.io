@@ -35,24 +35,17 @@ export const getStaticPaths = async () => {
           post.tags.map((tag) => (
             <a
               href={`/tag/${encodeURIComponent(tag)}`}
-              class="rounded hover:bg-gray-200 dark:hover:bg-modal px-3 py-1 cursor-pointer"
-            >
+              class="rounded hover:bg-gray-200 dark:hover:bg-modal px-3 py-1 cursor-pointer">
               #{tag}
             </a>
           ))
         }
       </div>
       <div class="ud-root read-only" set:html={post.html} />
-      <div
-        data-page-id={post.id}
-        class="navigator flex justify-between items-center mt-4 py-4"
-      >
+      <div data-page-id={post.id} class="navigator flex justify-between items-center mt-4 py-4">
         {
           prev ? (
-            <a
-              href={`/post/${prev.id}`}
-              class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]"
-            >
+            <a href={`/post/${prev.id}`} class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]">
               <div class="i-ri:arrow-left-double-line w-5 h-5 flex-shrink-0" />
               <div class="text-start">{prev.title}</div>
             </a>
@@ -64,8 +57,7 @@ export const getStaticPaths = async () => {
           next ? (
             <a
               href={`/post/${next.id}`}
-              class="flex items-center justify-end gap-1 text-blue cursor-pointer flex-[45%]"
-            >
+              class="flex items-center justify-end gap-1 text-blue cursor-pointer flex-[45%]">
               <div class="text-end">{next.title}</div>
               <div class="i-ri:arrow-right-double-line w-5 h-5 flex-shrink-0" />
             </a>

@@ -4,7 +4,7 @@ import { openDB } from "idb";
 //   text?: string;
 //   files?: Record<string, File>;
 // };
-export type Data = any;
+export type Data = unknown;
 
 const DB_NAME = "editor-saver";
 const STORE_NAME = "history";

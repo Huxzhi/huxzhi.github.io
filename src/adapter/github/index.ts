@@ -25,7 +25,7 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
     path: path,
   });
   // fix github base64
-  const content = decodeURIComponent(escape(window.atob((data as any).content.replace(/\s/g, ''))))
+  const content = decodeURIComponent(escape(window.atob((data as any).content.replace(/\s/g, ""))));
   const json = JSON.parse(content);
   const meta = parseMeta(json);
   return {
@@ -49,7 +49,7 @@ function fileToBase64(file: File) {
 }
 
 export const writePage: WritePage = async (_path, data, assets) => {
-  const path = _path.replace(/\/$/, "")
+  const path = _path.replace(/\/$/, "");
   const octokit = getOc();
   const { data: user } = await octokit.request({ url: "/user" });
   const userName = user.login;
