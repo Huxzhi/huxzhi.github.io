@@ -8,7 +8,7 @@ import Layout from "@/layouts/Layout.astro";
   mount("#editor", "#editor-operarions");
 </script>
 
-<Layout title="Editor">
+<Layout title="Editor" footer={false}>
   <div slot="operations" id="editor-operarions" class="flex gap-2 items-center"></div>
   <div id="editor" class="w-full flex flex-col items-center min-h-8" data-modal-loading="true"></div>
 </Layout>

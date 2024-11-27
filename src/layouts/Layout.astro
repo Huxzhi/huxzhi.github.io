@@ -1,13 +1,15 @@
 ---
-import "../index.scss";
-import Auth from "../components/Auth/index.astro";
+import "@/index.scss";
+import Auth from "@/components/Auth/index.astro";
+import Footer from "@/components/Footer.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  footer?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, footer = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -30,7 +32,7 @@ const { title, description } = Astro.props;
   </head>
   <body class="text-text bg-bg">
     <header class="flex justify-between items-center p-2 gap-2 h-10">
-      <a href="/" class="text-button text-lg">
+      <a href="/" class="text-button text-lg" aria-label="homepage">
         <div class="i-ri:menu-4-fill"></div>
       </a>
       <div class="flex gap-2 items-center header-operations">
@@ -39,6 +41,7 @@ const { title, description } = Astro.props;
       </div>
     </header>
     <slot />
+    {footer && <Footer />}
   </body>
 </html>
 <style is:global>

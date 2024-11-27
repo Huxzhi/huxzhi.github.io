@@ -123,12 +123,12 @@ const Profile = (user: UserInfo) => {
   return (
     <div class="flex gap-2">
       {canEdit && isIndex && (
-        <a href="/edit?new" class="text-button">
+        <a href="/edit?new" class="text-button" aria-label="create new post">
           <div class="i-ri:add-large-line"></div>
         </a>
       )}
       {canEdit && isPage && (
-        <a href={`/edit?path=${pageId}`} class="text-button">
+        <a href={`/edit?path=${pageId}`} class="text-button" aria-label="edit current post">
           <div class="i-ri:quill-pen-fill"></div>
         </a>
       )}

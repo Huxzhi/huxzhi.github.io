@@ -115,7 +115,7 @@ export const mount = async (selector: string, operationSelector: string) => {
 
     const saveButton = (
       <div class="group relative" tabIndex={-1}>
-        <button ref={saveButtonRef} class="buttoned bg-blue-200 dark:bg-blue">
+        <button ref={saveButtonRef} class="buttoned bg-blue-200 dark:bg-blue" aria-label="to save">
           <div class="i-ri:send-plane-fill"></div>
           <div class="i-ri:arrow-down-s-fill"></div>
         </button>
@@ -193,7 +193,8 @@ export const mount = async (selector: string, operationSelector: string) => {
           /\/$/,
           ""
         )}.json`}
-        target="_blank">
+        target="_blank"
+        aria-label="goto raw file">
         <div class="i-material-symbols:raw-on"></div>
       </a>
     );
