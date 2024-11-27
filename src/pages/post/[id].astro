@@ -27,7 +27,7 @@ export const getStaticPaths = async () => {
   mount(".navigator", "data-page-id");
 </script>
 
-<Layout title={post.title}>
+<Layout title={post.title} description={post.intro}>
   <main>
     <div class="content">
       <div class="w-full flex gap-2 pb-2">
