@@ -115,8 +115,6 @@ div[data-modal-loading="false"] {
 
     .page-title::after {
         content: 'draft';
-        position: absolute;
-        left: calc(100% + 12px);
-        @apply bg-yellow-200 dark:bg-yellow rounded px-2 py-1 text-xs;
+        @apply bg-yellow-200 dark:bg-yellow rounded mx-1 px-2 py-1 text-xs align-super;
     }
 }
