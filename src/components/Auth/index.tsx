@@ -84,8 +84,8 @@ const Login = () => {
     dialog.show();
   };
   const LoginButton = () => (
-    <button class="text-sm" onClick={toLogin}>
-      Login
+    <button class="text-sm" onClick={toLogin} title="login">
+      <div class="i-ri:triangle-line"></div>
     </button>
   );
 
