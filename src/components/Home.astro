@@ -46,13 +46,15 @@ const { posts, page, more } = Astro.props;
           </>
         ))
       }
+      {
+        more && (
+          <div class="w-full flex justify-center">
+            <a href={`/${page + 1}`} class="mt-4 text-blue">
+              Load More
+            </a>
+          </div>
+        )
+      }
     </div>
-    {
-      more && (
-        <a href={`/${page + 1}`} class="mt-4 text-blue">
-          Load More
-        </a>
-      )
-    }
   </main>
 </Layout>
