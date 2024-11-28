@@ -47,12 +47,16 @@ const { title, description, footer = true } = Astro.props;
 <style is:global>
   main {
     display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
+    width: 100%;
+    padding: 0 32px;
+    gap: 12px;
+    justify-content: center;
   }
   .content {
-    width: 100%;
+    /* width: 100%; */
     max-width: 720px;
-    padding: 0 12px;
+    /* padding: 0 24px; */
+    overflow-x: hidden;
+    flex: 1 1 0;
   }
 </style>

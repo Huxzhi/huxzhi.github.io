@@ -3,6 +3,7 @@ import * as React from "jsx-dom";
 import { EditorView } from "@tiptap/pm/view";
 import { TextSelection } from "@tiptap/pm/state";
 import { NodeRange } from "@tiptap/pm/model";
+import { toFilename } from "@/shared/transform";
 
 export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element | undefined) => {
   const onClickAdd = () => {
@@ -98,7 +99,7 @@ const handleMenu = [
       const content = nodes.textContent;
       const size = nodes.nodeSize;
 
-      const newBlockquote = heading.create({ level: 1 }, [schema.text(content)]);
+      const newBlockquote = heading.create({ level: 1, id: toFilename(content) }, [schema.text(content)]);
 
       // 替换为合法的 blockquote 结构
       tr.replaceWith(position - 1, position - 1 + size, newBlockquote);
@@ -125,7 +126,7 @@ const handleMenu = [
       const content = nodes.textContent;
       const size = nodes.nodeSize;
 
-      const newBlockquote = heading.create({ level: 2 }, [schema.text(content)]);
+      const newBlockquote = heading.create({ level: 2, id: toFilename(content) }, [schema.text(content)]);
 
       // 替换为合法的 blockquote 结构
       tr.replaceWith(position - 1, position - 1 + size, newBlockquote);
@@ -152,7 +153,7 @@ const handleMenu = [
       const content = nodes.textContent;
       const size = nodes.nodeSize;
 
-      const newBlockquote = heading.create({ level: 3 }, [schema.text(content)]);
+      const newBlockquote = heading.create({ level: 3, id: toFilename(content) }, [schema.text(content)]);
 
       // 替换为合法的 blockquote 结构
       tr.replaceWith(position - 1, position - 1 + size, newBlockquote);

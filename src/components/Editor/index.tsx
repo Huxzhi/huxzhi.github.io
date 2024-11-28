@@ -7,11 +7,12 @@ import { parseTitle, toFilename, toUniqueFilename } from "@/shared/transform";
 import { getGlobalData } from "@/utils/data";
 import { useAttrRef } from "@/utils/dom";
 import { createTagEditor } from "@/components/TagEditor/TagEditor";
-import { debounce } from "@/shared/debounce";
+import { debounce, throttle } from "@/shared/debounce";
 import { createSaver } from "@/utils/saver";
 import type { PageData } from "@/shared/type";
 import config from "urodele.config";
 import toast from "../Toast";
+import { mount as mountOutline } from "@/components/Outline";
 
 const { readPageByPath, writePage } = adapter;
 
@@ -42,8 +43,14 @@ export const mount = async (selector: string, operationSelector: string) => {
       }
     })();
 
-    const tagEditor = await createTagEditor(root, pageDat?.tags ?? []);
-    const editor = createEditor(root, pageDat?.content ?? "");
+    const filed = (<div class="field-wrapper flex flex-col"></div>) as HTMLDivElement;
+    const wrapper = (<div class="editor-wrapper flex">{filed}</div>) as HTMLDivElement;
+    const tagEditor = await createTagEditor(filed, pageDat?.tags ?? []);
+    const editor = createEditor(filed, pageDat?.content ?? "");
+    wrapper.appendChild(<div class="outline-wrapper"></div>);
+    root.appendChild(wrapper);
+    const outlines = mountOutline(".outline-wrapper")!;
+    editor.on("update", throttle(outlines, 200));
     return {
       tagEditor,
       editor,

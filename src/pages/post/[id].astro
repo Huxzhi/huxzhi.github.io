@@ -23,8 +23,10 @@ export const getStaticPaths = async () => {
 
 <script>
   import { mount } from "@/components/Pager";
+  import { mount as mountOutline } from "@/components/Outline";
 
   mount(".navigator", "data-page-id");
+  mountOutline(".outline-wrapper");
 </script>
 
 <Layout title={post.title} description={post.intro}>
@@ -41,7 +43,8 @@ export const getStaticPaths = async () => {
           ))
         }
       </div>
-      <div class="ud-root read-only" set:html={post.html} />
+      <div class="ud-root read-only flex-1" set:html={post.html} />
+
       <div data-page-id={post.id} class="navigator flex justify-between items-center mt-4 py-4">
         {
           prev ? (
@@ -67,5 +70,6 @@ export const getStaticPaths = async () => {
         }
       </div>
     </div>
+    <div class="outline-wrapper"></div>
   </main>
 </Layout>

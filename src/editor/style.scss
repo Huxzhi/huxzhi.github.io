@@ -1,4 +1,16 @@
 .ud-root {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    &:target {
+      scroll-margin-top: 48px;
+    }
+  }
+
   width: 100%;
   max-width: 720px;
   margin-bottom: 45vh;

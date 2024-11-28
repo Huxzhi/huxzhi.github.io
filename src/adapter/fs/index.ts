@@ -18,6 +18,7 @@ export const writePage: WritePage = async (path, data, assets) => {
   });
   const meta = toMeta({ ...data, updateTime: Date.now() });
   const rawString = JSON.stringify({ ...meta, ...JSON.parse(data.content) });
-  form.append("content", rawString);
+  const strFile = new File([new Blob([rawString], { type: "text/plain" })], "content.json");
+  form.append("content", strFile);
   await fetch(`${PREFIX}/api/post/${path}`, { method: "POST", body: form });
 };

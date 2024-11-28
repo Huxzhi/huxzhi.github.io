@@ -33,6 +33,8 @@ export const POST: APIRoute = async (ctx) => {
   const content = form.get("content");
   if (typeof content === "string") {
     await writeFile(`./posts/${id}.json`, content, { encoding: "utf-8" });
+  } else if (content instanceof File) {
+    await writeFile(`./posts/${id}.json`, Buffer.from(await content.arrayBuffer()), { encoding: "utf-8" });
   }
   return new Response(JSON.stringify({ code: 0 }), { status: 200 });
 };
