@@ -12,7 +12,7 @@ export const createMenu = (props: { items: { title: string; command: any }[]; ed
       </button>
     ) as HTMLElement;
   });
-  const root = (<div class="ud-root slash-menu">{buttons}</div>) as HTMLElement;
+  const root = (<div class="ud-wrapper slash-menu">{buttons}</div>) as HTMLElement;
   let selectedIndex = 0;
   const setSelectedIndex = (index: number) => {
     buttons.forEach((bt, i) => {

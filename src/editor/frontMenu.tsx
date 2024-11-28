@@ -32,7 +32,7 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
     lastCPosition = undefined;
   };
   const menu = (
-    <div class="ud-root front-handle" data-front-handle draggable="true">
+    <div class="ud-wrapper front-handle" data-front-handle draggable="true">
       <button data-front-handle onClick={onClickAdd}>
         <div data-front-handle class="i-ri:add-line"></div>
       </button>
@@ -40,11 +40,7 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
         <button class="drag-handle" data-drag-handle data-front-handle onMouseOver={onMouseover}>
           <div data-front-handle class="i-ri:draggable"></div>
         </button>
-        <div
-          data-drag-handle
-          data-front-handle
-          class="absolute z-[50] top-full left-0 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
-            bg-white rounded shadow flex flex-col gap-2 p-1 text-sm">
+        <div data-drag-handle data-front-handle class="front-handle-menu">
           {handleMenu.map((v) => (
             <button
               class="px-2 py-1"

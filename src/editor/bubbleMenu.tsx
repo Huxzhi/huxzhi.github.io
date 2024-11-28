@@ -26,7 +26,7 @@ export const createBubbleMenu = (getEditor: () => Editor) => {
     });
   });
   return (
-    <div ref={setRef} className="ud-root bubble-menu">
+    <div ref={setRef} className="ud-wrapper bubble-menu">
       <button
         class="ud-bm-bold"
         onClick={() => {
@@ -96,6 +96,18 @@ export const createBubbleMenuPlugin = (root: HTMLElement, getEditor: () => Edito
   root.appendChild(bubble);
   return BubbleMenu.configure({
     element: bubble,
+    tippyOptions: {
+      popperOptions: {
+        modifiers: [
+          {
+            name: "preventOverflow",
+            options: {
+              boundary: "window", // 设置边界为 window
+            },
+          },
+        ],
+      },
+    },
     shouldShow({ state }) {
       const { selection } = state;
       const { $from, $to } = selection;
