@@ -12,6 +12,7 @@ export const config = {
     copyright: "© Glink",
     copyrightUrl: "https://github.com/glink25",
   },
+  giscus: false as object | false,
 } as const;
 
 export default config;

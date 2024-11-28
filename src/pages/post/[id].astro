@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import "@/editor/style.scss";
 import { getPageList, getSinglePageData } from "@/pages/api/post/list";
+import config from "urodele.config";
 
 const id = (Astro.params as any).id;
 const post = await getSinglePageData(id);
@@ -72,4 +73,13 @@ export const getStaticPaths = async () => {
     </div>
     <div class="outline-wrapper"></div>
   </main>
+  {
+    config.giscus && (
+      <div class="giscus-container flex justify-center">
+        <div class="w-full max-w-[780px]">
+          <script {...config.giscus} />
+        </div>
+      </div>
+    )
+  }
 </Layout>
