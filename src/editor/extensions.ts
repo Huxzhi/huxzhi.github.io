@@ -9,6 +9,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { createLowlightCodeSSRPlugin, hydrate } from "./lowlight.tsx";
 import { createPlaceholderPlugin } from "./placeholder";
 import { toFilename } from "@/shared/transform.ts";
+import type { Node } from "@tiptap/pm/model";
 
 export const getBasicExtensions = () => {
   const CustomDocument = Document.extend({
@@ -38,6 +39,36 @@ export const getBasicExtensions = () => {
               };
             },
           },
+        };
+      },
+      addNodeView() {
+        return ({ node, editor, HTMLAttributes, getPos }) => {
+          const { level, id } = HTMLAttributes;
+          const contentDOM = document.createElement(`h${level}`);
+          contentDOM.id = id;
+          const updateId = (newNode: Node) => {
+            const newId = toFilename(newNode.textContent ?? "");
+            if (contentDOM.id !== newId) {
+              contentDOM.id = newId;
+              const transaction = editor.state.tr;
+              transaction.setNodeMarkup(getPos(), undefined, {
+                ...newNode.attrs,
+                id: newId,
+              });
+              editor.view.dispatch(transaction);
+            }
+            return true;
+          };
+          return {
+            dom: contentDOM,
+            contentDOM,
+            update: (updatedNode) => {
+              if (updatedNode.type !== node.type) {
+                return false;
+              }
+              return updateId(updatedNode);
+            },
+          };
         };
       },
     }),

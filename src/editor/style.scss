@@ -15,6 +15,11 @@
   max-width: 720px;
   margin-bottom: 45vh;
 
+  &.editable {
+    max-width: 100%;
+    width: 720px;
+  }
+
   &.read-only {
     &>*:not(:last-child) {
       margin-bottom: 12px;

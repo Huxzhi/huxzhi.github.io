@@ -43,8 +43,10 @@ export const mount = async (selector: string, operationSelector: string) => {
       }
     })();
 
-    const filed = (<div class="field-wrapper flex flex-col"></div>) as HTMLDivElement;
-    const wrapper = (<div class="editor-wrapper flex">{filed}</div>) as HTMLDivElement;
+    const filed = (<div class="field-wrapper w-full flex flex-col"></div>) as HTMLDivElement;
+    const wrapper = (
+      <div class="editor-wrapper w-full max-w-[720px] flex justify-center">{filed}</div>
+    ) as HTMLDivElement;
     const tagEditor = await createTagEditor(filed, pageDat?.tags ?? []);
     const editor = createEditor(filed, pageDat?.content ?? "");
     wrapper.appendChild(<div class="outline-wrapper"></div>);

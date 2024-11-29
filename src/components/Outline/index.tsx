@@ -50,7 +50,7 @@ export const mount = (selector: string) => {
       <div class="outlines flex flex-col text-sm gap-1 py-2 max-h-[60vh] overflow-y-auto <md:hidden break-words"></div>
     );
     const child = (
-      <div class="fixed top-[84px] right-[4px] bg-modal p-2 rounded shadow-lg md:shadow-none md:sticky md:top-[88px] <md:[&:focus-within_.outlines]:flex flex flex-col max-w-[240px]">
+      <div class="fixed top-[84px] right-[4px] bg-modal p-2 rounded shadow-lg md:shadow-none md:sticky md:top-[88px] <md:[&:focus-within_.outlines]:flex flex flex-col w-[240px]">
         <div class="w-full flex <md:justify-end">
           <button onClick={toToggle} title="toggle outline" class="<md:hidden">
             <div class="i-ri:menu-fold-4-fill"></div>

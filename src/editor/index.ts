@@ -11,7 +11,7 @@ import { getBasicExtensions } from "./extensions";
 
 export const createEditor = (parent: HTMLElement, initialContent: string) => {
   const root = document.createElement("div");
-  root.className = "ud-root";
+  root.className = "ud-root editable";
   parent?.appendChild(root);
 
   const basicExtension = [...getBasicExtensions(), createLowlightCodePlugin()];
