@@ -16,8 +16,7 @@
   margin-bottom: 45vh;
 
   &.editable {
-    max-width: 100%;
-    width: 720px;
+    @apply flex-[720px];
   }
 
   &.read-only {
@@ -407,23 +406,6 @@
     display: flex;
     cursor: grab;
 
-    .front-handle-menu {
-      position: absolute;
-      z-index: 50;
-      top: 100%;
-      left: 0;
-      transition: all ease 0.2s;
-      transition-delay: 0.2s;
-      border-radius: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 14px;
-      padding: 4px;
-      box-shadow: var(--shadow);
-      @apply whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto bg-modal;
-    }
-
     &.hide {
       opacity: 0;
       pointer-events: none;
@@ -433,6 +415,24 @@
       display: none;
       pointer-events: none;
     }
+  }
+
+  &.front-handle-menu {
+    position: absolute;
+    z-index: 50;
+    top: 100%;
+    left: 0;
+    transition: all ease 0.2s;
+    transition-delay: 0.2s;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    padding: 4px;
+    box-shadow: var(--shadow);
+    white-space: nowrap;
+    @apply bg-modal;
   }
 
   button,

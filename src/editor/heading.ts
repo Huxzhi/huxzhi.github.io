@@ -33,10 +33,15 @@ export default Heading.extend({
   addNodeView() {
     return ({ node, HTMLAttributes }) => {
       const { level, id } = HTMLAttributes;
+
       const contentDOM = document.createElement(`h${level}`);
       contentDOM.id = id;
-      const updateId = (newNode: Node) => {
+      const onUpdate = (newNode: Node) => {
+        if (newNode.type !== node.type || newNode.attrs.level !== node.attrs.level) {
+          return false;
+        }
         const newId = toFilename(newNode.textContent ?? "");
+
         if (contentDOM.id !== newId) {
           contentDOM.id = newId;
         }
@@ -44,13 +49,8 @@ export default Heading.extend({
       };
       return {
         dom: contentDOM,
-        contentDOM,
-        update: (updatedNode) => {
-          if (updatedNode.type !== node.type) {
-            return false;
-          }
-          return updateId(updatedNode);
-        },
+        contentDOM: contentDOM,
+        update: onUpdate,
       };
     };
   },

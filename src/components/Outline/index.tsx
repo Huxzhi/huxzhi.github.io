@@ -29,12 +29,6 @@ export const mount = (selector: string) => {
   document.addEventListener("scroll", onScroll, { passive: true });
 
   const create = () => {
-    const pageRoot = document.querySelector(".ud-root");
-    if (!pageRoot) return;
-    const tags = ["h1", "h2", "h3", "h4", "h5", "h6"];
-    const headingSelector = tags.map((tag) => `${tag}`).join(", ");
-    headings = Array.from(pageRoot?.querySelectorAll(headingSelector) ?? []);
-
     const toToggle = () => {
       // child.classList.toggle("[&_.outlines]:hidden");
       const el = child.querySelector<HTMLDivElement>(".outlines");
@@ -69,6 +63,11 @@ export const mount = (selector: string) => {
   const slot = create();
 
   const update = () => {
+    const pageRoot = document.querySelector(".ud-root");
+    if (!pageRoot) return;
+    const tags = ["h1", "h2", "h3", "h4", "h5", "h6"];
+    const headingSelector = tags.map((tag) => `${tag}`).join(", ");
+    headings = Array.from(pageRoot?.querySelectorAll(headingSelector) ?? []);
     slot?.replaceChildren(
       <>
         {headings.map((h) => (

@@ -4,6 +4,7 @@ import { EditorView } from "@tiptap/pm/view";
 import { TextSelection } from "@tiptap/pm/state";
 import { NodeRange } from "@tiptap/pm/model";
 import { toFilename } from "@/shared/transform";
+import tippy from "tippy.js";
 
 export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element | undefined) => {
   const onClickAdd = () => {
@@ -32,50 +33,69 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
   const onMouseover = (_e: MouseEvent) => {
     lastCPosition = undefined;
   };
+  const panel = (
+    <div data-drag-handle data-front-handle class="ud-wrapper front-handle-menu">
+      {handleMenu.map((v) => (
+        <button
+          class="px-2 py-1"
+          data-drag-handle
+          data-front-handle
+          onClick={() => {
+            const { state } = view;
+            const currentPosition = (() => {
+              if (lastCPosition !== undefined) {
+                return lastCPosition;
+              }
+              const currentNode = getCurrentNode();
+              if (!currentNode) return;
+
+              const pos = view.posAtDOM(currentNode, 0);
+              const node = state.doc.nodeAt(pos);
+              if (!node) return;
+              lastCPosition = pos;
+              return pos;
+            })();
+            if (!currentPosition) return;
+            v.command({ view, position: currentPosition });
+            // // 替换节点为 heading
+            // tr.setNodeMarkup(currentPosition - 1, state.schema.nodes.heading, { level: i + 1 });
+            // // 应用更改
+            // view.dispatch(tr);
+          }}>
+          {v.title}
+        </button>
+      ))}
+    </div>
+  );
+
+  const dragHandle = (
+    <button class="drag-handle" data-drag-handle data-front-handle onMouseOver={onMouseover}>
+      <div data-front-handle class="i-ri:draggable"></div>
+    </button>
+  ) as HTMLElement;
   const menu = (
     <div class="ud-wrapper front-handle" data-front-handle draggable="true">
       <button data-front-handle onClick={onClickAdd}>
         <div data-front-handle class="i-ri:add-line"></div>
       </button>
-      <div class="relative group" data-drag-handle data-front-handle>
-        <button class="drag-handle" data-drag-handle data-front-handle onMouseOver={onMouseover}>
-          <div data-front-handle class="i-ri:draggable"></div>
-        </button>
-        <div data-drag-handle data-front-handle class="front-handle-menu">
-          {handleMenu.map((v) => (
-            <button
-              class="px-2 py-1"
-              data-drag-handle
-              data-front-handle
-              onClick={() => {
-                const { state } = view;
-                const currentPosition = (() => {
-                  if (lastCPosition !== undefined) {
-                    return lastCPosition;
-                  }
-                  const currentNode = getCurrentNode();
-                  if (!currentNode) return;
-
-                  const pos = view.posAtDOM(currentNode, 0);
-                  const node = state.doc.nodeAt(pos);
-                  if (!node) return;
-                  lastCPosition = pos;
-                  return pos;
-                })();
-                if (!currentPosition) return;
-                v.command({ view, position: currentPosition });
-                // // 替换节点为 heading
-                // tr.setNodeMarkup(currentPosition - 1, state.schema.nodes.heading, { level: i + 1 });
-                // // 应用更改
-                // view.dispatch(tr);
-              }}>
-              {v.title}
-            </button>
-          ))}
-        </div>
-      </div>
+      {dragHandle}
     </div>
   ) as HTMLElement;
+  const tip = tippy(dragHandle, {
+    content: panel,
+    getReferenceClientRect: () => dragHandle.getBoundingClientRect(),
+    trigger: "click",
+    interactive: true,
+    placement: "bottom-start",
+  });
+  const ob = new MutationObserver((v) => {
+    if (v.every((x) => x.attributeName !== "style")) {
+      return;
+    }
+    tip.hide();
+    tip.setProps({ getReferenceClientRect: () => dragHandle.getBoundingClientRect() });
+  });
+  ob.observe(menu, { attributes: true, subtree: false });
   return menu;
 };
 
@@ -87,7 +107,6 @@ const handleMenu = [
       const { tr, schema } = state;
       const { heading } = schema.nodes;
       const nodes = getNodesUntilNextParagraph(view, position);
-
       if (!heading) {
         console.error("heading node is not defined in the schema.");
         return;
@@ -95,6 +114,7 @@ const handleMenu = [
 
       // 获取当前节点内容
       const node = state.doc.nodeAt(position);
+      console.log(node, "mod");
       if (!node) return;
       const content = nodes.textContent;
       const size = nodes.nodeSize;
@@ -105,6 +125,7 @@ const handleMenu = [
       tr.replaceWith(position - 1, position - 1 + size, newBlockquote);
 
       view.dispatch(tr);
+      console.log("change success");
     },
   },
   {
