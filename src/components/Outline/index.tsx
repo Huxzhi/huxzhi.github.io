@@ -76,7 +76,7 @@ export const mount = (selector: string) => {
             href={`#${h.id}`}
             data-anchor-id={h.id}
             data-anchor-tag={h.tagName}
-            class="opacity-50 hover:opacity-80">
+            class="opacity-50 hover:opacity-80 min-w-[180px]">
             {h.textContent}
           </a>
         ))}
