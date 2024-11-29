@@ -4,6 +4,8 @@ import Link from "@tiptap/extension-link";
 import Document from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
 import Heading from "./heading.ts";
 import StarterKit from "@tiptap/starter-kit";
 import { createLowlightCodeSSRPlugin, hydrate } from "./lowlight.tsx";
@@ -26,6 +28,8 @@ export const getBasicExtensions = () => {
       autolink: false,
     }),
     Underline,
+    TaskList,
+    TaskItem,
     //   ssr ? createLowlightCodeSSRPlugin() : createLowlightCodePlugin(),
     createPlaceholderPlugin(),
   ];

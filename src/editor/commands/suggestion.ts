@@ -37,6 +37,12 @@ export default {
         },
       },
       {
+        title: "Task",
+        command: ({ editor, range }: any) => {
+          (editor as Editor).chain().focus().deleteRange(range).toggleTaskList().run();
+        },
+      },
+      {
         title: "Image",
         command: async ({ editor, range }: any) => {
           // const url = prompt("entre image url")
