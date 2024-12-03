@@ -24,6 +24,8 @@ const Login = () => {
       try {
         await login(value);
         location.reload();
+      } catch (error: any) {
+        alert(error.message);
       } finally {
         setButtonRef({ "data-loading": false });
       }

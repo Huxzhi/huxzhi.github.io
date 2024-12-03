@@ -27,6 +27,9 @@ export const login = async (token: string) => {
         },
       };
     });
+  if (!(repo.permissions as any)?.push) {
+    throw new Error("login user has no permission to push to current repo");
+  }
   setLocalUser({
     name: data.name ?? "",
     avatar: data.avatar_url,

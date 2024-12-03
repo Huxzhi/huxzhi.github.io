@@ -18,8 +18,10 @@ export const mount = async () => {
       return alert(JSON.stringify(result, null, 2));
     }
     await login(result.token);
-    location.replace("/");
-  } catch (error) {
+  } catch (error: any) {
+    alert(error.message);
     console.error(error);
+  } finally {
+    location.replace("/");
   }
 };
