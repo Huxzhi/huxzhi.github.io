@@ -107,11 +107,11 @@
   }
 
   code {
-    border-radius: .125rem;
-    background-color: rgb(23 23 23 /0.5);
-    color: rgb(255 255 255 / 1);
+    border-radius: 4px;
+    @apply bg-[#e8e8e8] dark:bg-[#727272];
     caret-color: #fff;
-    padding: 0 2px;
+    padding: 1px;
+    border: 1px solid rgba(31, 35, 41, 0.04);
   }
 
   .llt-code {
