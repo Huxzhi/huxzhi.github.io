@@ -1,0 +1,29 @@
+---
+interface Props {
+  page: number;
+  pages: number;
+}
+
+const { page, pages } = Astro.props;
+
+const visible = pages > 1;
+
+const indicators = Array.from({ length: pages }, (_, i) => i);
+---
+
+{
+  visible && (
+    <div class="flex justify-center flex-wrap gap-2 py-4 text-sm">
+      {indicators.map((i) => (
+        <a
+          class={
+            `rounded border w-8 h-8 overflow-hidden whitespace-pre-wrap flex items-center justify-center` +
+            (i === page ? " bg-gray text-white" : "")
+          }
+          href={`/${i}`}>
+          {i + 1}
+        </a>
+      ))}
+    </div>
+  )
+}

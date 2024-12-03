@@ -1,14 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Pagination from "../components/Pagination.astro";
 import type { ShortPageData } from "../shared/type";
 
 interface Props {
   posts: ShortPageData[];
   page: number;
-  more: boolean;
+  pages: number;
 }
 
-const { posts, page, more } = Astro.props;
+const { posts, page, pages } = Astro.props;
 ---
 
 <script>
@@ -46,15 +47,7 @@ const { posts, page, more } = Astro.props;
           </>
         ))
       }
-      {
-        more && (
-          <div class="w-full flex justify-center">
-            <a href={`/${page + 1}`} class="mt-4 text-blue">
-              Load More
-            </a>
-          </div>
-        )
-      }
+      <Pagination page={page} pages={pages} />
     </div>
   </main>
 </Layout>

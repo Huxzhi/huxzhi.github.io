@@ -12,6 +12,9 @@ export const config = {
     copyright: "© Glink",
     copyrightUrl: "https://github.com/glink25",
   },
+  pagination: {
+    size: 10,
+  },
   giscus: false as object | false,
 } as const;
 

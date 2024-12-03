@@ -2,7 +2,10 @@
 import { sortByPin } from "@/shared/tag";
 import Home from "../components/Home.astro";
 import { getPageList } from "./api/post/list";
+import config from "urodele.config";
 const posts = sortByPin(await getPageList());
+
+const pageSize = config.pagination.size;
 ---
 
-<Home posts={posts.slice(0, 10)} page={0} more={posts.length > 10} />
+<Home posts={posts.slice(0, pageSize)} page={0} pages={Math.ceil(posts.length / pageSize)} />

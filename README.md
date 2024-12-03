@@ -44,6 +44,7 @@ export const config = {
     repo: "test-for-anything", // 仓库名称 YOUR_NAME.github.io
     // 默认情况下，urodele仅支持使用github token登录，你需要在博客首页的右上角点击登录，输入自己的github token来进行登录
     // 如果你希望使用更安全的 Github OAuth 方式登录，urodele目前提供了beta支持，你需要自己创建一个Github OAuth应用和对应的后端用于登录
+    // 可以参考https://github.com/glink25/github-login 项目来部署免费的CloudFlare Worker以实现Github Apps登录
     logInUrl: "", // 启用 Github OAuth 登录，这里填入Github OAuth的登录地址
     logInAuthUrl: "", // 启用 Github OAuth 登录，，这里填入Github OAuth获取token的地址
   },
@@ -54,6 +55,7 @@ export const config = {
     copyright: "© Glink", // 页脚版权文本
     copyrightUrl: "https://github.com/glink25", // 页脚版权文本跳转链接
   },
+  // 是否启用giscus评论系统，详情：https://giscus.app/zh-CN
   giscus: false as object | false,
 } as const;
 ```
