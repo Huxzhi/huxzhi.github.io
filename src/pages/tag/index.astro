@@ -8,7 +8,7 @@ const tags = [...new Set(posts.map((p) => p.tags).flat())];
 
 <Layout title="Tags">
   <main>
-    <div class="content flex flex-wrap items-center justify-center px-4 gap-4">
+    <div class="content flex flex-wrap items-center justify-center py-2 px-4 gap-4">
       {
         tags.map((tag) => (
           <a href={`/tag/${encodeURIComponent(tag)}`} class="text-4xl text-text text-opacity-60 hover:text-opacity-100">
