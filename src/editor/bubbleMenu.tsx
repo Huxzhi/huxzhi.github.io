@@ -26,7 +26,7 @@ export const createBubbleMenu = (getEditor: () => Editor) => {
     });
   });
   return (
-    <div ref={setRef} className="ud-wrapper bubble-menu">
+    <div ref={setRef} className="ud-wrapper bubble-menu text-lg">
       <button
         class="ud-bm-bold"
         onClick={() => {
@@ -34,7 +34,7 @@ export const createBubbleMenu = (getEditor: () => Editor) => {
           editor.chain().focus().toggleBold().run();
           updateActive();
         }}>
-        <div class="i-material-symbols:format-bold pointer-events-none"></div>
+        <div class="i-material-symbols:format-bold"></div>
       </button>
       <button
         class="ud-bm-italic"
