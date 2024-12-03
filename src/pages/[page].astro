@@ -10,6 +10,8 @@ const pageSize = config.pagination.size;
 const posts = allPosts.slice(page * pageSize, page * pageSize + pageSize);
 
 export const getStaticPaths = async () => {
+  const { default: config } = await import("urodele.config");
+  const pageSize = config.pagination.size;
   const posts = sortByPin(await getPageList());
   const pages = Math.ceil(posts.length / pageSize);
   return Array.from({ length: pages }, (_, i) => i)
