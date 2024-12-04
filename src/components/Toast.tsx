@@ -26,7 +26,7 @@ export default function toast(title: string, type: "success" | "error" | "warn" 
     const el = (
       <div
         id={SELECTOR_ID}
-        class="w-full fixed left-0 top-0 z-[30] pointer-events-none flex flex-col items-center pt-8 p-2 gap-2 transition-all"></div>
+        class="w-full fixed left-0 top-0 z-[110] pointer-events-none flex flex-col items-center pt-8 p-2 gap-2 transition-all"></div>
     ) as HTMLDivElement;
     document.body.appendChild(el);
     return el;

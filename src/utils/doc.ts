@@ -38,3 +38,16 @@ export const getLocalUploadImages = async (editor: Editor) => {
 
   return { assets, editorJSON };
 };
+
+export const getDocAssets = (editor: Editor) => {
+  const assets: string[] = [];
+  editor.state.doc.content.forEach((node) => {
+    if (node.type.name === "image") {
+      const url = node.attrs.src as string;
+      if (url.startsWith("/post-assets")) {
+        assets.push(url);
+      }
+    }
+  });
+  return [...new Set(assets)];
+};

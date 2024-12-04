@@ -3,7 +3,7 @@ import type { ReactElement } from "jsx-dom";
 import { useMemoFn } from "../utils/dom";
 
 export const useDialog = (content: () => ReactElement) => {
-  const getDialog = useMemoFn(() => {
+  const [getDialog, clear] = useMemoFn(() => {
     const onClick = hide;
     return (
       <div class="fixed z-[100] top-0 left-0 w-full h-full flex items-center justify-center">
@@ -20,8 +20,13 @@ export const useDialog = (content: () => ReactElement) => {
     const dialog = getDialog();
     dialog.parentElement?.removeChild(dialog);
   };
+  const close = () => {
+    hide();
+    clear();
+  };
   return {
     show,
     hide,
+    close,
   };
 };

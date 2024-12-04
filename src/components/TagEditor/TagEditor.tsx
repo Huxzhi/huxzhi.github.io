@@ -60,7 +60,7 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
     };
 
     return (
-      <div ref={tagEditor} class={cn("flex text-sm px-4 gap-2 w-full max-w-[720px]", style["tag-editor"])}>
+      <div ref={tagEditor} class={cn("flex text-sm px-[28px] gap-2 w-full max-w-[720px]", style["tag-editor"])}>
         <div ref={tagsListWrapper} class="flex gap-2">
           {tagList()}
         </div>
