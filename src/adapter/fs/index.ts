@@ -1,5 +1,5 @@
 import { toMeta } from "@/shared/transform";
-import type { ReadPageByPath, WritePage } from "../helper";
+import type { DeletePageByPath, ReadPageByPath, WritePage } from "../helper";
 
 const PREFIX = location.origin;
 
@@ -21,4 +21,14 @@ export const writePage: WritePage = async (path, data, assets) => {
   const strFile = new File([new Blob([rawString], { type: "text/plain" })], "content.json");
   form.append("content", strFile);
   await fetch(`${PREFIX}/api/post/${path}`, { method: "POST", body: form });
+};
+
+export const deletePageByPath: DeletePageByPath = async (path, assets) => {
+  await fetch(`${PREFIX}/api/post/${path}`, {
+    method: "DELETE",
+    body: JSON.stringify({ path, assets }),
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 };

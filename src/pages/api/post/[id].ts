@@ -1,4 +1,4 @@
-import { writeFile } from "fs/promises";
+import { writeFile, unlink } from "fs/promises";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getPageList, getSinglePageData } from "./list";
 
@@ -36,5 +36,13 @@ export const POST: APIRoute = async (ctx) => {
   } else if (content instanceof File) {
     await writeFile(`./posts/${id}.json`, Buffer.from(await content.arrayBuffer()), { encoding: "utf-8" });
   }
+  return new Response(JSON.stringify({ code: 0 }), { status: 200 });
+};
+
+export const DELETE: APIRoute = async (ctx) => {
+  const { path: id, assets } = (await ctx.request.json()) as { path: string; assets: string[] };
+  const pagePath = `./posts/${id}.json`;
+  const assetsPaths = assets.map((p) => p.replace(`/post-assets`, "./public/post-assets"));
+  await Promise.all([pagePath, ...assetsPaths].map((p) => unlink(p)));
   return new Response(JSON.stringify({ code: 0 }), { status: 200 });
 };

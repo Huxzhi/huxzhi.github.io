@@ -32,7 +32,10 @@ export const useMemoFn = <T>(fn: () => T) => {
     memo = fn();
     return memo;
   };
-  return run;
+  const clear = () => {
+    memo = undefined;
+  };
+  return [run, clear] as const;
 };
 
 export const withCreated = <P extends any[], R, F extends (...args: P) => R>(

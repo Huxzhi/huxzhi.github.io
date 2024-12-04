@@ -2,7 +2,7 @@ import * as React from "jsx-dom";
 
 import { createEditor } from "@/editor";
 import adapter from "@/adapter";
-import { getLocalUploadImages, travelDoc } from "@/utils/doc";
+import { getDocAssets, getLocalUploadImages, travelDoc } from "@/utils/doc";
 import { parseTitle, toFilename, toUniqueFilename } from "@/shared/transform";
 import { getGlobalData } from "@/utils/data";
 import { useAttrRef } from "@/utils/dom";
@@ -13,8 +13,9 @@ import type { PageData } from "@/shared/type";
 import config from "urodele.config";
 import toast from "../Toast";
 import { mount as mountOutline } from "@/components/Outline";
+import { useDialog } from "../Dialog";
 
-const { readPageByPath, writePage } = adapter;
+const { readPageByPath, writePage, deletePageByPath } = adapter;
 
 export const mount = async (selector: string, operationSelector: string) => {
   const root = document.querySelector<HTMLElement>(selector);
@@ -208,7 +209,69 @@ export const mount = async (selector: string, operationSelector: string) => {
       </a>
     );
   };
+
+  const DeleteButton = () => {
+    const checkRef = React.useRef<HTMLInputElement>(null);
+    const [setRef, setAttar] = useAttrRef({ "data-loading": false, disabled: false });
+    const confirmDelete = async () => {
+      if (!pagePath) return;
+      const recursive = Boolean(checkRef.current?.checked);
+      const assets = getDocAssets(editor);
+      try {
+        setAttar({ "data-loading": true, disabled: true });
+        await deletePageByPath(pagePath, recursive ? assets : []);
+        await toast("Delete success!");
+        location.replace("/");
+      } catch (error) {
+        toast(`delete failed: ${error}`);
+      } finally {
+        setAttar({ "data-loading": false, disabled: false });
+      }
+    };
+    const { show, close } = useDialog(() => {
+      const assets = getDocAssets(editor);
+      return (
+        <div class="flex-1 flex flex-col p-4 gap-2">
+          <div class="font-bold">Are you sure to delete this post?</div>
+          <div class="text-sm flex flex-col">
+            <label>
+              <input type="checkbox" ref={checkRef} checked />
+              <span class="px-2">delete related assets</span>
+            </label>
+            <span class="text-xs opacity-60">Make sure no other posts are using these assets</span>
+            <ul class="flex flex-col text-xs pt-2">
+              {assets.map((asset) => (
+                <a target="_blank" href={asset}>
+                  {asset}
+                </a>
+              ))}
+            </ul>
+          </div>
+          <div class="flex-1"></div>
+          <div class="flex gap-2 justify-end text-sm">
+            <button class="buttoned" onClick={() => close()}>
+              Cancel
+            </button>
+            <button ref={setRef} class="buttoned bg-red" onClick={() => confirmDelete()}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      );
+    });
+    const toDelete = () => {
+      show();
+    };
+    return (
+      <button title="delete" class="text-red" onClick={toDelete}>
+        <div class="i-ri:delete-bin-fill"></div>
+      </button>
+    );
+  };
   opRoot.appendChild(AutoSaveIndicator());
+  if (!isCreate) {
+    opRoot.appendChild(DeleteButton());
+  }
   opRoot.appendChild(RawButton());
   opRoot.appendChild(Save());
 };
