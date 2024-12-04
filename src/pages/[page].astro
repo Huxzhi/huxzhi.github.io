@@ -24,4 +24,4 @@ export const getStaticPaths = async () => {
 };
 ---
 
-<Home posts={posts} page={page} pages={Math.ceil(posts.length / pageSize)} />
+<Home posts={posts} page={page} pages={Math.ceil(allPosts.length / pageSize)} />
