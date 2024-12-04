@@ -20,7 +20,7 @@ const indicators = Array.from({ length: pages }, (_, i) => i);
             `rounded border w-8 h-8 overflow-hidden whitespace-pre-wrap flex items-center justify-center` +
             (i === page ? " bg-gray text-white" : "")
           }
-          href={`/${i}`}>
+          href={`/${i === 0 ? "" : i}`}>
           {i + 1}
         </a>
       ))}
