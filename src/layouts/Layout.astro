@@ -2,6 +2,7 @@
 import "@/index.scss";
 import Auth from "@/components/Auth/index.astro";
 import Footer from "@/components/Footer.astro";
+import config from "urodele.config";
 
 interface Props {
   title?: string;
@@ -20,15 +21,15 @@ const { title, description, footer = true } = Astro.props;
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="URODELE" />
+    <meta name="apple-mobile-web-app-title" content={config.head.brand} />
     <meta name="msapplication-TileColor" content="#000000" />
     <meta
       name="viewport"
       content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="description" content={description ?? "A self-owned full-static blog system"} />
+    <meta name="description" content={description ?? config.head.description} />
     <link rel="icon" href="/favicon.ico" />
-    <title>{["Urodele", title].reverse().join(" | ")}</title>
+    <title>{[config.head.brand, title].reverse().join(" | ")}</title>
   </head>
   <body class="text-text bg-bg">
     <header class="flex justify-between items-center p-2 gap-2 h-10">

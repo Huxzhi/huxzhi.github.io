@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Pagination from "../components/Pagination.astro";
 import type { ShortPageData } from "../shared/type";
+import config from "urodele.config";
 
 interface Props {
   posts: ShortPageData[];
@@ -17,8 +18,10 @@ const { posts, page, pages } = Astro.props;
 
   mount("data-acc-time");
 </script>
-<Layout title="Welcome to Urodele">
-  <div class="w-full h-40 bg-black text-white font-bold text-3xl flex items-center justify-center">Urodele</div>
+<Layout title={config.head.title}>
+  <div class="w-full h-40 bg-black text-white font-bold text-3xl flex items-center justify-center">
+    {config.head.brand}
+  </div>
   <main>
     <div class="content">
       {

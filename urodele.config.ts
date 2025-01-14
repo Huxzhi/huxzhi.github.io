@@ -7,6 +7,8 @@ export const config = {
   },
   head: {
     title: "Urodele",
+    brand: "Urodele",
+    description: "A self-owned full-static blog system",
   },
   footer: {
     copyright: "© Glink",
