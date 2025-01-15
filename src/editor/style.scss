@@ -386,7 +386,7 @@
     border: 1px solid rgba(0, 0, 0, .05);
     border-radius: 4px;
     box-shadow: var(--shadow);
-    @apply bg-modal;
+    @apply bg-modal <md:w-[calc(100vw-60px)] <md:justify-around;
 
     $types: bold, italic, underline, strike, code, link;
 
@@ -442,10 +442,10 @@
   }
 
   &.front-handle-menu {
-    position: absolute;
+    // position: absolute;
     z-index: 50;
-    top: 100%;
-    left: 0;
+    // top: 100%;
+    // left: 0;
     transition: all ease 0.2s;
     transition-delay: 0.2s;
     border-radius: 4px;

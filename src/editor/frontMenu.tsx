@@ -87,6 +87,7 @@ export const createFrontMenu = (view: EditorView, getCurrentNode: () => Element 
     trigger: "click",
     interactive: true,
     placement: "bottom-start",
+    offset: [0, 0],
   });
   const ob = new MutationObserver((v) => {
     if (v.every((x) => x.attributeName !== "style")) {
@@ -114,7 +115,6 @@ const handleMenu = [
 
       // 获取当前节点内容
       const node = state.doc.nodeAt(position);
-      console.log(node, "mod");
       if (!node) return;
       const content = nodes.textContent;
       const size = nodes.nodeSize;
@@ -125,7 +125,6 @@ const handleMenu = [
       tr.replaceWith(position - 1, position - 1 + size, newBlockquote);
 
       view.dispatch(tr);
-      console.log("change success");
     },
   },
   {

@@ -94,9 +94,25 @@ export const createBubbleMenu = (getEditor: () => Editor) => {
 export const createBubbleMenuPlugin = (root: HTMLElement, getEditor: () => Editor) => {
   const bubble = createBubbleMenu(getEditor);
   root.appendChild(bubble);
+  const referenceRect =
+    window.innerWidth < 768
+      ? () => ({
+          top: 32,
+          left: window.innerWidth / 2,
+          right: 0,
+          bottom: 0,
+          height: 0,
+          width: 0,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        })
+      : undefined;
   return BubbleMenu.configure({
     element: bubble,
     tippyOptions: {
+      arrow: false,
+      getReferenceClientRect: referenceRect,
       popperOptions: {
         modifiers: [
           {
