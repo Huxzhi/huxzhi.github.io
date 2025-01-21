@@ -35,8 +35,10 @@ export const mount = (selector: string) => {
       if (!el) return;
       if (el?.style.display === "none") {
         el.style.removeProperty("display");
+        child.classList.remove("md:w-[32px]");
       } else {
         el.style.display = "none";
+        child.classList.add("md:w-[32px]");
       }
     };
 
