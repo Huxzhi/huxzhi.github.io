@@ -23,7 +23,7 @@ jobs:
       - name: Install pnpm 📦
         uses: pnpm/action-setup@v2
         with:
-          version: 9.1.1  # 或指定你项目使用的 pnpm 版本
+          version: 8
           run_install: false
 
       - name: Install and Build 🔨
