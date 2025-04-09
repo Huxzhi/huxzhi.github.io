@@ -2,9 +2,9 @@ import { Extension } from "@tiptap/core";
 import { NodeSelection, Plugin, PluginKey, TextSelection } from "@tiptap/pm/state";
 import { Fragment, Slice, Node } from "@tiptap/pm/model";
 
-// @ts-expect-error: import private method
-import { __serializeForClipboard, EditorView } from "@tiptap/pm/view";
+import { EditorView } from "@tiptap/pm/view";
 import { createFrontMenu } from "./frontMenu.tsx";
+import { DOMSerializer } from "prosemirror-model";
 
 export interface GlobalFrontHandleOptions {
   /**
@@ -126,10 +126,22 @@ export function DragHandlePlugin(options: GlobalFrontHandleOptions & { pluginKey
     }
 
     const slice = view.state.selection.content();
-    const { dom, text } = __serializeForClipboard(view, slice);
+    const serializer = DOMSerializer.fromSchema(view.state.schema as any);
+
+    // 创建一个容器 DOM 节点
+    const div = document.createElement("div");
+
+    slice.content.forEach((node) => {
+      const dom = serializer.serializeNode(node as any);
+      div.appendChild(dom);
+    });
+
+    // 转换为 HTML 和纯文本
+    const html = div.innerHTML;
+    const text = div.textContent ?? "";
 
     event.dataTransfer.clearData();
-    event.dataTransfer.setData("text/html", dom.innerHTML);
+    event.dataTransfer.setData("text/html", html);
     event.dataTransfer.setData("text/plain", text);
     event.dataTransfer.effectAllowed = "copyMove";
 
