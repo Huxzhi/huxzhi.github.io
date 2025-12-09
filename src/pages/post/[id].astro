@@ -1,55 +1,72 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import "@/editor/style.scss";
-import { getPageList, getSinglePageData } from "@/pages/api/post/list";
-import config from "urodele.config";
+import Layout from '@/layouts/Layout.astro'
+import '@/editor/style.scss'
+import { getPageList, getSinglePageData } from '@/pages/api/post/list'
+import { formatTagDisplay, getLeafTags } from '@/shared/tag'
+import config from 'urodele.config'
 
-const id = (Astro.params as any).id;
-const post = await getSinglePageData(id);
-const allPosts = await getPageList();
+const id = Astro.params.id as string
+const post = await getSinglePageData(id)
+const allPosts = await getPageList()
 
-const curIndex = allPosts.findIndex((p) => p.id === post.id);
-const prev = allPosts[curIndex + 1];
-const next = allPosts[curIndex - 1];
+const curIndex = allPosts.findIndex((p) => p.id === post.id)
+const prev = allPosts[curIndex + 1]
+const next = allPosts[curIndex - 1]
+
+// Get only leaf tags for display (deepest level)
+const displayTags = getLeafTags(post.tags)
 
 export const getStaticPaths = async () => {
-  const posts = await getPageList(false);
+  const posts = await getPageList(false)
   return posts.map((p) => ({
     params: {
       id: p.id,
     },
-  }));
-};
+  }))
+}
 ---
 
 <script>
-  import { mount } from "@/components/Pager";
-  import { mount as mountOutline } from "@/components/Outline";
+  import { mount as mountOutline } from '@/components/Outline'
+  import { mount } from '@/components/Pager'
 
-  mount(".navigator", "data-page-id");
-  mountOutline(".outline-wrapper");
+  mount('.navigator', 'data-page-id')
+  mountOutline('.outline-wrapper')
 </script>
 
-<Layout title={post.title} description={post.intro}>
+<Layout
+  title={post.title}
+  description={post.intro}
+>
   <main>
     <div class="content">
       <div class="w-full flex gap-2 pb-2">
         {
-          post.tags.map((tag) => (
+          displayTags.map((tag) => (
             <a
-              href={`/tag/${encodeURIComponent(tag)}`}
-              class="rounded hover:bg-gray-200 dark:hover:bg-modal px-3 py-1 cursor-pointer">
-              #{tag}
+              href={`/tag/${tag}`}
+              class="rounded hover:bg-gray-200 dark:hover:bg-modal px-3 py-1 cursor-pointer"
+            >
+              #{formatTagDisplay(tag)}
             </a>
           ))
         }
       </div>
-      <div class="ud-root read-only flex-1" set:html={post.html} />
+      <div
+        class="ud-root read-only flex-1"
+        set:html={post.html}
+      />
 
-      <div data-page-id={post.id} class="navigator flex justify-between items-center mt-4 py-4">
+      <div
+        data-page-id={post.id}
+        class="navigator flex justify-between items-center mt-4 py-4"
+      >
         {
           prev ? (
-            <a href={`/post/${prev.id}`} class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]">
+            <a
+              href={`/post/${prev.id}`}
+              class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]"
+            >
               <div class="i-ri:arrow-left-double-line w-5 h-5 flex-shrink-0" />
               <div class="text-start">{prev.title}</div>
             </a>
@@ -61,7 +78,8 @@ export const getStaticPaths = async () => {
           next ? (
             <a
               href={`/post/${next.id}`}
-              class="flex items-center justify-end gap-1 text-blue cursor-pointer flex-[45%]">
+              class="flex items-center justify-end gap-1 text-blue cursor-pointer flex-[45%]"
+            >
               <div class="text-end">{next.title}</div>
               <div class="i-ri:arrow-right-double-line w-5 h-5 flex-shrink-0" />
             </a>

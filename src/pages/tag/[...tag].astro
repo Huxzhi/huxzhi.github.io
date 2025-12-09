@@ -1,0 +1,66 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByTag, getAllTags } from '@/pages/api/post/list'
+import { formatTagDisplay } from '@/shared/tag'
+
+// Rest parameter captures the full path with slashes
+const tagPath = Astro.params.tag as string
+
+const posts = await getPostsByTag(tagPath)
+
+export const getStaticPaths = async () => {
+  const allTags = await getAllTags()
+  return allTags.map((tag) => ({
+    params: {
+      tag: tag,
+    },
+  }))
+}
+---
+
+<script>
+  import { mount } from '@/components/RelativeTime'
+
+  mount('data-acc-time')
+</script>
+
+<Layout title={`Tag | ${formatTagDisplay(tagPath)}`}>
+  <main>
+    <div class="content flex flex-col w-full items-center justify-center px-4">
+      <div class="w-full flex justify-between">
+        <div class="text-4xl">#{formatTagDisplay(tagPath)}</div>
+        <div>{posts.length}</div>
+      </div>
+      {
+        posts.map((item) => (
+          <>
+            <div class="w-full group pt-8 pb-2">
+              <a
+                href={`/post/${item.id}?fromTag=${encodeURIComponent(tagPath)}`}
+                class="px-4 pb-4  flex flex-col w-full"
+              >
+                <div class="text-lg transition-all font-semibold group-hover:underline">
+                  {item.title}
+                </div>
+                <div class="text-text text-opacity-60 text-sm">
+                  {item.intro}
+                </div>
+              </a>
+              <div
+                data-acc-time={item.createTime}
+                class="text-end text-xs text-gray"
+              />
+            </div>
+            <hr class="w-full" />
+          </>
+        ))
+      }
+      <a
+        href="/tag"
+        class="mt-4 text-blue"
+      >
+        All Tags
+      </a>
+    </div>
+  </main>
+</Layout>

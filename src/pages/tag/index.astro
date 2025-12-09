@@ -1,18 +1,23 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { getPageList } from "@/pages/api/post/list";
+import Layout from '@/layouts/Layout.astro'
+import { getAllTags } from '@/pages/api/post/list'
+import { formatTagDisplay } from '@/shared/tag'
 
-const posts = await getPageList();
-const tags = [...new Set(posts.map((p) => p.tags).flat())];
+const tags = (await getAllTags()).sort()
 ---
 
 <Layout title="Tags">
   <main>
-    <div class="content flex flex-wrap items-center justify-center py-2 px-4 gap-4">
+    <div
+      class="content flex flex-wrap items-center justify-center py-2 px-4 gap-4"
+    >
       {
         tags.map((tag) => (
-          <a href={`/tag/${encodeURIComponent(tag)}`} class="text-4xl text-text text-opacity-60 hover:text-opacity-100">
-            #{decodeURIComponent(tag)}
+          <a
+            href={`/tag/${tag}`}
+            class="text-4xl text-text text-opacity-60 hover:text-opacity-100"
+          >
+            #{formatTagDisplay(decodeURIComponent(tag))}
           </a>
         ))
       }
