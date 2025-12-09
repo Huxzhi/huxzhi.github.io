@@ -1,12 +1,26 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import '@/editor/style.scss'
-import { getPageList, getSinglePageData } from '@/pages/api/post/list'
+import '@/editor/codemirror.scss'
+import { getPageList } from '@/pages/api/post/list'
 import { formatTagDisplay, getLeafTags } from '@/shared/tag'
+import { getCollection, getEntry, render } from 'astro:content'
+import { expandTags } from '@/shared/tag'
 import config from 'urodele.config'
 
 const id = Astro.params.id as string
-const post = await getSinglePageData(id)
+const entry = await getEntry('posts', id)
+
+if (!entry) {
+  return Astro.redirect('/404')
+}
+
+const { Content } = await render(entry)
+const post = {
+  id: entry.id.replace(/\.md$/, ''),
+  ...entry.data,
+  tags: expandTags(entry.data.tags),
+}
+
 const allPosts = await getPageList()
 
 const curIndex = allPosts.findIndex((p) => p.id === post.id)
@@ -17,10 +31,10 @@ const next = allPosts[curIndex - 1]
 const displayTags = getLeafTags(post.tags)
 
 export const getStaticPaths = async () => {
-  const posts = await getPageList(false)
+  const posts = await getCollection('posts')
   return posts.map((p) => ({
     params: {
-      id: p.id,
+      id: p.id.replace(/\.md$/, ''),
     },
   }))
 }
@@ -52,10 +66,9 @@ export const getStaticPaths = async () => {
           ))
         }
       </div>
-      <div
-        class="ud-root read-only flex-1"
-        set:html={post.html}
-      />
+      <div class="ud-root read-only flex-1 prose dark:prose-invert max-w-none">
+        <Content />
+      </div>
 
       <div
         data-page-id={post.id}

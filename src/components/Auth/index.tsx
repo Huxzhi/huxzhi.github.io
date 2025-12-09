@@ -170,8 +170,11 @@ const Profile = (user: UserInfo) => {
   const canEdit = Boolean(user.permissions?.push)
   const isHome = location.pathname === '/'
   const isIndex = isHome || /^\/\d+$/.test(location.pathname)
-  const isPage = location.pathname.startsWith('/post')
+  const isPage = location.pathname.startsWith('/post/')
   const pageId = location.pathname.replace('/post/', '')
+
+  console.log('Auth debug:', { isPage, pageId, pathname: location.pathname })
+
   if (canEdit && isHome) {
     handleDraft()
   }

@@ -1,39 +1,68 @@
 ---
-import "@/index.scss";
-import Auth from "@/components/Auth/index.astro";
-import Footer from "@/components/Footer.astro";
-import config from "urodele.config";
+import Auth from '@/components/Auth/index.astro'
+import Footer from '@/components/Footer.astro'
+import config from 'urodele.config'
+import '../styles.css'
 
 interface Props {
-  title?: string;
-  description?: string;
-  footer?: boolean;
+  title?: string
+  description?: string
+  footer?: boolean
 }
 
-const { title, description, footer = true } = Astro.props;
+const { title, description, footer = true } = Astro.props
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content={config.head.brand} />
-    <meta name="msapplication-TileColor" content="#000000" />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="144x144"
+      href="/favicon.png"
+    />
+    <meta
+      name="apple-mobile-web-app-capable"
+      content="yes"
+    />
+    <meta
+      name="mobile-web-app-capable"
+      content="yes"
+    />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta
+      name="apple-mobile-web-app-title"
+      content={config.head.brand}
+    />
+    <meta
+      name="msapplication-TileColor"
+      content="#000000"
+    />
     <meta
       name="viewport"
       content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="description" content={description ?? config.head.description} />
-    <link rel="icon" href="/favicon.ico" />
-    <title>{[config.head.brand, title].reverse().join(" | ")}</title>
+    <meta
+      name="description"
+      content={description ?? config.head.description}
+    />
+    <link
+      rel="icon"
+      href="/favicon.ico"
+    />
+    <title>{[config.head.brand, title].reverse().join(' | ')}</title>
   </head>
   <body class="text-text bg-bg">
     <header class="flex justify-between items-center p-2 gap-2 h-10">
-      <a href="/" class="text-button text-lg" aria-label="homepage">
+      <a
+        href="/"
+        class="text-button text-lg"
+        aria-label="homepage"
+      >
         <div class="i-ri:menu-4-fill"></div>
       </a>
       <div class="flex gap-2 items-center header-operations">

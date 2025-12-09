@@ -1,0 +1,300 @@
+.cm-root {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+
+  .cm-editor {
+    height: 100%;
+    outline: none;
+    
+    &.cm-focused {
+      outline: none;
+    }
+  }
+
+  .cm-scroller {
+    overflow: auto;
+    font-family: inherit;
+  }
+
+  .cm-content {
+    padding: 20px;
+    min-height: 100%;
+    caret-color: var(--ud-c-primary, #409eff);
+  }
+
+  .cm-line {
+    padding: 0;
+    line-height: 1.8;
+  }
+
+  // Gutters
+  .cm-gutters {
+    background-color: var(--ud-c-bg-light, #fafafa);
+    border-right: 1px solid var(--ud-c-border, #e0e0e0);
+    color: var(--ud-c-text-3, #999);
+  }
+
+  .cm-activeLineGutter {
+    background-color: var(--ud-c-bg, #fff);
+  }
+
+  .cm-lineNumbers {
+    .cm-gutterElement {
+      padding: 0 8px;
+      min-width: 30px;
+    }
+  }
+
+  // Selection
+  .cm-selectionBackground,
+  &.cm-focused .cm-selectionBackground {
+    background-color: var(--ud-c-primary-light, rgba(64, 158, 255, 0.2));
+  }
+
+  .cm-activeLine {
+    background-color: var(--ud-c-bg-light, #fafafa);
+  }
+
+  // Cursor
+  .cm-cursor {
+    border-left-color: var(--ud-c-primary, #409eff);
+  }
+
+  // Markdown 语法高亮
+  .cm-content {
+    // 标题
+    .tok-heading {
+      font-weight: 600;
+      color: var(--ud-c-text-1, #1a1a1a);
+    }
+
+    .tok-heading1 {
+      font-size: 2em;
+      line-height: 1.4;
+      margin: 0.67em 0;
+    }
+
+    .tok-heading2 {
+      font-size: 1.5em;
+      line-height: 1.4;
+      margin: 0.83em 0;
+    }
+
+    .tok-heading3 {
+      font-size: 1.25em;
+      line-height: 1.4;
+      margin: 1em 0;
+    }
+
+    .tok-heading4 {
+      font-size: 1.1em;
+      line-height: 1.4;
+    }
+
+    .tok-heading5,
+    .tok-heading6 {
+      font-size: 1em;
+      line-height: 1.4;
+    }
+
+    // 强调
+    .tok-emphasis {
+      font-style: italic;
+      color: var(--ud-c-text-1, #1a1a1a);
+    }
+
+    .tok-strong {
+      font-weight: 700;
+      color: var(--ud-c-text-1, #1a1a1a);
+    }
+
+    // 链接
+    .tok-link {
+      color: var(--ud-c-primary, #409eff);
+      text-decoration: underline;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--ud-c-primary-dark, #337ecc);
+      }
+    }
+
+    .tok-url {
+      color: var(--ud-c-primary-light, #79bbff);
+    }
+
+    // 代码
+    .tok-monospace {
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 0.9em;
+      background-color: var(--ud-c-bg-light, #f5f5f5);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--ud-c-text-2, #333);
+    }
+
+    .tok-codeBlock {
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 0.9em;
+      background-color: var(--ud-c-bg-light, #f5f5f5);
+      padding: 12px;
+      border-radius: 6px;
+      display: block;
+      margin: 1em 0;
+      overflow-x: auto;
+    }
+
+    // 引用
+    .tok-quote {
+      color: var(--ud-c-text-2, #666);
+      border-left: 4px solid var(--ud-c-border, #e0e0e0);
+      padding-left: 16px;
+      margin: 1em 0;
+      font-style: italic;
+    }
+
+    // 列表
+    .tok-list {
+      color: var(--ud-c-text-1, #1a1a1a);
+    }
+
+    // 元字符（如 # * - 等）
+    .tok-meta {
+      color: var(--ud-c-text-3, #999);
+    }
+
+    .tok-processingInstruction {
+      color: var(--ud-c-text-3, #999);
+    }
+  }
+
+  // 图片预览
+  .cm-image-preview {
+    display: inline-block;
+    margin: 8px 0;
+    max-width: 100%;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  // 搜索匹配高亮
+  .cm-searchMatch {
+    background-color: var(--ud-c-warning-light, #fef0cd);
+    outline: 1px solid var(--ud-c-warning, #e6a23c);
+  }
+
+  .cm-searchMatch-selected {
+    background-color: var(--ud-c-warning, #e6a23c);
+  }
+
+  // Autocomplete
+  .cm-tooltip-autocomplete {
+    background-color: var(--ud-c-bg, #fff);
+    border: 1px solid var(--ud-c-border, #e0e0e0);
+    border-radius: 6px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+    ul {
+      max-height: 200px;
+      overflow-y: auto;
+      
+      li {
+        padding: 6px 12px;
+        cursor: pointer;
+
+        &[aria-selected] {
+          background-color: var(--ud-c-primary-light, rgba(64, 158, 255, 0.1));
+          color: var(--ud-c-primary, #409eff);
+        }
+      }
+    }
+  }
+
+  // 占位符
+  .cm-placeholder {
+    color: var(--ud-c-text-3, #999);
+    font-style: italic;
+  }
+}
+
+// 暗色模式
+@media (prefers-color-scheme: dark) {
+  .cm-root {
+    .cm-gutters {
+      background-color: var(--ud-c-bg-light, #1e1e1e);
+      border-right-color: var(--ud-c-border, #333);
+      color: var(--ud-c-text-3, #666);
+    }
+
+    .cm-activeLineGutter {
+      background-color: var(--ud-c-bg, #121212);
+    }
+
+    .cm-activeLine {
+      background-color: var(--ud-c-bg-light, #1e1e1e);
+    }
+
+    .cm-selectionBackground,
+    &.cm-focused .cm-selectionBackground {
+      background-color: var(--ud-c-primary-dark, rgba(64, 158, 255, 0.3));
+    }
+
+    .cm-content {
+      .tok-heading,
+      .tok-emphasis,
+      .tok-strong,
+      .tok-list {
+        color: var(--ud-c-text-1, #e0e0e0);
+      }
+
+      .tok-monospace,
+      .tok-codeBlock {
+        background-color: var(--ud-c-bg-light, #1e1e1e);
+        color: var(--ud-c-text-2, #ccc);
+      }
+
+      .tok-quote {
+        color: var(--ud-c-text-2, #999);
+        border-left-color: var(--ud-c-border, #333);
+      }
+
+      .tok-meta,
+      .tok-processingInstruction {
+        color: var(--ud-c-text-3, #666);
+      }
+    }
+
+    .cm-tooltip-autocomplete {
+      background-color: var(--ud-c-bg, #1e1e1e);
+      border-color: var(--ud-c-border, #333);
+    }
+  }
+}
+
+// 打印样式
+@media print {
+  .cm-root {
+    .cm-gutters {
+      display: none;
+    }
+
+    .cm-content {
+      padding: 0;
+    }
+  }
+}

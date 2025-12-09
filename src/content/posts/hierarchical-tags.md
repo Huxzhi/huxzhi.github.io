@@ -1,3 +1,10 @@
+---
+title: 层级标签使用指南 (Obsidian 风格)
+tags: [guide, features, tags]
+createTime: 1733756400000
+draft: false
+---
+
 # 层级标签使用指南 (Obsidian 风格)
 
 ## 功能说明

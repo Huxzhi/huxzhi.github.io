@@ -1,41 +1,13 @@
-import { getSSRHTML } from '@/editor/extensions'
 import { expandTags } from '@/shared/tag'
-import { parseIntro, parseMeta, pathToId } from '@/shared/transform'
-import type { PageDetail, ShortPageData } from '@/shared/type'
-import type { JSONContent } from '@tiptap/core'
-import { readFile, readdir } from 'fs/promises'
+import type { ShortPageData } from '@/shared/type'
+import { getCollection, getEntry } from 'astro:content'
 
-const detailCache = new Map<string, PageDetail>()
-const getPageDetail = async (path: string) => {
-  if (detailCache.has(path)) {
-    return detailCache.get(path)!
-  }
-  const text = await readFile(path, { encoding: 'utf-8' })
-  const content = JSON.parse(text) as JSONContent
-  const meta = parseMeta(content)
-  const imageNode = content.content?.find((v) => v.type === 'image')
-  const cover = imageNode?.attrs
-    ? {
-        src: imageNode.attrs.src as string,
-        alt: imageNode.attrs.alt as string | undefined,
-      }
-    : undefined
-
-  // Expand tags Obsidian-style: "a/b/c" becomes ["a", "a/b", "a/b/c"]
-  const expandedTags = expandTags(meta.tags)
-
-  const detail = {
-    content: text,
-    ...meta,
-    tags: expandedTags,
-    intro: parseIntro(content) ?? '',
-    html: getSSRHTML(content),
-    cover,
-  }
-  if (import.meta.env.PROD) {
-    detailCache.set(path, detail)
-  }
-  return detail
+// Helper to extract intro from markdown content (first paragraph)
+const extractIntro = (body: string): string => {
+  const paragraphs = body
+    .split('\n\n')
+    .filter((p) => p.trim() && !p.startsWith('#'))
+  return paragraphs[0]?.trim().slice(0, 200) ?? ''
 }
 
 const listCache = new Map<boolean, ShortPageData[]>()
@@ -81,50 +53,66 @@ export const getPostsByTag = async (tag: string): Promise<ShortPageData[]> => {
   return posts
 }
 
-export const getPageList = async (filterDraft = true) => {
+export const getPageList = async (
+  filterDraft = true,
+): Promise<ShortPageData[]> => {
   if (listCache.has(filterDraft)) return listCache.get(filterDraft)!
-  const dir = await readdir('./posts', { withFileTypes: true })
-  const rawPageData = await Promise.all(
-    dir
-      .filter((v) => v.isFile() && v.name.endsWith('.json'))
-      .map(async (v) => {
-        const filePath = `./posts/${v.name}`
-        const detail = await getPageDetail(filePath)
-        const id = pathToId(v.name)
-        return {
-          ...detail,
-          id,
-          path: v.name.replace(/\.json$/, ''),
-          html: undefined,
-          content: undefined,
-        }
-      }),
+
+  const allPosts = await getCollection('posts')
+
+  const pageData = await Promise.all(
+    allPosts.map(async (post) => {
+      const expandedTags = expandTags(post.data.tags)
+      const intro = extractIntro(post.body)
+
+      // Remove .md extension from id
+      const postId = post.id.replace(/\.md$/, '')
+
+      return {
+        id: postId,
+        path: postId,
+        title: post.data.title,
+        tags: expandedTags,
+        createTime: post.data.createTime,
+        updateTime: post.data.updateTime || post.data.createTime,
+        draft: post.data.draft,
+        cover: post.data.cover,
+        intro,
+      } satisfies ShortPageData
+    }),
   )
 
-  const pageData = rawPageData
-    // 按照创建时间先后排序
-    .sort((a, b) => b.createTime - a.createTime)
+  const sorted = pageData.sort((a, b) => b.createTime - a.createTime)
+  const result = filterDraft ? sorted.filter((p) => !p.draft) : sorted
 
-  if (filterDraft) {
-    const filtered = pageData.filter((p) => !p.draft)
-    if (import.meta.env.PROD) {
-      listCache.set(filterDraft, filtered)
-    }
-    return pageData.filter((p) => !p.draft)
-  }
   if (import.meta.env.PROD) {
-    listCache.set(filterDraft, pageData)
+    listCache.set(filterDraft, result)
   }
-  return pageData
+
+  return result
 }
 
 export const getSinglePageData = async (id: string) => {
-  const filePath = `./posts/${decodeURIComponent(id)}.json`
-  const detail = await getPageDetail(filePath)
+  const entry = await getEntry('posts', id)
+  if (!entry) {
+    throw new Error(`Post not found: ${id}`)
+  }
+
+  const expandedTags = expandTags(entry.data.tags)
+  const intro = extractIntro(entry.body)
+
   return {
-    ...detail,
-    id,
+    id: entry.id.replace(/\.md$/, ''),
     path: `/posts/${id}.json`,
+    title: entry.data.title,
+    tags: expandedTags,
+    createTime: entry.data.createTime,
+    updateTime: entry.data.updateTime || entry.data.createTime,
+    draft: entry.data.draft,
+    cover: entry.data.cover,
+    intro,
+    content: entry.body,
+    html: '', // Will be rendered by Astro
   }
 }
 
