@@ -1,23 +1,23 @@
 export const config = {
   github: {
-    login: "glink25", // github login name, not user name
-    repo: "test-for-anything", //"urodele",
-    logInUrl: "",
-    logInAuthUrl: "",
+    login: 'huxzhi', // github login name, not user name
+    repo: 'huxzhi.github.io', //"urodele",
+    logInUrl: '',
+    logInAuthUrl: '',
   },
   head: {
-    title: "Urodele",
-    brand: "Urodele",
-    description: "A self-owned full-static blog system",
+    title: 'Huxzhi',
+    brand: 'Huxzhi',
+    description: 'A self-owned full-static blog system',
   },
   footer: {
-    copyright: "© Glink",
-    copyrightUrl: "https://github.com/glink25",
+    copyright: '© Huxzhi',
+    copyrightUrl: 'https://github.com/Huxzhi',
   },
   pagination: {
     size: 10,
   },
   giscus: false as object | false,
-} as const;
+} as const
 
-export default config;
+export default config
