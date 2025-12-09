@@ -1,48 +1,56 @@
-import * as React from "jsx-dom";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { common, createLowlight } from "lowlight";
-import type { DOMOutputSpec, Node } from "@tiptap/pm/model";
-import { hljsDefineVue, hljsDefineHTML } from "./utils/lang";
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import type { DOMOutputSpec, Node } from '@tiptap/pm/model'
+import * as React from 'jsx-dom'
+import { common, createLowlight } from 'lowlight'
+import { hljsDefineHTML, hljsDefineVue } from './utils/lang'
 
-const all = { ...common, vue: hljsDefineVue, html: hljsDefineHTML };
+const all = { ...common, vue: hljsDefineVue, html: hljsDefineHTML }
 
-type Root = { children?: Root[]; tagName: string; properties?: any; type: string; value?: string };
+type Root = {
+  children?: Root[]
+  tagName: string
+  properties?: any
+  type: string
+  value?: string
+}
 const transformToNodes = (root: Root, lang: string): DOMOutputSpec => {
-  if (root.type === "root") {
+  if (root.type === 'root') {
     return [
-      "code",
+      'code',
       { class: lang ? `language-${lang}` : undefined },
       ...(root.children?.map((c) => transformToNodes(c, lang)) ?? []),
-    ];
+    ]
   }
-  if (root.type === "text") {
-    return root.value ?? "";
+  if (root.type === 'text') {
+    return root.value ?? ''
   }
   return [
     root.tagName,
     { ...root.properties, class: root.properties?.className },
     ...(root.children?.map((c) => transformToNodes(c, lang)) ?? []),
-  ];
-};
+  ]
+}
 
-const isReactive = (node: Node) => node.attrs.language === "html" && node.textContent.startsWith("<!-- reactive -->");
+const isReactive = (node: Node) =>
+  node.attrs.language === 'html' &&
+  node.textContent.startsWith('<!-- reactive -->')
 
 const injectHtml = (root: HTMLElement, html: string | undefined) => {
-  const iframe = document.createElement("iframe");
-  const htmlContent = `<html><head></head><body>${html}</body></html>`;
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
+  const iframe = document.createElement('iframe')
+  const htmlContent = `<html><head></head><body>${html}</body></html>`
+  iframe.style.width = '100%'
+  iframe.style.height = '100%'
   iframe.onload = () => {
-    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    const doc = iframe.contentDocument || iframe.contentWindow?.document
     if (!doc) {
-      return;
+      return
     }
-    doc.open();
-    doc.write(htmlContent);
-    doc.close();
-  };
-  root.replaceChildren(iframe);
-};
+    doc.open()
+    doc.write(htmlContent)
+    doc.close()
+  }
+  root.replaceChildren(iframe)
+}
 
 export const hydrate = () => {
   return `<script type="module">const injectHtml = (root, html) => {
@@ -86,30 +94,42 @@ export const hydrate = () => {
     if (window.screen.width < 768) {
       showPreview.click();
     }
-  });</script>`;
-};
+  });</script>`
+}
 
 export const createLowlightCodePlugin = () => {
-  const lowlight = createLowlight(all);
+  const lowlight = createLowlight(all)
 
   return CodeBlockLowlight.extend({
     addNodeView() {
-      const initialLang = null;
+      const initialLang = null
       const contentDOM = (
         <pre class="not-draggable">
           <code></code>
         </pre>
-      ) as HTMLElement;
+      ) as HTMLElement
       const select = (
-        <select contentEditable="false" value={initialLang as any} class="language">
-          <option value={undefined} disabled></option>
-          <option value={null as any}>auto</option>
+        <select
+          contentEditable="false"
+          value={initialLang ?? undefined}
+          class="language"
+        >
+          <option
+            value={undefined}
+            disabled
+          ></option>
+          <option value="">auto</option>
           {lowlight.listLanguages().map((lang) => (
             <option value={lang}>{lang}</option>
           ))}
         </select>
-      ) as HTMLSelectElement;
-      const playground = (<div class="playground" contentEditable={false}></div>) as HTMLElement;
+      ) as HTMLSelectElement
+      const playground = (
+        <div
+          class="playground"
+          contentEditable={false}
+        ></div>
+      ) as HTMLElement
       const dom = (
         <div class="llt-code">
           {select}
@@ -118,45 +138,46 @@ export const createLowlightCodePlugin = () => {
             {playground}
           </div>
         </div>
-      ) as HTMLElement;
+      ) as HTMLElement
       const onUpdate = (newNode: any) => {
-        const text = newNode.textContent;
+        const text = newNode.textContent
         if (isReactive(newNode)) {
-          playground.style.display = "block";
-          injectHtml(playground, text);
+          playground.style.display = 'block'
+          injectHtml(playground, text)
         } else {
-          playground.style.display = "none";
-          injectHtml(playground, undefined);
+          playground.style.display = 'none'
+          injectHtml(playground, undefined)
         }
-        return true;
-      };
+        return true
+      }
 
       return (ctx) => {
-        select.value = ctx.node.attrs.language;
+        select.value = ctx.node.attrs.language
         const onChange = () => {
-          const language = (select as HTMLSelectElement).value as string;
+          const language = (select as HTMLSelectElement).value as string
           // ctx.editor.commands.updateAttributes({ language: select.value })
+          const pos = typeof ctx.getPos === 'function' ? ctx.getPos() : 0
           ctx.editor.view.dispatch(
-            ctx.editor.view.state.tr.setNodeMarkup((ctx.getPos as any)(), null, {
+            ctx.editor.view.state.tr.setNodeMarkup(pos, null, {
               ...ctx.node.attrs,
               language,
-            })
-          );
-        };
-        select.addEventListener("change", onChange);
+            }),
+          )
+        }
+        select.addEventListener('change', onChange)
 
         const onDestroy = () => {
-          select.removeEventListener("change", onChange);
-        };
+          select.removeEventListener('change', onChange)
+        }
 
-        onUpdate(ctx.node);
+        onUpdate(ctx.node)
         return {
           dom,
           contentDOM,
           destroy: onDestroy,
           update: onUpdate,
-        };
-      };
+        }
+      }
     },
     addKeyboardShortcuts() {
       return {
@@ -165,42 +186,53 @@ export const createLowlightCodePlugin = () => {
           //     return this.editor.commands.insertContent("\t");
           // }
           // return true
-          this.editor.commands.insertContent("\t");
-          return true;
+          this.editor.commands.insertContent('\t')
+          return true
         },
-      };
+      }
     },
   }).configure({
     lowlight,
-  });
-};
+  })
+}
 
 export const createLowlightCodeSSRPlugin = () => {
-  const lowlight = createLowlight(all);
+  const lowlight = createLowlight(all)
   return CodeBlockLowlight.extend({
     renderHTML({ node }) {
-      const lang = node.attrs?.language;
+      const lang = node.attrs?.language
       const highlight = (lang: string, content: any) => {
         try {
-          return lowlight.highlight(lang, content);
+          return lowlight.highlight(lang, content)
         } catch (error) {
-          console.error(`highlight ${lang} failed:`, error);
-          return lowlight.highlight("text", content);
+          console.error(`highlight ${lang} failed:`, error)
+          return lowlight.highlight('text', content)
         }
-      };
-      const gen = lang ? highlight(lang, node.textContent) : lowlight.highlightAuto(node.textContent);
+      }
+      const gen = lang
+        ? highlight(lang, node.textContent)
+        : lowlight.highlightAuto(node.textContent)
       const result: DOMOutputSpec = [
-        "div",
-        { className: "llt-code readonly" },
-        ["div", { className: "language" }, gen.data?.language ?? lang ?? "auto"],
+        'div',
+        { className: 'llt-code readonly' },
         [
-          "div",
-          { className: "wrapper" },
-          ["pre", {}, transformToNodes(gen as any, lang)],
-          isReactive(node) ? ["div", { className: "playground", "data-html": node.textContent }] : "",
+          'div',
+          { className: 'language' },
+          gen.data?.language ?? lang ?? 'auto',
         ],
-      ];
-      return result;
+        [
+          'div',
+          { className: 'wrapper' },
+          ['pre', {}, transformToNodes(gen, lang)],
+          isReactive(node)
+            ? [
+                'div',
+                { className: 'playground', 'data-html': node.textContent },
+              ]
+            : '',
+        ],
+      ]
+      return result
     },
-  }).configure({ lowlight });
-};
+  }).configure({ lowlight })
+}
