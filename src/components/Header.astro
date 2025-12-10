@@ -1,0 +1,71 @@
+---
+import Auth from '@/components/Auth/index.astro'
+import config from 'urodele.config'
+---
+
+<header
+  class="top-0 z-20 bg-white dark:bg-gray-900"
+  style="background-color: var(--color-main); box-shadow: var(--shadow-3xl);"
+>
+  <nav class="grid grid-cols-3 items-center px-4 py-3 max-w-7xl mx-auto">
+    <!-- Left: Blog Title -->
+    <div
+      class="text-xl font-bold"
+      style="color: var(--color-logo);"
+    >
+      <a
+        href="/"
+        class="transition-colors"
+        onmouseover="this.style.color='var(--color-link)'"
+        onmouseout="this.style.color='var(--color-logo)'"
+      >
+        {config.head.brand} の Blog
+      </a>
+    </div>
+
+    <!-- Center: Navigation Menu -->
+    <div class="flex items-center justify-center gap-6">
+      <a
+        href="/"
+        class="transition-colors"
+        style="color: var(--color-t);"
+        onmouseover="this.style.color='var(--color-link)'"
+        onmouseout="this.style.color='var(--color-t)'"
+      >
+        首页
+      </a>
+      <a
+        href="/archives"
+        class="transition-colors"
+        style="color: var(--color-t);"
+        onmouseover="this.style.color='var(--color-link)'"
+        onmouseout="this.style.color='var(--color-t)'"
+      >
+        归档
+      </a>
+      <a
+        href="/tag"
+        class="transition-colors"
+        style="color: var(--color-t);"
+        onmouseover="this.style.color='var(--color-link)'"
+        onmouseout="this.style.color='var(--color-t)'"
+      >
+        标签
+      </a>
+      <a
+        href="/about"
+        class="transition-colors"
+        style="color: var(--color-t);"
+        onmouseover="this.style.color='var(--color-link)'"
+        onmouseout="this.style.color='var(--color-t)'"
+      >
+        关于
+      </a>
+    </div>
+
+    <!-- Right: Avatar + Auth -->
+    <div class="flex items-center justify-end gap-3">
+      <Auth />
+    </div>
+  </nav>
+</header>

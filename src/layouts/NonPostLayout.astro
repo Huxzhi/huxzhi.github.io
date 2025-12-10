@@ -1,0 +1,88 @@
+---
+import ArchiveList from '@/components/ArchiveList.astro'
+import CategoryList from '@/components/CategoryList.astro'
+import ProfileCard from '@/components/ProfileCard.astro'
+import RecentPosts from '@/components/RecentPosts.astro'
+import { expandTags } from '@/shared/tag'
+import type { Fragment } from 'astro/runtime/server/index.js'
+import { getCollection } from 'astro:content'
+import Layout from './Layout.astro'
+
+interface Props {
+  title?: string
+  description?: string
+  showFooter?: boolean
+}
+
+const { title, description, showFooter } = Astro.props
+
+// Load data for sidebars
+const allPosts = await getCollection('posts')
+const publishedPosts = allPosts.filter((post) => !post.data.draft)
+
+const totalPosts = publishedPosts.length
+
+// Statistics for tags
+const allTags = [
+  ...new Set(publishedPosts.flatMap((p) => expandTags(p.data.tags))),
+]
+const tagCounts = allTags
+  .map((tag) => ({
+    tag,
+    count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag))
+      .length,
+  }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 10)
+
+// Archive statistics
+const postsByYear = publishedPosts.reduce(
+  (acc, post) => {
+    const year = new Date(post.data.createTime).getFullYear()
+    acc[year] = (acc[year] || 0) + 1
+    return acc
+  },
+  {} as Record<number, number>,
+)
+
+// Recent posts
+const recentPosts = publishedPosts
+  .sort((a, b) => b.data.createTime - a.data.createTime)
+  .slice(0, 5)
+  .map((p) => ({
+    id: p.id.replace(/\.md$/, ''),
+    title: p.data.title,
+    createTime: p.data.createTime,
+  }))
+---
+
+<Layout
+  title={title}
+  description={description}
+  showFooter={showFooter}
+>
+  <!-- Main Content -->
+  <main class="flex flex-col order-first md:order-none min-w-0">
+    <slot />
+  </main>
+
+  <!-- Left Sidebar -->
+  <aside class="order-last md:order-first">
+    <div class="sticky top-6">
+      <ProfileCard
+        totalPosts={totalPosts}
+        totalTags={allTags.length}
+        totalYears={Object.keys(postsByYear).length}
+      />
+      <CategoryList tags={tagCounts} />
+      <ArchiveList archives={postsByYear} />
+    </div>
+  </aside>
+
+  <!-- Right Sidebar -->
+  <aside class="max-xl:hidden">
+    <div class="sticky top-6">
+      <RecentPosts posts={recentPosts} />
+    </div>
+  </aside>
+</Layout>

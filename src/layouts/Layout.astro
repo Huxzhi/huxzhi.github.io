@@ -1,5 +1,5 @@
 ---
-import Auth from '@/components/Auth/index.astro'
+import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import config from 'urodele.config'
 import '../styles.css'
@@ -7,10 +7,10 @@ import '../styles.css'
 interface Props {
   title?: string
   description?: string
-  footer?: boolean
+  showFooter?: boolean
 }
 
-const { title, description, footer = true } = Astro.props
+const { title, description, showFooter = true } = Astro.props
 ---
 
 <!doctype html>
@@ -48,45 +48,34 @@ const { title, description, footer = true } = Astro.props
     />
     <meta
       name="description"
-      content={description ?? config.head.description}
+      content={description || config.head.description}
     />
-    <link
-      rel="icon"
-      href="/favicon.ico"
+    <meta
+      name="generator"
+      content={Astro.generator}
     />
-    <title>{[config.head.brand, title].reverse().join(' | ')}</title>
+    <title>{title || config.head.title}</title>
+    <script is:inline>
+      console.log('Huxzhi Blog - Built with Astro + CodeMirror + GitHub API')
+    </script>
   </head>
-  <body class="text-text bg-bg">
-    <header class="flex justify-between items-center p-2 gap-2 h-10">
-      <a
-        href="/"
-        class="text-button text-lg"
-        aria-label="homepage"
+  <body>
+    <!-- Header Navigation (includes Auth) -->
+    <Header />
+
+    <!-- Main Content (provided by child layouts) -->
+    <div
+      class="min-h-screen"
+      style="background-color: var(--color-bg);"
+    >
+      <div
+        class="grid mx-auto gap-6 py-6 px-4 md:grid-cols-[12fr_25fr] md:max-w-5xl xl:grid-cols-[23fr_54fr_23fr] xl:max-w-7xl"
       >
-        <div class="i-ri:menu-4-fill"></div>
-      </a>
-      <div class="flex gap-2 items-center header-operations">
-        <slot name="operations" />
-        {(<Auth />)}
+        <slot />
       </div>
-    </header>
-    <slot />
-    {footer && <Footer />}
+    </div>
+
+    <!-- Footer -->
+    {showFooter && <Footer />}
   </body>
 </html>
-<style is:global>
-  main {
-    display: flex;
-    width: 100%;
-    padding: 0 16px;
-    gap: 12px;
-    justify-content: center;
-  }
-  .content {
-    /* width: 100%; */
-    max-width: 720px;
-    /* padding: 0 24px; */
-    overflow-x: hidden;
-    flex: 1 1 0;
-  }
-</style>

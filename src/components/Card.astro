@@ -1,0 +1,27 @@
+---
+import type { Fragment } from 'astro/runtime/server/index.js'
+
+interface Props {
+  title?: string
+  class?: string
+}
+
+const { title, class: className } = Astro.props
+---
+
+<div
+  class={`rounded-lg p-6 mt-6 ${className || ''}`}
+  style="background-color: var(--color-main); box-shadow: var(--shadow-3xl);"
+>
+  {
+    title && (
+      <h3
+        class="text-lg font-bold mb-4"
+        style="color: var(--color-title);"
+      >
+        {title}
+      </h3>
+    )
+  }
+  <slot />
+</div>

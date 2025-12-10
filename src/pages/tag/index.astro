@@ -1,26 +1,28 @@
 ---
-import Layout from '@/layouts/Layout.astro'
+import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import Card from '@/components/Card.astro'
 import { getAllTags } from '@/pages/api/post/list'
 import { formatTagDisplay } from '@/shared/tag'
 
 const tags = (await getAllTags()).sort()
 ---
 
-<Layout title="Tags">
-  <main>
-    <div
-      class="content flex flex-wrap items-center justify-center py-2 px-4 gap-4"
-    >
+<NonPostLayout title="所有标签">
+  <Card title="标签云">
+    <div class="flex flex-wrap gap-4">
       {
         tags.map((tag) => (
           <a
             href={`/tag/${tag}`}
-            class="text-4xl text-text text-opacity-60 hover:text-opacity-100"
+            class="text-2xl transition-colors"
+            style="color: var(--color-t);"
+            onmouseover="this.style.color='var(--color-link)'"
+            onmouseout="this.style.color='var(--color-t)'"
           >
             #{formatTagDisplay(decodeURIComponent(tag))}
           </a>
         ))
       }
     </div>
-  </main>
-</Layout>
+  </Card>
+</NonPostLayout>

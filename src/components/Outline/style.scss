@@ -1,8 +1,0 @@
-.outlines {
-    @for $i from 1 through 6 {
-        a[data-anchor-tag="H#{$i}"] {
-            margin-left: #{($i - 1) * 12}px;
-        }
-    }
-
-}

@@ -6,7 +6,6 @@ import * as React from 'jsx-dom'
 import config from 'urodele.config'
 import { useDialog } from '../Dialog'
 import { getUserInfo, login, logout } from './auth.js'
-import styles from './style.module.scss'
 
 const Login = () => {
   const createModal = () => {
@@ -35,7 +34,17 @@ const Login = () => {
     }
     const showOAuthLogin = Boolean(config.github.logInUrl)
     return (
-      <div class={cn('flex flex-col p-4', styles.tabset)}>
+      <div class="flex flex-col p-4 tabset-container">
+        <style>{`
+          .tabset-container input[type="radio"] { display: none; }
+          .tabset-container input[data-tab-name="direct"]:checked ~ .tab-panels .tab-panel[data-tab-name="direct"] { display: block; }
+          .tabset-container input[data-tab-name="direct"]:checked ~ .tab-panels .tab-panel[data-tab-name="app"] { display: none; }
+          .tabset-container input[data-tab-name="app"]:checked ~ .tab-panels .tab-panel[data-tab-name="app"] { display: block; }
+          .tabset-container input[data-tab-name="app"]:checked ~ .tab-panels .tab-panel[data-tab-name="direct"] { display: none; }
+          .tabset-container input[data-tab-name="direct"]:checked ~ .tab-labels label[data-tab-name="direct"] { border-bottom: 2px solid red; }
+          .tabset-container input[data-tab-name="app"]:checked ~ .tab-labels label[data-tab-name="app"] { border-bottom: 2px solid red; }
+          .tab-panels { display: flex; }
+        `}</style>
         <input
           type="radio"
           name="tabset"
@@ -52,8 +61,7 @@ const Login = () => {
         />
         <div
           class={cn(
-            'flex gap-4 justify-center pb-4',
-            styles['tab-labels'],
+            'flex gap-4 justify-center pb-4 tab-labels',
             !showOAuthLogin && 'hidden!',
           )}
         >
@@ -72,9 +80,9 @@ const Login = () => {
             App
           </label>
         </div>
-        <div class={cn(styles['tab-panels'])}>
+        <div class="tab-panels">
           <div
-            class={cn('panel-direct', styles['tab-panel'])}
+            class="panel-direct tab-panel"
             data-tab-name="direct"
           >
             <div class="flex flex-col gap-4">
@@ -108,7 +116,7 @@ const Login = () => {
             </div>
           </div>
           <div
-            class={cn('panel-app w-full h-full', styles['tab-panel'])}
+            class="panel-app w-full h-full tab-panel"
             data-tab-name="app"
           >
             <div class="w-full h-full flex justify-center p-2">
@@ -131,11 +139,19 @@ const Login = () => {
   }
   const LoginButton = () => (
     <button
-      class="text-sm"
+      class="text-sm inline-flex items-center justify-center w-6 h-6"
       onClick={toLogin}
       title="login"
     >
-      <div class="i-ri:triangle-line"></div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        width="20"
+        height="20"
+      >
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+      </svg>
     </button>
   )
 
@@ -183,19 +199,36 @@ const Profile = (user: UserInfo) => {
       {canEdit && isIndex && (
         <a
           href="/edit?new"
-          class="text-button"
+          class="text-button inline-flex items-center justify-center w-6 h-6"
           aria-label="create new post"
         >
-          <div class="i-ri:add-large-line"></div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="20"
+            height="20"
+          >
+            <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
+          </svg>
         </a>
       )}
       {canEdit && isPage && (
         <a
           href={`/edit?path=${pageId}`}
-          class="text-button"
+          class="text-button inline-flex items-center justify-center w-6 h-6"
           aria-label="edit current post"
         >
-          <div class="i-ri:quill-pen-fill"></div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="20"
+            height="20"
+          >
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.35 8.35a.75.75 0 0 0-.214.413l-.978 5.498a.75.75 0 0 0 .874.874l5.498-.978a.75.75 0 0 0 .413-.214l8.35-8.35Z" />
+            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+          </svg>
         </a>
       )}
 

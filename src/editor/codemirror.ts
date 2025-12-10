@@ -31,7 +31,6 @@ import {
   keymap,
   lineNumbers,
 } from '@codemirror/view'
-import './codemirror.scss'
 import {
   imagePreview,
   imageUploadHandler,

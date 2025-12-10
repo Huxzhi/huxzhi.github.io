@@ -1,11 +1,9 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import '@/editor/codemirror.scss'
+import PostLayout from '@/layouts/PostLayout.astro'
 import { getPageList } from '@/pages/api/post/list'
 import { formatTagDisplay, getLeafTags } from '@/shared/tag'
 import { getCollection, getEntry, render } from 'astro:content'
 import { expandTags } from '@/shared/tag'
-import config from 'urodele.config'
 
 const id = Astro.params.id as string
 const entry = await getEntry('posts', id)
@@ -14,7 +12,7 @@ if (!entry) {
   return Astro.redirect('/404')
 }
 
-const { Content } = await render(entry)
+const { Content, headings } = await render(entry)
 const post = {
   id: entry.id.replace(/\.md$/, ''),
   ...entry.data,
@@ -40,77 +38,134 @@ export const getStaticPaths = async () => {
 }
 ---
 
-<script>
-  import { mount as mountOutline } from '@/components/Outline'
-  import { mount } from '@/components/Pager'
-
-  mount('.navigator', 'data-page-id')
-  mountOutline('.outline-wrapper')
-</script>
-
-<Layout
+<PostLayout
   title={post.title}
   description={post.intro}
+  postId={post.id}
+  headings={headings}
+  tags={post.tags}
 >
-  <main>
-    <div class="content">
-      <div class="w-full flex gap-2 pb-2">
+  <article>
+    <header class="mb-8">
+      <h1
+        class="text-3xl lg:text-4xl font-bold mb-4"
+        style="color: var(--color-title);"
+      >
+        {post.title}
+      </h1>
+      <div
+        class="flex items-center gap-4 text-sm"
+        style="color: var(--color-t-l);"
+      >
+        <time>
+          {
+            new Date(post.createTime).toLocaleDateString('zh-CN', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
+        </time>
         {
-          displayTags.map((tag) => (
-            <a
-              href={`/tag/${tag}`}
-              class="rounded hover:bg-gray-200 dark:hover:bg-modal px-3 py-1 cursor-pointer"
-            >
-              #{formatTagDisplay(tag)}
-            </a>
-          ))
+          post.updateTime && (
+            <span>
+              更新于{' '}
+              {new Date(post.updateTime).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </span>
+          )
+        }
+        {
+          displayTags.length > 0 && (
+            <span class="lg:hidden flex gap-2">
+              {displayTags.map((tag) => (
+                <a
+                  href={`/tag/${tag}`}
+                  class="transition-colors"
+                  style="color: var(--color-link);"
+                  onmouseover="this.style.color='var(--color-link-hover)'"
+                  onmouseout="this.style.color='var(--color-link)'"
+                >
+                  #{formatTagDisplay(tag)}
+                </a>
+              ))}
+            </span>
+          )
         }
       </div>
-      <div class="ud-root read-only flex-1 prose dark:prose-invert max-w-none">
-        <Content />
-      </div>
+    </header>
 
-      <div
-        data-page-id={post.id}
-        class="navigator flex justify-between items-center mt-4 py-4"
-      >
+    <div class="prose dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <!-- Navigation -->
+    <nav
+      class="mt-12 pt-6"
+      style="border-top: 1px solid var(--color-border);"
+    >
+      <div class="grid grid-cols-2 gap-4">
         {
           prev ? (
             <a
               href={`/post/${prev.id}`}
-              class="flex items-center gap-1 text-blue cursor-pointer flex-[45%]"
+              class="flex items-center gap-2 text-sm transition-colors"
+              style="color: var(--color-t);"
+              onmouseover="this.style.color='var(--color-link)'"
+              onmouseout="this.style.color='var(--color-t)'"
             >
-              <div class="i-ri:arrow-left-double-line w-5 h-5 flex-shrink-0" />
-              <div class="text-start">{prev.title}</div>
+              <svg
+                class="w-5 h-5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              <span class="truncate">{prev.title}</span>
             </a>
           ) : (
             <div />
           )
         }
+
         {
           next ? (
             <a
               href={`/post/${next.id}`}
-              class="flex items-center justify-end gap-1 text-blue cursor-pointer flex-[45%]"
+              class="flex items-center justify-end gap-2 text-sm transition-colors"
+              style="color: var(--color-t);"
+              onmouseover="this.style.color='var(--color-link)'"
+              onmouseout="this.style.color='var(--color-t)'"
             >
-              <div class="text-end">{next.title}</div>
-              <div class="i-ri:arrow-right-double-line w-5 h-5 flex-shrink-0" />
+              <span class="truncate text-right">{next.title}</span>
+              <svg
+                class="w-5 h-5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
             </a>
           ) : (
             <div />
           )
         }
       </div>
-    </div>
-    <div class="outline-wrapper"></div>
-  </main>
-  {
-    config.giscus && (
-      <div class="giscus-container flex justify-center">
-        <div class="w-full max-w-[870px] mx-8">
-          <script {...config.giscus} />
-        </div>
-      </div>
-    )
-  }
-</Layout>
+    </nav>
+  </article>
+</PostLayout>

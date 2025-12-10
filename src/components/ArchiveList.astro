@@ -1,0 +1,35 @@
+---
+import Card from './Card.astro'
+
+interface Props {
+  archives: Record<number, number>
+}
+
+const { archives } = Astro.props
+---
+
+<Card title="归档">
+  <div class="space-y-2">
+    {
+      Object.entries(archives)
+        .sort((a, b) => Number(b[0]) - Number(a[0]))
+        .map(([year, count]) => (
+          <a
+            href={`/archives#year-${year}`}
+            class="flex justify-between items-center py-1 transition-colors group"
+            style="color: var(--color-t);"
+            onmouseover="this.style.color='var(--color-link)'"
+            onmouseout="this.style.color='var(--color-t)'"
+          >
+            <span class="text-sm">{year}</span>
+            <span
+              class="text-xs px-2 py-0.5 rounded transition-colors"
+              style="background-color: var(--color-alt); color: var(--color-t-l);"
+            >
+              {count}
+            </span>
+          </a>
+        ))
+    }
+  </div>
+</Card>

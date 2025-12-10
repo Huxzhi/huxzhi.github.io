@@ -1,0 +1,99 @@
+---
+import config from 'urodele.config'
+import Card from './Card.astro'
+
+interface Props {
+  totalPosts: number
+  totalTags: number
+  totalYears: number
+}
+
+const { totalPosts, totalTags, totalYears } = Astro.props
+
+// Use GitHub avatar and config bio
+const avatarUrl = `https://github.com/${config.github.login}.png?size=200`
+const bio = config.head.bio || '童话只美在真实从不缺'
+---
+
+<Card class="text-center">
+  <div
+    class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center"
+    style="background-color: var(--color-alt);"
+  >
+    <img
+      src={avatarUrl}
+      alt={config.head.brand}
+      class="w-full h-full object-cover"
+    />
+  </div>
+  <h2
+    class="text-xl font-bold mb-2"
+    style="color: var(--color-title);"
+  >
+    {config.head.brand}
+  </h2>
+  <p
+    class="text-sm mb-4"
+    style="color: var(--color-t-l);"
+  >
+    {bio}
+  </p>
+  <div class="grid grid-cols-4 gap-4 text-center">
+    <div>
+      <div
+        class="text-2xl font-bold"
+        style="color: var(--color-t);"
+      >
+        {totalPosts}
+      </div>
+      <div
+        class="text-xs"
+        style="color: var(--color-t-l);"
+      >
+        文章
+      </div>
+    </div>
+    <div>
+      <div
+        class="text-2xl font-bold"
+        style="color: var(--color-t);"
+      >
+        {totalTags}
+      </div>
+      <div
+        class="text-xs"
+        style="color: var(--color-t-l);"
+      >
+        分类
+      </div>
+    </div>
+    <div>
+      <div
+        class="text-2xl font-bold"
+        style="color: var(--color-t);"
+      >
+        {totalYears}
+      </div>
+      <div
+        class="text-xs"
+        style="color: var(--color-t-l);"
+      >
+        标签
+      </div>
+    </div>
+    <div>
+      <div
+        class="text-2xl font-bold"
+        style="color: var(--color-t);"
+      >
+        30.1
+      </div>
+      <div
+        class="text-xs"
+        style="color: var(--color-t-l);"
+      >
+        万字
+      </div>
+    </div>
+  </div>
+</Card>

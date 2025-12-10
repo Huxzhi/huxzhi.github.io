@@ -1,0 +1,102 @@
+---
+import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import { getCollection } from 'astro:content'
+import { expandTags } from '@/shared/tag'
+
+const allPosts = await getCollection('posts')
+const publishedPosts = allPosts.filter((post) => !post.data.draft)
+
+// Group posts by year
+const postsByYear = publishedPosts.reduce(
+  (acc, post) => {
+    const year = new Date(post.data.createTime).getFullYear()
+    if (!acc[year]) {
+      acc[year] = []
+    }
+    acc[year].push({
+      id: post.id.replace(/\.md$/, ''),
+      title: post.data.title,
+      createTime: post.data.createTime,
+      cover: post.data.cover,
+    })
+    return acc
+  },
+  {} as Record<
+    number,
+    Array<{ id: string; title: string; createTime: number; cover?: any }>
+  >,
+)
+
+// Sort years descending and posts within each year descending
+const sortedYears = Object.keys(postsByYear)
+  .map(Number)
+  .sort((a, b) => b - a)
+
+sortedYears.forEach((year) => {
+  postsByYear[year].sort((a, b) => b.createTime - a.createTime)
+})
+---
+
+<NonPostLayout title="归档">
+  {
+    sortedYears.map((year) => (
+      <>
+        <div
+          id={`year-${year}`}
+          class="rounded-lg  scroll-mt-20"
+        >
+          <h2
+            class="text-2xl font-bold "
+            style="color: var(--color-title);"
+          >
+            {year}
+          </h2>
+        </div>
+
+        <div class="space-y-6">
+          {postsByYear[year].map((post) => (
+            <div
+              class="rounded-lg transition-shadow"
+              style="background-color: var(--color-main); box-shadow: var(--shadow-3xl);"
+              onmouseover="this.style.boxShadow='0 6px 16px rgba(0,2,4,.12)'"
+              onmouseout="this.style.boxShadow='var(--shadow-3xl)'"
+            >
+              <a
+                href={`/post/${post.id}`}
+                class="flex items-center gap-4 p-4"
+              >
+                <div class="flex-1 min-w-0">
+                  <div
+                    class="text-sm mb-2"
+                    style="color: var(--color-t-l);"
+                  >
+                    {new Date(post.createTime).toLocaleDateString('zh-CN', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    })}
+                  </div>
+                  <h3
+                    class="text-lg font-medium transition-colors line-clamp-2"
+                    style="color: var(--color-title);"
+                    onmouseover="this.style.color='var(--color-link)'"
+                    onmouseout="this.style.color='var(--color-title)'"
+                  >
+                    {post.title}
+                  </h3>
+                </div>
+                {post.cover && (
+                  <img
+                    src={post.cover.src}
+                    alt={post.cover.alt || ''}
+                    class="w-24 h-24 rounded object-cover flex-shrink-0"
+                  />
+                )}
+              </a>
+            </div>
+          ))}
+        </div>
+      </>
+    ))
+  }
+</NonPostLayout>

@@ -1,0 +1,51 @@
+---
+import Card from './Card.astro'
+
+interface Post {
+  id: string
+  title: string
+  createTime: number
+}
+
+interface Props {
+  posts: Post[]
+}
+
+const { posts } = Astro.props
+---
+
+<Card title="最近文章">
+  <ul
+    class="divide-y"
+    style="border-color: var(--color-alt);"
+  >
+    {
+      posts.map((post) => (
+        <li
+          class="py-4 first:pt-0"
+          style="border-color: var(--color-alt);"
+        >
+          <a
+            href={`/post/${post.id}`}
+            class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
+            style="color: var(--color-t);"
+            onmouseover="this.style.color='var(--color-link)'"
+            onmouseout="this.style.color='var(--color-t)'"
+          >
+            {post.title}
+          </a>
+          <time
+            class="text-xs block mt-1"
+            style="color: var(--color-t-l);"
+          >
+            {new Date(post.createTime).toLocaleDateString('zh-CN', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+</Card>

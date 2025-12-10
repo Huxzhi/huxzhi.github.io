@@ -1,13 +1,21 @@
 ---
-import Home from '@/components/Home.astro'
-import { sortByPin } from '@/shared/tag'
+import PostCard from '@/components/PostCard.astro'
+import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import { expandTags, sortByPin } from '@/shared/tag'
 import config from 'urodele.config'
 import { getPageList } from './api/post/list'
 
 const page = Number(Astro.params.page)
 const allPosts = sortByPin(await getPageList())
 const pageSize = config.pagination.size
-const posts = allPosts.slice(page * pageSize, page * pageSize + pageSize)
+const posts = allPosts.slice(page * pageSize, (page + 1) * pageSize)
+const totalPages = Math.ceil(allPosts.length / pageSize)
+
+// Extract summary
+const extractSummary = (body: string) => {
+  const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
+  return text.slice(0, 150)
+}
 
 export const getStaticPaths = async () => {
   const { default: config } = await import('urodele.config')
@@ -18,14 +26,54 @@ export const getStaticPaths = async () => {
     .filter((v) => v !== 0)
     .map((p) => ({
       params: {
-        page: p,
+        page: String(p),
       },
     }))
 }
 ---
 
-<Home
-  posts={posts}
-  page={page}
-  pages={Math.ceil(allPosts.length / pageSize)}
-/>
+<NonPostLayout title={config.head.title}>
+  {
+    posts.map((post) => {
+      const postId = post.id.replace(/\.md$/, '')
+      const summary = extractSummary(post.body)
+      const tags = expandTags(post.data.tags)
+
+      return (
+        <PostCard
+          postId={postId}
+          title={post.data.title}
+          summary={summary}
+          createTime={post.data.createTime}
+          tags={tags}
+        />
+      )
+    })
+  }
+
+  <div class="flex justify-center gap-4 mt-8">
+    {
+      page > 1 && (
+        <a
+          href={page === 2 ? '/' : `/page/${page - 1}`}
+          class="px-4 py-2 rounded-lg transition-colors"
+          style="background-color: var(--color-alt);"
+        >
+          上一页
+        </a>
+      )
+    }
+
+    {
+      page < totalPages - 1 && (
+        <a
+          href={`/page/${page + 1}`}
+          class="px-4 py-2 rounded-lg transition-colors"
+          style="background-color: var(--color-link); color: #fff;"
+        >
+          下一页
+        </a>
+      )
+    }
+  </div>
+</NonPostLayout>

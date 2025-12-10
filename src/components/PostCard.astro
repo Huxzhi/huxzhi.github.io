@@ -1,0 +1,74 @@
+---
+import Card from './Card.astro'
+
+interface Props {
+  postId: string
+  title: string
+  summary: string
+  createTime: number
+  tags: string[]
+}
+
+const { postId, title, summary, createTime, tags } = Astro.props
+---
+
+<Card class="transition-shadow min-w-0">
+  <h2 class="text-2xl font-bold mb-3 line-clamp-2">
+    <a
+      href={`/post/${postId}`}
+      class="transition-colors"
+      style="color: var(--color-title);"
+      onmouseover="this.style.color='var(--color-link)'"
+      onmouseout="this.style.color='var(--color-title)'"
+    >
+      {title}
+    </a>
+  </h2>
+
+  <p
+    class="mb-4 leading-relaxed line-clamp-3"
+    style="color: var(--color-t);"
+  >
+    {summary}
+  </p>
+
+  <div
+    class="flex items-center justify-between text-sm"
+    style="color: var(--color-t-l);"
+  >
+    <div class="flex items-center gap-4">
+      <time>
+        {
+          new Date(createTime).toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+        }
+      </time>
+      {tags.length > 0 && <span>·</span>}
+      {
+        tags.slice(0, 2).map((tag: string) => (
+          <a
+            href={`/tag/${tag}`}
+            class="transition-colors"
+            style="color: var(--color-t-l);"
+            onmouseover="this.style.color='var(--color-link)'"
+            onmouseout="this.style.color='var(--color-t-l)'"
+          >
+            {tag}
+          </a>
+        ))
+      }
+    </div>
+    <a
+      href={`/post/${postId}`}
+      class="transition-colors"
+      style="color: var(--color-link);"
+      onmouseover="this.style.color='var(--color-link-hover)'"
+      onmouseout="this.style.color='var(--color-link)'"
+    >
+      继续阅读
+    </a>
+  </div>
+</Card>

@@ -1,8 +1,6 @@
 import { TAG_PIN, formatTagDisplay } from '@/shared/tag'
 import { getGlobalData } from '@/utils/data'
-import { cn } from '@/utils/dom'
 import * as React from 'jsx-dom'
-import style from './style.module.scss'
 
 export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
   const data = await getGlobalData()
@@ -18,10 +16,10 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
     const createTag = (tag: string) => (
       <div
         key={tag}
-        class={cn(
-          'rounded px-3 py-1 cursor-pointer relative group',
-          style['tag'],
-        )}
+        class="rounded px-3 py-1 cursor-pointer relative group transition-all duration-250"
+        style="background: linear-gradient(90deg, rgba(229, 231, 235, 0) 50%, rgb(248 113 113) 50%, rgb(248 113 113) 100%); background-position: 0%; background-size: 200%;"
+        onmouseenter="this.style.backgroundPosition='100%'; this.style.color='white'"
+        onmouseleave="this.style.backgroundPosition='0%'; this.style.color=''"
       >
         <button
           class="opacity-0 transition-delay-[0.25s] group-hover:opacity-100 absolute bg-red top-0 right-0 w-3 h-3 rounded-full flex items-center justify-center"
@@ -79,10 +77,7 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
     return (
       <div
         ref={tagEditor}
-        class={cn(
-          'flex text-sm px-[28px] gap-2 w-full max-w-[720px]',
-          style['tag-editor'],
-        )}
+        class="flex text-sm px-[28px] gap-2 w-full max-w-[720px]"
       >
         <div
           ref={tagsListWrapper}
@@ -90,11 +85,11 @@ export const createTagEditor = async (root: HTMLElement, initial: string[]) => {
         >
           {tagList()}
         </div>
-        <div class={cn('relative', style['add-tag'])}>
+        <div class="relative group">
           <button class="rounded text-gray hover:bg-gray-200 px-2 py-1 cursor-pointer">
             #Add a Tag
           </button>
-          <div class={cn('absolute z-[50]', style['tag-selector'])}>
+          <div class="absolute z-[50] hidden group-focus-within:block">
             <div class="flex flex-col bg-modal shadow-md rounded p-2 gap-2 text-sm">
               <div class="flex items-center justify-center gap-2">
                 <input
