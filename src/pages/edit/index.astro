@@ -1,14 +1,38 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import Header from '@/components/Header.astro'
+import config from 'urodele.config'
+import '@/styles.css'
 ---
 
 <script>
-  import { mount } from "@/components/Editor";
+  import { mount } from '@/components/Editor'
 
-  mount("#editor", "#editor-operarions");
+  mount('#editor', '#editor-operations')
 </script>
 
-<Layout title="Editor" footer={false}>
-  <div slot="operations" id="editor-operarions" class="flex gap-2 items-center"></div>
-  <div id="editor" class="w-full flex flex-col items-center min-h-8" data-modal-loading="true"></div>
-</Layout>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Editor - {config.head.title}</title>
+  </head>
+  <body>
+    <Header />
+    <div
+      class="min-h-screen"
+      style="background-color: var(--color-bg);"
+    >
+      <div class="w-full flex flex-col">
+        <div
+          id="editor"
+          class="w-full flex flex-col items-center min-h-8"
+          data-modal-loading="true"
+        >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

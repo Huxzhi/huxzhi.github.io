@@ -1,9 +1,9 @@
 ---
 import ArchiveList from '@/components/ArchiveList.astro'
 import CategoryCard from '@/components/CategoryCard.astro'
-import CategoryList from '@/components/CategoryList.astro'
 import ProfileCard from '@/components/ProfileCard.astro'
 import RecentPosts from '@/components/RecentPosts.astro'
+import TagCard from '@/components/TagCard.astro'
 import { expandTags } from '@/shared/tag'
 import type { Fragment } from 'astro/runtime/server/index.js'
 import { getCollection } from 'astro:content'
@@ -89,7 +89,7 @@ const recentPosts = publishedPosts
         totalYears={Object.keys(postsByYear).length}
       />
       <CategoryCard categories={categories} />
-      <CategoryList tags={tagCounts} />
+      <TagCard tags={tagCounts} />
       <ArchiveList archives={postsByYear} />
     </div>
   </aside>
