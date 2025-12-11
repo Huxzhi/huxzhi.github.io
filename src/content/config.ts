@@ -15,6 +15,27 @@ const posts = defineCollection({
         alt: z.string().optional(),
       })
       .optional(),
+    tasks: z
+      .array(
+        z.object({
+          status: z.string(),
+          checked: z.boolean(),
+          completed: z.boolean(),
+          visual: z.string(),
+          metadata: z.array(
+            z.object({
+              key: z.string(),
+              value: z.string(),
+              start: z.number(),
+              end: z.number(),
+            }),
+          ),
+          line: z.number(),
+          symbol: z.string(),
+        }),
+      )
+      .optional()
+      .default([]),
   }),
 })
 

@@ -11,6 +11,9 @@ draft: false
 
 已成功移除所有 Tiptap 相关代码和依赖，项目现在完全使用 CodeMirror 6 作为唯一的编辑器。
 
+- [x] 移除所有 Tiptap 相关代码和依赖
+- [ ] 实现功能 [priority:: high] [due:: 2025-12-31]
+
 ## 执行的操作
 
 ### 1. 依赖清理

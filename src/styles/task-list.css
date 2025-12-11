@@ -1,0 +1,110 @@
+/* Task List Styles */
+.task-list-item,
+.task-item {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  position: relative;
+}
+
+.task-list-item::before,
+.task-item::before {
+  content: none !important;
+}
+
+.task-checkbox {
+  margin-top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 2px solid currentColor;
+  appearance: none;
+  background-color: transparent;
+  transition: all 0.2s;
+}
+
+.task-checkbox:checked {
+  background-color: var(--color-primary, #3b82f6);
+  border-color: var(--color-primary, #3b82f6);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+
+.task-checkbox[data-checked='true'] {
+  background-color: var(--color-primary, #3b82f6);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.task-visual {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.task-completed .task-visual {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.task-metadata {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-left: 0.5rem;
+}
+
+.task-meta-item {
+  font-size: 0.875rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--color-bg-secondary, #f3f4f6);
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.task-meta-item strong {
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .task-meta-item {
+    background-color: var(--color-bg-secondary, #374151);
+    color: var(--color-text-secondary, #9ca3af);
+  }
+
+  .task-meta-item strong {
+    color: var(--color-text-primary, #f9fafb);
+  }
+}
+
+/* Custom task status styles */
+.task-status-x {
+  /* Completed tasks */
+}
+
+.task-status-- {
+  /* In-progress tasks */
+  border-left: 3px solid #f59e0b;
+  padding-left: 0.5rem;
+}
+
+.task-status-\> {
+  /* Forwarded tasks */
+  border-left: 3px solid #8b5cf6;
+  padding-left: 0.5rem;
+}
+
+/* Hover effects */
+.task-item:hover {
+  background-color: var(--color-hover, rgba(0, 0, 0, 0.02));
+  border-radius: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .task-item:hover {
+    background-color: var(--color-hover, rgba(255, 255, 255, 0.05));
+  }
+}

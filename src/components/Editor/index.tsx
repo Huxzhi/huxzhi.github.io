@@ -2,7 +2,6 @@ import * as React from 'jsx-dom'
 
 import adapter from '@/adapter'
 import { mount as mountOutline } from '@/components/Outline'
-import { createTagEditor } from '@/components/TagEditor/TagEditor'
 import { createEditor } from '@/editor/codemirror'
 import { debounce, throttle } from '@/shared/debounce'
 import {
@@ -36,7 +35,7 @@ export const mount = async (selector: string, operationSelector: string) => {
 
   const saver = createSaver()
 
-  const { editor, tagEditor, initial } = await (async () => {
+  const { editor, initial } = await (async () => {
     const saved = await saver.read(pagePath)
     const { data: savedPageData } =
       saved && typeof saved === 'object' && 'data' in saved
@@ -60,7 +59,6 @@ export const mount = async (selector: string, operationSelector: string) => {
         {filed}
       </div>
     ) as HTMLDivElement
-    const tagEditor = await createTagEditor(filed, pageDat?.tags ?? [])
 
     // 创建图片上传函数
     const uploadImage = async (file: File): Promise<string> => {
@@ -75,7 +73,6 @@ export const mount = async (selector: string, operationSelector: string) => {
     const outlines = mountOutline('.outline-wrapper')!
     editor.on('update', throttle(outlines, 200))
     return {
-      tagEditor,
       editor,
       initial: pageDat,
     }
@@ -86,7 +83,6 @@ export const mount = async (selector: string, operationSelector: string) => {
   const getCurrentDoc = async () => {
     const newContent = editor.getJSON()
     const { assets } = await getLocalUploadImages(editor)
-    const newTags: string[] = tagEditor.getValue()
 
     const title = parseTitle(newContent) ?? ''
 
@@ -103,7 +99,7 @@ export const mount = async (selector: string, operationSelector: string) => {
       data: {
         content: JSON.stringify(newContent),
         title,
-        tags: newTags,
+        tags: [],
         createTime: initial?.createTime ?? Date.now(),
       },
       assets,
@@ -238,7 +234,6 @@ export const mount = async (selector: string, operationSelector: string) => {
       saveToLocal()
     }
     editor.on('update', onUpdate)
-    tagEditor.onChange(onUpdate)
 
     const render = () => (
       <div
