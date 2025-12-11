@@ -72,7 +72,8 @@ export const writePage: WritePage = async (_path, data, assets) => {
   )
   console.log(main, 'main')
   const meta = toMeta({ ...data, updateTime: Date.now() })
-  const rawString = JSON.stringify({ ...meta, ...JSON.parse(data.content) })
+  // content 现在是纯 Markdown 字符串，不需要解析
+  const rawString = JSON.stringify({ ...meta, content: data.content })
   const textFile = new File(
     [new Blob([rawString], { type: 'application/json' })],
     path.replace(/^\//, ''),

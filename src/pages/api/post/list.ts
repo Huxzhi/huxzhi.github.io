@@ -1,9 +1,11 @@
+import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/shared/tag'
 import type { ShortPageData } from '@/shared/type'
-import { getCollection, getEntry } from 'astro:content'
+import { getEntry } from 'astro:content'
 
 // Helper to extract intro from markdown content (first paragraph)
-const extractIntro = (body: string): string => {
+const extractIntro = (body: string | undefined): string => {
+  if (!body) return ''
   const paragraphs = body
     .split('\n\n')
     .filter((p) => p.trim() && !p.startsWith('#'))
@@ -58,7 +60,7 @@ export const getPageList = async (
 ): Promise<ShortPageData[]> => {
   if (listCache.has(filterDraft)) return listCache.get(filterDraft)!
 
-  const allPosts = await getCollection('posts')
+  const allPosts = await getAllPosts()
 
   const pageData = await Promise.all(
     allPosts.map(async (post) => {

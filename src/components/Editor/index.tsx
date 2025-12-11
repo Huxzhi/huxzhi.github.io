@@ -2,10 +2,10 @@ import * as React from 'jsx-dom'
 
 import adapter from '@/adapter'
 import { mount as mountOutline } from '@/components/Outline'
+import { createTagPanel } from '@/components/TagPanel'
 import { createEditor } from '@/editor/codemirror'
 import { debounce, throttle } from '@/shared/debounce'
 import {
-  parseTitle,
   toFilename,
   toUniqueFilename,
   type JSONContent,
@@ -55,8 +55,9 @@ export const mount = async (selector: string, operationSelector: string) => {
       <div class="field-wrapper w-full flex flex-col"></div>
     ) as HTMLDivElement
     const wrapper = (
-      <div class="editor-wrapper w-full max-w-[960px] flex justify-center">
-        {filed}
+      <div class="editor-wrapper w-full flex gap-4 justify-center px-4">
+        <div class="flex-1 max-w-[960px]">{filed}</div>
+        <div class="tag-panel-wrapper w-60 <lg:hidden"></div>
       </div>
     ) as HTMLDivElement
 
@@ -68,23 +69,52 @@ export const mount = async (selector: string, operationSelector: string) => {
     }
 
     const editor = createEditor(filed, pageDat?.content ?? '', uploadImage)
-    wrapper.appendChild(<div class="outline-wrapper"></div>)
+
+    // 挂载大纲
+    const outlineWrapper = (
+      <div class="outline-wrapper"></div>
+    ) as HTMLDivElement
+    wrapper.querySelector('.flex-1')?.appendChild(outlineWrapper)
+    const updateOutline = mountOutline('.outline-wrapper')
+
+    // 挂载标签面板
+    const tagPanelContainer = wrapper.querySelector(
+      '.tag-panel-wrapper',
+    ) as HTMLElement
+    const tagPanel = createTagPanel(tagPanelContainer)
+
+    // 初始化标签
+    console.log('Initializing tag panel')
+    tagPanel.update(pageDat?.content ?? '')
+
+    // 监听编辑器更新，实时更新标签和大纲
+    editor.on(
+      'update',
+      throttle(() => {
+        console.log('Editor update triggered')
+        if (updateOutline) updateOutline()
+        tagPanel.update(editor.getValue())
+      }, 200),
+    )
+
     root.appendChild(wrapper)
-    const outlines = mountOutline('.outline-wrapper')!
-    editor.on('update', throttle(outlines, 200))
     return {
       editor,
       initial: pageDat,
+      tagPanel,
     }
   })()
 
   root.removeAttribute('data-modal-loading')
 
   const getCurrentDoc = async () => {
-    const newContent = editor.getJSON()
+    // 直接获取 Markdown 文本内容
+    const markdownContent = editor.getValue()
     const { assets } = await getLocalUploadImages(editor)
 
-    const title = parseTitle(newContent) ?? ''
+    // 从 Markdown 内容中提取标题
+    const titleMatch = markdownContent.match(/^#\s+(.+)$/m)
+    const title = titleMatch ? titleMatch[1] : 'Untitled'
 
     const path = (() => {
       if (!isCreate) return pagePath!
@@ -93,15 +123,24 @@ export const mount = async (selector: string, operationSelector: string) => {
       }
       return toFilename(title)
     })()
+
+    const data: any = {
+      content: markdownContent,
+      title: title,
+      tags: [],
+      createTime: initial?.createTime ?? Date.now(),
+      draft: false,
+    }
+
+    // 只添加有值的可选字段
+    if (initial?.category !== undefined && initial?.category !== null) {
+      data.category = initial.category
+    }
+
     return {
       path,
-      content: newContent,
-      data: {
-        content: JSON.stringify(newContent),
-        title,
-        tags: [],
-        createTime: initial?.createTime ?? Date.now(),
-      },
+      content: markdownContent,
+      data,
       assets,
     }
   }
@@ -119,20 +158,20 @@ export const mount = async (selector: string, operationSelector: string) => {
       })
       try {
         const { path, data, assets, content } = await getCurrentDoc()
-        // 将本地上传的文件转为博客站点路径
-        travelDoc(content, (node) => {
-          if (node.type === 'image') {
-            const img = assets.find(
-              (asset) => asset.url === (node.attrs?.src as string),
-            )
-            if (img && node.attrs) {
-              node.attrs.src = `/post-assets/${img.file.name}`
-            }
-          }
+
+        // 将本地上传的文件路径替换为博客站点路径
+        let processedContent = content
+        assets.forEach((asset) => {
+          // 替换 Markdown 中的图片链接
+          processedContent = processedContent.replace(
+            new RegExp(asset.url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+            `/post-assets/${asset.file.name}`,
+          )
         })
+
         await writePage(
           path,
-          { ...data, content: JSON.stringify(content), draft },
+          { ...data, content: processedContent, draft },
           assets,
         )
         toast(`${draft ? 'Save' : 'Publish'} success`)
@@ -219,10 +258,7 @@ export const mount = async (selector: string, operationSelector: string) => {
     // auto save
     const saveToLocal = debounce(async () => {
       const { data, assets, content } = await getCurrentDoc()
-      await saver.save(
-        { data: { ...data, content: undefined }, assets, content },
-        pagePath,
-      )
+      await saver.save({ data, assets, content }, pagePath)
       setChangeSaved(true)
     })
     const toClearLocalSaved = async () => {
@@ -439,19 +475,34 @@ interface SavedData {
 
 const transformSaved = async (saved: SavedData) => {
   const { data, assets, content } = saved
-  travelDoc(content, (node) => {
-    if (node.type === 'image') {
-      const img = assets.find(
-        (asset) => asset.url === (node.attrs?.src as string),
-      )
-      if (img && node.attrs) {
-        const blobUrl = URL.createObjectURL(img.file)
-        node.attrs.src = blobUrl
-      }
-    }
-  })
 
-  data.content = JSON.stringify(content)
+  // 如果 content 是字符串（Markdown），直接使用
+  if (typeof content === 'string') {
+    // 处理图片链接，将保存的本地路径替换为 blob URL
+    let processedContent = content
+    assets.forEach((asset) => {
+      const blobUrl = URL.createObjectURL(asset.file)
+      processedContent = processedContent.replace(
+        new RegExp(asset.url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+        blobUrl,
+      )
+    })
+    data.content = processedContent
+  } else {
+    // 兼容旧的 JSON 格式（如果存在）
+    travelDoc(content, (node) => {
+      if (node.type === 'image') {
+        const img = assets.find(
+          (asset) => asset.url === (node.attrs?.src as string),
+        )
+        if (img && node.attrs) {
+          const blobUrl = URL.createObjectURL(img.file)
+          node.attrs.src = blobUrl
+        }
+      }
+    })
+    data.content = JSON.stringify(content)
+  }
 
   return {
     data,

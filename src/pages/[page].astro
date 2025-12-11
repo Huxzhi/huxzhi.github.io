@@ -11,12 +11,6 @@ const pageSize = config.pagination.size
 const posts = allPosts.slice(page * pageSize, (page + 1) * pageSize)
 const totalPages = Math.ceil(allPosts.length / pageSize)
 
-// Extract summary
-const extractSummary = (body: string) => {
-  const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
-  return text.slice(0, 150)
-}
-
 export const getStaticPaths = async () => {
   const { default: config } = await import('urodele.config')
   const pageSize = config.pagination.size
@@ -36,15 +30,15 @@ export const getStaticPaths = async () => {
   {
     posts.map((post) => {
       const postId = post.id.replace(/\.md$/, '')
-      const summary = extractSummary(post.body)
-      const tags = expandTags(post.data.tags)
+      const summary = post.intro
+      const tags = expandTags(post.tags)
 
       return (
         <PostCard
           postId={postId}
-          title={post.data.title}
+          title={post.title}
           summary={summary}
-          createTime={post.data.createTime}
+          createTime={post.createTime}
           tags={tags}
         />
       )

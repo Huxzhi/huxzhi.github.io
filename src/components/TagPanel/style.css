@@ -1,0 +1,31 @@
+.tag-panel {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.tag-panel h3 {
+  color: var(--color-title);
+}
+
+.tag-item {
+  cursor: default;
+}
+
+.tag-item:hover {
+  background-color: var(--color-bg-l);
+}
+
+/* 响应式：在小屏幕上隐藏标签面板 */
+@media (max-width: 1024px) {
+  .tag-panel-wrapper {
+    display: none;
+  }
+  
+  .editor-wrapper {
+    justify-content: center;
+  }
+  
+  .editor-wrapper > .flex-1 {
+    max-width: 960px;
+  }
+}

@@ -35,7 +35,8 @@ export async function getStaticPaths() {
 
 const { posts = [], category, count } = Astro.props
 
-const extractSummary = (body: string) => {
+const extractSummary = (body: string | undefined) => {
+  if (!body) return ''
   const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
   return text.slice(0, 150) + (text.length > 150 ? '...' : '')
 }

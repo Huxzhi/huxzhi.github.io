@@ -20,6 +20,11 @@ const post = {
   tags: expandTags(entry.data.tags),
 }
 
+// Extract intro from body for meta description
+const intro = entry.body
+  ? entry.body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim().slice(0, 150)
+  : ''
+
 const allPosts = await getPageList()
 
 const curIndex = allPosts.findIndex((p) => p.id === post.id)
@@ -41,7 +46,7 @@ export const getStaticPaths = async () => {
 
 <PostLayout
   title={post.title}
-  description={post.intro}
+  description={intro}
   postId={post.id}
   headings={headings}
   tags={post.tags}

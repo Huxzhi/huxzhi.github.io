@@ -32,17 +32,6 @@ export const getTagName = (tag: string): string => {
 }
 
 /**
- * Format tag for display with hierarchy
- * @example "前端/JavaScript" => "前端 › JavaScript"
- */
-export const formatTagDisplay = (
-  tag: string,
-  separator: string = ' › ',
-): string => {
-  return parseTagPath(tag).join(separator)
-}
-
-/**
  * Check if tag matches or is under a parent tag
  * @example matchesTag("前端/JavaScript", "前端") => true
  */

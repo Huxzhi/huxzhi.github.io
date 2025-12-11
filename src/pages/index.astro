@@ -1,11 +1,11 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import { getCollection } from 'astro:content'
+import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/shared/tag'
 import config from 'urodele.config'
 import PostCard from '@/components/PostCard.astro'
 
-const allPosts = await getCollection('posts')
+const allPosts = await getAllPosts()
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
 const posts = publishedPosts
   .sort((a, b) => b.data.createTime - a.data.createTime)
@@ -15,7 +15,8 @@ const totalPosts = publishedPosts.length
 const hasMorePosts = totalPosts > 10
 
 // Extract summary
-const extractSummary = (body: string) => {
+const extractSummary = (body: string | undefined) => {
+  if (!body) return ''
   const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
   return text.slice(0, 150)
 }

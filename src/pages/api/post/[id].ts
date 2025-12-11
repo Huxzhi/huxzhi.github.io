@@ -1,5 +1,5 @@
+import { getPostById, toPageData } from '@/adapter/content'
 import type { APIRoute, GetStaticPaths } from 'astro'
-import { getEntry } from 'astro:content'
 import { unlink, writeFile } from 'fs/promises'
 import matter from 'gray-matter'
 import { getPageList } from './list'
@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ params }) => {
   const id = params.id
   if (id == undefined) return new Response(JSON.stringify({}), { status: 200 })
 
-  const entry = await getEntry('posts', id)
+  const entry = await getPostById(id)
   if (!entry) {
     return new Response(JSON.stringify({ error: 'Post not found' }), {
       status: 404,
@@ -16,20 +16,12 @@ export const GET: APIRoute = async ({ params }) => {
   }
 
   // 返回编辑器需要的格式
-  return new Response(
-    JSON.stringify({
-      content: entry.body,
-      tags: entry.data.tags,
-      title: entry.data.title,
-      createTime: entry.data.createTime,
-      updateTime: entry.data.updateTime,
-      draft: entry.data.draft,
-      category: entry.data.category,
-      id: id,
-      path: id,
-    }),
-    { status: 200 },
+  const pageData = toPageData(entry)
+  console.log(
+    'GET /api/post/[id] - content preview:',
+    pageData.content?.substring(0, 100),
   )
+  return new Response(JSON.stringify(pageData), { status: 200 })
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -69,18 +61,25 @@ export const POST: APIRoute = async (ctx) => {
     contentData = JSON.parse(text)
   }
 
+  // contentData.content 现在直接是 Markdown 字符串
+  const markdownContent = contentData.content || ''
+
   // 构建 Markdown 文件内容
-  const frontmatter = {
-    title: contentData.title,
-    tags: contentData.tags || [],
-    ...(contentData.category && { category: contentData.category }),
+  const frontmatter: Record<string, any> = {
+    title: contentData.title || 'Untitled',
+    tags: Array.isArray(contentData.tags) ? contentData.tags : [],
     createTime: contentData.createTime || Date.now(),
     updateTime: Date.now(),
-    draft: contentData.draft || false,
+    draft: contentData.draft === true,
+  }
+
+  // 只添加有值的可选字段
+  if (contentData.category !== undefined && contentData.category !== null) {
+    frontmatter.category = contentData.category
   }
 
   // 使用 gray-matter 格式化
-  const markdown = matter.stringify(contentData.content || '', frontmatter)
+  const markdown = matter.stringify(markdownContent, frontmatter)
 
   // 保存为 .md 文件
   await writeFile(`./src/content/posts/${id}.md`, markdown, {
