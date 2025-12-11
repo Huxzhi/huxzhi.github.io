@@ -2,7 +2,6 @@
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import Card from '@/components/Card.astro'
 import { getAllTags } from '@/pages/api/post/list'
-import { formatTagDisplay } from '@/shared/tag'
 
 const tags = (await getAllTags()).sort()
 ---
@@ -19,7 +18,7 @@ const tags = (await getAllTags()).sort()
             onmouseover="this.style.color='var(--color-link)'"
             onmouseout="this.style.color='var(--color-t)'"
           >
-            #{formatTagDisplay(decodeURIComponent(tag))}
+            #{decodeURIComponent(tag)}
           </a>
         ))
       }

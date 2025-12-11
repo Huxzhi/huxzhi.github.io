@@ -2,7 +2,7 @@
 import Header from '@/components/Header.astro'
 import config from 'urodele.config'
 import '@/styles.css'
-import '@/components/TagPanel/style.css'
+import Card from '../../components/Card.astro'
 ---
 
 <script>
@@ -28,10 +28,58 @@ import '@/components/TagPanel/style.css'
     >
       <div class="w-full flex flex-col">
         <div
-          id="editor"
-          class="w-full flex flex-col items-center min-h-8"
+          class="editor-container w-full flex gap-4 justify-center px-4"
           data-modal-loading="true"
         >
+          <!-- 编辑器主体 -->
+          <Card class="flex-1 max-w-[960px]">
+            <div
+              id="editor"
+              class="field-wrapper w-full flex flex-col"
+            >
+            </div>
+          </Card>
+
+          <!-- 右侧边栏：大纲和标签 -->
+          <aside class="sidebar-wrapper w-60 max-lg:hidden">
+            <div class="sticky top-6 flex flex-col gap-4">
+              <!-- 大纲 -->
+              <Card
+                class="outline-panel max-h-[calc(50vh-60px)] overflow-y-auto"
+              >
+                <div class="mb-3">
+                  <h3
+                    class="text-sm font-semibold mb-2"
+                    style="color: var(--color-title);"
+                  >
+                    文章大纲
+                  </h3>
+                </div>
+                <div class="outline-list flex flex-col gap-1 text-sm"></div>
+              </Card>
+
+              <!-- 标签面板 -->
+              <Card
+                class="tag-panel p-4 rounded-lg max-h-[calc(50vh-60px)] overflow-y-auto"
+              >
+                <div class="mb-3">
+                  <h3
+                    class="text-sm font-semibold mb-2"
+                    style="color: var(--color-title);"
+                  >
+                    文章标签
+                  </h3>
+                  <div
+                    class="text-xs mb-2"
+                    style="color: var(--color-t-l);"
+                  >
+                    使用 #标签 格式自动提取
+                  </div>
+                </div>
+                <div class="tags-list flex flex-wrap gap-2"></div>
+              </Card>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

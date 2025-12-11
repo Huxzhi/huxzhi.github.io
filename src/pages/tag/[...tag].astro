@@ -2,7 +2,7 @@
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import PostCard from '@/components/PostCard.astro'
 import { getPostsByTag, getAllTags } from '@/pages/api/post/list'
-import { formatTagDisplay, expandTags } from '@/shared/tag'
+import { expandTags } from '@/shared/tag'
 
 // Rest parameter captures the full path with slashes
 const tagPath = Astro.params.tag as string
@@ -25,7 +25,7 @@ export const getStaticPaths = async () => {
   mount('data-acc-time')
 </script>
 
-<NonPostLayout title={`标签: ${formatTagDisplay(tagPath)}`}>
+<NonPostLayout title={`标签: ${tagPath}`}>
   <div
     class="rounded-lg p-6"
     style="background-color: var(--color-main); box-shadow: var(--shadow-3xl);"
@@ -34,7 +34,7 @@ export const getStaticPaths = async () => {
       class="text-xl"
       style="color: var(--color-t);"
     >
-      分类：{formatTagDisplay(tagPath)} 共 {posts.length} 篇文章
+      分类：{tagPath} 共 {posts.length} 篇文章
     </h1>
   </div>
 

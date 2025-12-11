@@ -2,7 +2,7 @@
 import PostLayout from '@/layouts/PostLayout.astro'
 import Card from '@/components/Card.astro'
 import { getPageList } from '@/pages/api/post/list'
-import { formatTagDisplay, getLeafTags } from '@/shared/tag'
+import { getLeafTags } from '@/shared/tag'
 import { getCollection, getEntry, render } from 'astro:content'
 import { expandTags } from '@/shared/tag'
 
@@ -119,7 +119,7 @@ export const getStaticPaths = async () => {
                     class="transition-colors"
                     style="color: var(--color-link);"
                   >
-                    #{formatTagDisplay(tag)}
+                    #{tag}
                   </a>
                 ))}
               </span>

@@ -1,8 +1,7 @@
 import * as React from 'jsx-dom'
 
 import adapter from '@/adapter'
-import { mount as mountOutline } from '@/components/Outline'
-import { createTagPanel } from '@/components/TagPanel'
+
 import { createEditor } from '@/editor/codemirror'
 import { debounce, throttle } from '@/shared/debounce'
 import {
@@ -51,16 +50,6 @@ export const mount = async (selector: string, operationSelector: string) => {
       }
     })()
 
-    const filed = (
-      <div class="field-wrapper w-full flex flex-col"></div>
-    ) as HTMLDivElement
-    const wrapper = (
-      <div class="editor-wrapper w-full flex gap-4 justify-center px-4">
-        <div class="flex-1 max-w-[960px]">{filed}</div>
-        <div class="tag-panel-wrapper w-60 <lg:hidden"></div>
-      </div>
-    ) as HTMLDivElement
-
     // 创建图片上传函数
     const uploadImage = async (file: File): Promise<string> => {
       // 创建本地 blob URL 用于预览
@@ -68,44 +57,150 @@ export const mount = async (selector: string, operationSelector: string) => {
       return blobUrl
     }
 
-    const editor = createEditor(filed, pageDat?.content ?? '', uploadImage)
+    const editor = createEditor(root, pageDat?.content ?? '', uploadImage)
 
-    // 挂载大纲
-    const outlineWrapper = (
-      <div class="outline-wrapper"></div>
-    ) as HTMLDivElement
-    wrapper.querySelector('.flex-1')?.appendChild(outlineWrapper)
-    const updateOutline = mountOutline('.outline-wrapper')
+    // 大纲面板逻辑
+    const outlineList = document.querySelector('.outline-list') as HTMLElement
 
-    // 挂载标签面板
-    const tagPanelContainer = wrapper.querySelector(
-      '.tag-panel-wrapper',
-    ) as HTMLElement
-    const tagPanel = createTagPanel(tagPanelContainer)
+    const extractHeadings = (markdown: string) => {
+      const lines = markdown.split('\n')
+      const headings: Array<{ level: number; text: string; id: string }> = []
+      let idCounter = 0
 
-    // 初始化标签
-    console.log('Initializing tag panel')
-    tagPanel.update(pageDat?.content ?? '')
+      lines.forEach((line) => {
+        const match = line.match(/^(#{1,6})\s+(.+)$/)
+        if (match) {
+          const level = match[1].length
+          const text = match[2].trim()
+          const id = `heading-${idCounter++}`
+          headings.push({ level, text, id })
+        }
+      })
+
+      return headings
+    }
+
+    const updateOutline = (markdown: string) => {
+      if (!outlineList) return
+
+      const headings = extractHeadings(markdown)
+      outlineList.innerHTML = ''
+
+      if (headings.length === 0) {
+        const emptyDiv = document.createElement('div')
+        emptyDiv.className = 'text-sm'
+        emptyDiv.style.color = 'var(--color-t-l)'
+        emptyDiv.textContent = '暂无标题'
+        outlineList.appendChild(emptyDiv)
+      } else {
+        headings.forEach((heading) => {
+          const marginLeft = (heading.level - 1) * 12
+          const link = document.createElement('div')
+          link.className = 'outline-item text-sm py-1 cursor-pointer'
+          link.style.cssText = `margin-left: ${marginLeft}px; color: var(--color-t-l); opacity: 0.7; transition: opacity 0.2s;`
+          link.textContent = heading.text
+
+          link.onmouseenter = () => {
+            link.style.opacity = '1'
+          }
+          link.onmouseleave = () => {
+            link.style.opacity = '0.7'
+          }
+
+          outlineList.appendChild(link)
+        })
+      }
+    }
+
+    // 标签面板逻辑
+    const tagsList = document.querySelector('.tags-list') as HTMLElement
+
+    const extractHashtags = (markdown: string): string[] => {
+      // 移除代码块（```...```）和行内代码（`...`）
+      const cleanMarkdown = markdown
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/`[^`]+`/g, '')
+
+      const tagRegex = /#([^\s#]+)/g
+      const matches = cleanMarkdown.matchAll(tagRegex)
+      const tags = new Set<string>()
+
+      for (const match of matches) {
+        const tag = match[1]
+        tags.add(tag)
+        if (tag.includes('/')) {
+          const parts = tag.split('/')
+          for (let i = 0; i < parts.length - 1; i++) {
+            tags.add(parts.slice(0, i + 1).join('/'))
+          }
+        }
+      }
+
+      return Array.from(tags).sort()
+    }
+
+    const updateTags = (markdown: string) => {
+      if (!tagsList) return
+
+      const tags = extractHashtags(markdown)
+      tagsList.innerHTML = ''
+
+      if (tags.length === 0) {
+        const emptyDiv = document.createElement('div')
+        emptyDiv.className = 'text-sm'
+        emptyDiv.style.color = 'var(--color-t-l)'
+        emptyDiv.textContent = '暂无标签'
+        tagsList.appendChild(emptyDiv)
+      } else {
+        tags.forEach((tag) => {
+          const tagEl = document.createElement('div')
+          tagEl.className = 'tag-item flex text-sm  rounded'
+          tagEl.style.cssText =
+            'color: var(--color-t-l); cursor: default; transition: background-color 0.2s;'
+          tagEl.onmouseenter = () => {
+            tagEl.style.backgroundColor = 'var(--color-bg-l)'
+          }
+          tagEl.onmouseleave = () => {
+            tagEl.style.backgroundColor = ''
+          }
+
+          const span = document.createElement('span')
+          span.style.cssText = 'color: var(--color-primary);'
+          span.textContent = '#'
+
+          const text = document.createTextNode(tag)
+
+          tagEl.appendChild(span)
+          tagEl.appendChild(text)
+          tagsList.appendChild(tagEl)
+        })
+      }
+    }
+
+    // 初始化大纲和标签
+    updateOutline(pageDat?.content ?? '')
+    updateTags(pageDat?.content ?? '')
 
     // 监听编辑器更新，实时更新标签和大纲
     editor.on(
       'update',
       throttle(() => {
-        console.log('Editor update triggered')
-        if (updateOutline) updateOutline()
-        tagPanel.update(editor.getValue())
+        const markdown = editor.getValue()
+        updateOutline(markdown)
+        updateTags(markdown)
       }, 200),
     )
 
-    root.appendChild(wrapper)
+    // 移除 loading 状态
+    document
+      .querySelector('.editor-container')
+      ?.removeAttribute('data-modal-loading')
+
     return {
       editor,
       initial: pageDat,
-      tagPanel,
     }
   })()
-
-  root.removeAttribute('data-modal-loading')
 
   const getCurrentDoc = async () => {
     // 直接获取 Markdown 文本内容
@@ -224,7 +319,7 @@ export const mount = async (selector: string, operationSelector: string) => {
           </svg>
         </button>
         <div
-          class="absolute z-[50] top-full right-0 mt-1 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
+          class="absolute z-50 top-full right-0 mt-1 transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto
         flex flex-col gap-2 p-2 rounded bg-modal shadow text-sm"
         >
           <button
@@ -315,7 +410,7 @@ export const mount = async (selector: string, operationSelector: string) => {
             </svg>
           )}
         </button>
-        <div class="absolute text-sm top-full right-0 gap-2 p-2 mt-1 z-[50] bg-modal flex flex-col justify-center w-[200px] shadow rounded transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
+        <div class="absolute text-sm top-full right-0 gap-2 p-2 mt-1 z-50 bg-modal flex flex-col justify-center w-[200px] shadow rounded transition-all transition-delay-[0.2s] whitespace-nowrap opacity-0 translate-y--2 pointer-events-none group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
           {changeSaved ? (
             <div class="text-center">Changes saved</div>
           ) : (
