@@ -5,6 +5,7 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     tags: z.array(z.string()).default([]),
+    category: z.string().optional(), // 新增分类字段
     createTime: z.number(),
     updateTime: z.number().optional(),
     draft: z.boolean().default(false),

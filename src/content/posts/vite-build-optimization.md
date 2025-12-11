@@ -1,6 +1,7 @@
 ---
 title: Vite 构建优化实战指南
 tags: [vite, build, performance, frontend]
+category: 技术向
 createTime: 1733410800000
 draft: false
 ---

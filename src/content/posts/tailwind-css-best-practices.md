@@ -1,6 +1,7 @@
 ---
 title: Tailwind CSS 最佳实践与常见误区
 tags: [tailwind, css, frontend, design]
+category: 技术向
 createTime: 1733583600000
 draft: false
 ---

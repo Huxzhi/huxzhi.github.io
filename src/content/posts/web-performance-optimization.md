@@ -1,6 +1,7 @@
 ---
 title: Web 性能优化核心指标与实践
 tags: [performance, web-vitals, optimization, frontend]
+category: 技术向
 createTime: 1733151600000
 draft: false
 ---
@@ -336,7 +337,6 @@ import debounce from 'lodash-es/debounce'
 // 使用图片优化服务
 // Cloudinary / Imgix / Next.js Image
 import Image from 'next/image'
-
 ;<Image
   src="/hero.jpg"
   width={1200}

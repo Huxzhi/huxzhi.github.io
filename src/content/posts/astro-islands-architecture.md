@@ -1,6 +1,7 @@
 ---
 title: Astro Islands 架构深度解析
 tags: [astro, architecture, performance, frontend]
+category: 技术向
 createTime: 1733670000000
 draft: false
 ---

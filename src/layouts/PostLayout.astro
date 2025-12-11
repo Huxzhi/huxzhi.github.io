@@ -1,8 +1,10 @@
 ---
 import Layout from './Layout.astro'
 import Card from '@/components/Card.astro'
+import CategoryCard from '@/components/CategoryCard.astro'
 import { getCollection } from 'astro:content'
 import { expandTags } from '@/shared/tag'
+import { getPostCategory } from '@/shared/category'
 
 interface Props {
   title: string
@@ -41,6 +43,18 @@ const recentPosts = publishedPosts
     title: p.data.title,
     createTime: p.data.createTime,
   }))
+
+// Get categories with counts
+const categoryCounts = new Map<string, number>()
+publishedPosts.forEach((post) => {
+  const category = getPostCategory(post)
+  categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
+})
+
+const categories = Array.from(categoryCounts.entries())
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8)
 ---
 
 <Layout
@@ -49,9 +63,12 @@ const recentPosts = publishedPosts
 >
   <!-- Left Sidebar - ToC -->
   <aside class="space-y-6 order-last hidden md:block md:order-first">
-    <div class="sticky top-6">
+    <div class="sticky top-6 space-y-6">
       <Card title="目录">
-        <nav class="space-y-1 text-sm">
+        <nav
+          class="space-y-1 text-sm overflow-y-auto"
+          style="max-height: calc(100vh - 570px);"
+        >
           {
             headings.map((heading) => (
               <a
@@ -67,11 +84,13 @@ const recentPosts = publishedPosts
           }
         </nav>
       </Card>
+
+      <CategoryCard categories={categories} />
     </div>
   </aside>
 
   <!-- Main Content -->
-  <main class="space-y-6 flex flex-col order-first md:order-none min-w-0">
+  <main class="space-y-6 flex flex-col order-first md:order-0 min-w-0">
     <slot />
   </main>
 

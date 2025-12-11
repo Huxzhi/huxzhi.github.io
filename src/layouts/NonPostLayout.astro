@@ -1,11 +1,13 @@
 ---
 import ArchiveList from '@/components/ArchiveList.astro'
+import CategoryCard from '@/components/CategoryCard.astro'
 import CategoryList from '@/components/CategoryList.astro'
 import ProfileCard from '@/components/ProfileCard.astro'
 import RecentPosts from '@/components/RecentPosts.astro'
 import { expandTags } from '@/shared/tag'
 import type { Fragment } from 'astro/runtime/server/index.js'
 import { getCollection } from 'astro:content'
+import config from 'urodele.config'
 import Layout from './Layout.astro'
 
 interface Props {
@@ -32,6 +34,18 @@ const tagCounts = allTags
     count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag))
       .length,
   }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 10)
+
+// Statistics for categories
+const categoryCounts = new Map<string, number>()
+publishedPosts.forEach((post) => {
+  const category = post.data.category || config.categories.uncategorized
+  categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
+})
+
+const categories = Array.from(categoryCounts.entries())
+  .map(([name, count]) => ({ name, count }))
   .sort((a, b) => b.count - a.count)
   .slice(0, 10)
 
@@ -68,12 +82,13 @@ const recentPosts = publishedPosts
 
   <!-- Left Sidebar -->
   <aside class="order-last md:order-first">
-    <div class="sticky top-6">
+    <div class="sticky top-20 space-y-6">
       <ProfileCard
         totalPosts={totalPosts}
         totalTags={allTags.length}
         totalYears={Object.keys(postsByYear).length}
       />
+      <CategoryCard categories={categories} />
       <CategoryList tags={tagCounts} />
       <ArchiveList archives={postsByYear} />
     </div>
@@ -81,7 +96,7 @@ const recentPosts = publishedPosts
 
   <!-- Right Sidebar -->
   <aside class="max-xl:hidden">
-    <div class="sticky top-6">
+    <div class="sticky top-20 space-y-6">
       <RecentPosts posts={recentPosts} />
     </div>
   </aside>

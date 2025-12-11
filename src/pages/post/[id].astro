@@ -1,5 +1,6 @@
 ---
 import PostLayout from '@/layouts/PostLayout.astro'
+import Card from '@/components/Card.astro'
 import { getPageList } from '@/pages/api/post/list'
 import { formatTagDisplay, getLeafTags } from '@/shared/tag'
 import { getCollection, getEntry, render } from 'astro:content'
@@ -45,127 +46,127 @@ export const getStaticPaths = async () => {
   headings={headings}
   tags={post.tags}
 >
-  <article>
-    <header class="mb-8">
-      <h1
-        class="text-3xl lg:text-4xl font-bold mb-4"
-        style="color: var(--color-title);"
-      >
-        {post.title}
-      </h1>
-      <div
-        class="flex items-center gap-4 text-sm"
-        style="color: var(--color-t-l);"
-      >
-        <time>
-          {
-            new Date(post.createTime).toLocaleDateString('zh-CN', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          }
-        </time>
-        {
-          post.updateTime && (
-            <span>
-              更新于{' '}
-              {new Date(post.updateTime).toLocaleDateString('zh-CN', {
+  <Card>
+    <article>
+      <header class="mb-8">
+        <h1
+          class="text-3xl lg:text-4xl font-bold mb-4"
+          style="color: var(--color-title);"
+        >
+          {post.title}
+        </h1>
+        <div
+          class="flex items-center gap-4 text-sm"
+          style="color: var(--color-t-l);"
+        >
+          <time>
+            {
+              new Date(post.createTime).toLocaleDateString('zh-CN', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-              })}
-            </span>
-          )
-        }
-        {
-          displayTags.length > 0 && (
-            <span class="lg:hidden flex gap-2">
-              {displayTags.map((tag) => (
-                <a
-                  href={`/tag/${tag}`}
-                  class="transition-colors"
-                  style="color: var(--color-link);"
-                  onmouseover="this.style.color='var(--color-link-hover)'"
-                  onmouseout="this.style.color='var(--color-link)'"
+              })
+            }
+          </time>
+          {
+            post.updateTime && (
+              <span>
+                更新于{' '}
+                {new Date(post.updateTime).toLocaleDateString('zh-CN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            )
+          }
+          {
+            displayTags.length > 0 && (
+              <span class="min-h-0 flex gap-2 flex-wrap">
+                {displayTags.map((tag) => (
+                  <a
+                    href={`/tag/${tag}`}
+                    class="transition-colors"
+                    style="color: var(--color-link);"
+                  >
+                    #{formatTagDisplay(tag)}
+                  </a>
+                ))}
+              </span>
+            )
+          }
+        </div>
+      </header>
+
+      <div class="prose dark:prose-invert max-w-none">
+        <Content />
+      </div>
+
+      <!-- Navigation -->
+      <nav
+        class="mt-12 pt-6"
+        style="border-top: 1px solid var(--color-border);"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          {
+            prev ? (
+              <a
+                href={`/post/${prev.id}`}
+                class="flex items-center gap-2 text-sm transition-colors"
+                style="color: var(--color-t);"
+                onmouseover="this.style.color='var(--color-link)'"
+                onmouseout="this.style.color='var(--color-t)'"
+              >
+                <svg
+                  class="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  #{formatTagDisplay(tag)}
-                </a>
-              ))}
-            </span>
-          )
-        }
-      </div>
-    </header>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                <span class="truncate">{prev.title}</span>
+              </a>
+            ) : (
+              <div />
+            )
+          }
 
-    <div class="prose dark:prose-invert max-w-none">
-      <Content />
-    </div>
-
-    <!-- Navigation -->
-    <nav
-      class="mt-12 pt-6"
-      style="border-top: 1px solid var(--color-border);"
-    >
-      <div class="grid grid-cols-2 gap-4">
-        {
-          prev ? (
-            <a
-              href={`/post/${prev.id}`}
-              class="flex items-center gap-2 text-sm transition-colors"
-              style="color: var(--color-t);"
-              onmouseover="this.style.color='var(--color-link)'"
-              onmouseout="this.style.color='var(--color-t)'"
-            >
-              <svg
-                class="w-5 h-5 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {
+            next ? (
+              <a
+                href={`/post/${next.id}`}
+                class="flex items-center justify-end gap-2 text-sm transition-colors"
+                style="color: var(--color-t);"
+                onmouseover="this.style.color='var(--color-link)'"
+                onmouseout="this.style.color='var(--color-t)'"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              <span class="truncate">{prev.title}</span>
-            </a>
-          ) : (
-            <div />
-          )
-        }
-
-        {
-          next ? (
-            <a
-              href={`/post/${next.id}`}
-              class="flex items-center justify-end gap-2 text-sm transition-colors"
-              style="color: var(--color-t);"
-              onmouseover="this.style.color='var(--color-link)'"
-              onmouseout="this.style.color='var(--color-t)'"
-            >
-              <span class="truncate text-right">{next.title}</span>
-              <svg
-                class="w-5 h-5 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
-          ) : (
-            <div />
-          )
-        }
-      </div>
-    </nav>
-  </article>
+                <span class="truncate text-right">{next.title}</span>
+                <svg
+                  class="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            ) : (
+              <div />
+            )
+          }
+        </div>
+      </nav>
+    </article>
+  </Card>
 </PostLayout>

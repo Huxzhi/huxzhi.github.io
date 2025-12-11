@@ -1,0 +1,63 @@
+---
+import Card from '@/components/Card.astro'
+import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import { getPostCategory } from '@/shared/category'
+import { getCollection } from 'astro:content'
+import config from 'urodele.config'
+
+const allPosts = await getCollection('posts')
+const publishedPosts = allPosts.filter((post) => !post.data.draft)
+
+// 统计分类
+const categoryCounts = new Map<string, number>()
+
+publishedPosts.forEach((post) => {
+  const category = getPostCategory(post)
+  categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
+})
+
+const categories = Array.from(categoryCounts.entries())
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count)
+
+const totalCategories = categories.length
+const totalPosts = publishedPosts.length
+---
+
+<NonPostLayout title={`分类 - ${config.head.title}`}>
+  <Card title="所有分类">
+    <div class="mb-6">
+      <p
+        class="text-sm"
+        style="color: var(--color-t-l);"
+      >
+        共 {totalCategories} 个分类，{totalPosts} 篇文章
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        categories.map(({ name, count }) => (
+          <a
+            href={`/categories/${encodeURIComponent(name)}`}
+            class="block p-4 rounded-lg transition-all hover:scale-105"
+            style="background-color: var(--color-alt);"
+          >
+            <div
+              class="text-xl font-bold mb-1"
+              style="color: var(--color-title);"
+            >
+              {name}
+            </div>
+            <div
+              class="text-sm"
+              style="color: var(--color-t-l);"
+            >
+              {count} 篇文章
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </Card>
+</NonPostLayout>

@@ -5,8 +5,6 @@ createTime: 1733759400000
 draft: false
 ---
 
-# 使用 Astro + CodeMirror + GitHub API 构建动态静态博客
-
 这是一个创新的架构：利用 Astro 生成纯静态网页，通过 CodeMirror 提供编辑器，结合 GitHub API 实现内容的动态修改和存储。
 
 ## 架构概览

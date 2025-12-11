@@ -1,0 +1,77 @@
+---
+import PostCard from '@/components/PostCard.astro'
+import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import { getPostCategory } from '@/shared/category'
+import { expandTags } from '@/shared/tag'
+import { getCollection } from 'astro:content'
+import config from 'urodele.config'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts')
+  const publishedPosts = allPosts.filter((post) => !post.data.draft)
+
+  // 统计所有分类
+  const categoryCounts = new Map<string, number>()
+
+  publishedPosts.forEach((post) => {
+    const category = getPostCategory(post)
+    categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
+  })
+
+  // 为每个分类生成页面
+  return Array.from(categoryCounts.keys()).map((category) => ({
+    params: { category },
+    props: {
+      posts: publishedPosts
+        .filter((post) => getPostCategory(post) === category)
+        .sort((a, b) => b.data.createTime - a.data.createTime),
+      category,
+      count: categoryCounts.get(category) || 0,
+    },
+  }))
+}
+
+const { posts = [], category, count } = Astro.props
+
+const extractSummary = (body: string) => {
+  const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
+  return text.slice(0, 150) + (text.length > 150 ? '...' : '')
+}
+---
+
+<NonPostLayout title={`分类：${category} - ${config.head.title}`}>
+  <div class="mb-8">
+    <h1
+      class="text-3xl font-bold mb-2"
+      style="color: var(--color-title);"
+    >
+      分类：{category}
+    </h1>
+    <p
+      class="text-sm"
+      style="color: var(--color-t-l);"
+    >
+      共 {count} 篇文章
+    </p>
+  </div>
+
+  {
+    posts.map((post) => {
+      const postId = post.id.replace(/\.md$/, '')
+      const summary = extractSummary(post.body)
+      const tags = expandTags(post.data.tags)
+
+      return (
+        <PostCard
+          postId={postId}
+          title={post.data.title}
+          summary={summary}
+          createTime={post.data.createTime}
+          tags={tags}
+        />
+      )
+    })
+  }
+</NonPostLayout>

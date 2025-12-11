@@ -29,7 +29,13 @@ export const config = {
   pagination: {
     size: 10,
   },
+  categories: {
+    enabled: true,
+    fieldName: 'category', // 可以是 'category' 或 'categories'
+    uncategorized: '未分类', // 没有分类时的默认名称
+    useFolderName: false, // 是否使用文件夹名作为分类（优先级低于 frontmatter）
+  },
   giscus: false as object | false,
-} as const
+}
 
 export default config

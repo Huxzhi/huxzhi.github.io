@@ -1,6 +1,7 @@
 ---
 title: TypeScript 高级类型技巧与实战
 tags: [typescript, javascript, types, programming]
+category: 技术向
 createTime: 1733497200000
 draft: false
 ---

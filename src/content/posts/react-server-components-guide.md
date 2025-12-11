@@ -1,6 +1,7 @@
 ---
 title: React Server Components 完全指南
 tags: [react, nextjs, rsc, server-components]
+category: 技术向
 createTime: 1733324400000
 draft: false
 ---

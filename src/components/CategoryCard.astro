@@ -1,0 +1,33 @@
+---
+import Card from './Card.astro'
+
+interface Props {
+  categories: Array<{ name: string; count: number }>
+}
+
+const { categories } = Astro.props
+---
+
+<Card title="分类">
+  <div class="space-y-2">
+    {
+      categories.map(({ name, count }) => (
+        <a
+          href={`/categories/${encodeURIComponent(name)}`}
+          class="flex justify-between items-center py-1 transition-colors group"
+          style="color: var(--color-t);"
+          onmouseover="this.style.color='var(--color-link)'"
+          onmouseout="this.style.color='var(--color-t)'"
+        >
+          <span class="text-sm">{name}</span>
+          <span
+            class="text-xs px-2 py-0.5 rounded transition-colors"
+            style="background-color: var(--color-alt); color: var(--color-t-l);"
+          >
+            {count}
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</Card>
