@@ -5,6 +5,7 @@ import CategoryCard from '@/components/CategoryCard.astro'
 import { getCollection } from 'astro:content'
 import { expandTags } from '@/shared/tag'
 import { getPostCategory } from '@/shared/category'
+import { getCreateTime } from '@/shared/time'
 
 interface Props {
   title: string
@@ -26,22 +27,22 @@ const relatedPosts = publishedPosts
       p.id.replace(/\.md$/, '') !== postId &&
       expandTags(p.data.tags).some((tag) => tags.includes(tag)),
   )
-  .sort((a, b) => b.data.createTime - a.data.createTime)
+  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
   .slice(0, 5)
   .map((p) => ({
     id: p.id.replace(/\.md$/, ''),
     title: p.data.title,
-    createTime: p.data.createTime,
+    createTime: getCreateTime(p.data),
   }))
 
 // Get recent posts for right sidebar
 const recentPosts = publishedPosts
-  .sort((a, b) => b.data.createTime - a.data.createTime)
+  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
   .slice(0, 5)
   .map((p) => ({
     id: p.id.replace(/\.md$/, ''),
     title: p.data.title,
-    createTime: p.data.createTime,
+    createTime: getCreateTime(p.data),
   }))
 
 // Get categories with counts
