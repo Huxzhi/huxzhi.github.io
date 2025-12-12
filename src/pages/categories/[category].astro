@@ -3,9 +3,9 @@ import PostCard from '@/components/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getPostCategory } from '@/shared/category'
 import { expandTags } from '@/shared/tag'
+import { getCreateTime } from '@/shared/time'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
-import { getCreateTime } from '@/shared/time'
 
 export const prerender = true
 

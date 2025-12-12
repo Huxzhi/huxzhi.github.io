@@ -29,7 +29,12 @@ export async function getStaticPaths() {
   }))
 }
 
-const { posts = [], currentPage = 2, totalPages = 1, totalPosts = 0 } = Astro.props
+const {
+  posts = [],
+  currentPage = 2,
+  totalPages = 1,
+  totalPosts = 0,
+} = Astro.props
 
 // Extract summary
 const extractSummary = (body: string | undefined) => {
