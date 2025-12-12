@@ -2,6 +2,7 @@ import config from '@/../urodele.config'
 import { getLocalUser } from '@/shared/storage'
 import { parseMeta, toMeta } from '@/shared/transform'
 import { Octokit } from 'octokit'
+import matter from 'gray-matter'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 
 const { repo: REPO, login: OWNER } = config.github
@@ -17,7 +18,7 @@ const getOc = () => {
 
 export const readPageByPath: ReadPageByPath = async (_id) => {
   const id = _id.replace(/\/$/, '')
-  const path = `posts/${id}.json`
+  const path = `posts/${id}.md`
   const octokit = getOc()
   const { data } = await octokit.request(
     'GET /repos/{owner}/{repo}/contents/{path}',
@@ -29,14 +30,31 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
   )
   // fix github base64
   const fileData = data as { content: string }
-  const content = decodeURIComponent(
+  const markdownContent = decodeURIComponent(
     escape(window.atob(fileData.content.replace(/\s/g, ''))),
   )
-  const json = JSON.parse(content)
-  const meta = parseMeta(json)
+  
+  // Parse frontmatter from Markdown
+  const parsed = matter(markdownContent)
+  const frontmatter = parsed.data
+  
+  // Parse time from new format (created/updated strings) or old format (createTime/updateTime numbers)
+  const parseTime = (timeStr?: string, fallbackTimestamp?: number): number => {
+    if (timeStr) {
+      const parsed = new Date(timeStr).getTime()
+      if (!isNaN(parsed)) return parsed
+    }
+    return fallbackTimestamp || Date.now()
+  }
+  
   return {
-    content: content,
-    ...meta,
+    content: markdownContent,
+    title: frontmatter.title || 'Untitled',
+    tags: frontmatter.tags || [],
+    createTime: parseTime(frontmatter.created, frontmatter.createTime),
+    updateTime: parseTime(frontmatter.updated, frontmatter.updateTime),
+    draft: frontmatter.draft || false,
+    category: frontmatter.category,
     id,
     path,
   }
@@ -71,11 +89,10 @@ export const writePage: WritePage = async (_path, data, assets) => {
     },
   )
   console.log(main, 'main')
-  const meta = toMeta({ ...data, updateTime: Date.now() })
-  // content 现在是纯 Markdown 字符串，不需要解析
-  const rawString = JSON.stringify({ ...meta, content: data.content })
+  
+  // data.content already contains full Markdown with frontmatter from the editor
   const textFile = new File(
-    [new Blob([rawString], { type: 'application/json' })],
+    [new Blob([data.content], { type: 'text/markdown' })],
     path.replace(/^\//, ''),
   )
   const tree = await Promise.all(
@@ -85,7 +102,7 @@ export const writePage: WritePage = async (_path, data, assets) => {
         file,
       })),
       {
-        path: `posts/${path}.json`,
+        path: `posts/${path}.md`,
         file: textFile,
       },
     ].map(async ({ file, path }) => {
@@ -168,7 +185,7 @@ export const deletePageByPath: DeletePageByPath = async (_path, assets) => {
       sha: null,
     })),
     {
-      path: `posts/${path}.json`,
+      path: `posts/${path}.md`,
       mode: '100644' as const,
       sha: null,
     },
