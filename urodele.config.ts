@@ -27,7 +27,7 @@ export const config = {
     copyrightUrl: 'https://github.com/Huxzhi',
   },
   pagination: {
-    size: 10,
+    size: 7,
   },
   categories: {
     enabled: true,

@@ -10,10 +10,10 @@ const allPosts = await getAllPosts()
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
 const posts = publishedPosts
   .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
-  .slice(0, 10)
+  .slice(0, config.pagination.size)
 
 const totalPosts = publishedPosts.length
-const hasMorePosts = totalPosts > 10
+const hasMorePosts = totalPosts > config.pagination.size
 
 // Extract summary
 const extractSummary = (body: string | undefined) => {

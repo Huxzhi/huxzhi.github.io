@@ -1,18 +1,20 @@
 ---
 import PostCard from '@/components/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
+import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/shared/tag'
-import { getCollection } from 'astro:content'
-import config from 'urodele.config'
-import { getCreateTime } from '../../shared/time'
+import { getCreateTime } from '@/shared/time'
+import appConfig from 'urodele.config'
+
+export const prerender = true
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts')
+  const allPosts = await getAllPosts()
   const publishedPosts = allPosts
     .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.createTime - a.data.createTime)
+    .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
 
-  const pageSize = 10
+  const pageSize = appConfig?.pagination?.size || 7
   const pageCount = Math.ceil(publishedPosts.length / pageSize)
 
   // 从第 2 页开始，因为第 1 页是 index.astro
@@ -27,12 +29,13 @@ export async function getStaticPaths() {
   }))
 }
 
-const { posts = [], currentPage, totalPages, totalPosts } = Astro.props
+const { posts = [], currentPage = 2, totalPages = 1, totalPosts = 0 } = Astro.props
 
+// Extract summary
 const extractSummary = (body: string | undefined) => {
   if (!body) return ''
   const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
-  return text.slice(0, 150) + (text.length > 150 ? '...' : '')
+  return text.slice(0, 150)
 }
 
 // 分页逻辑：最多显示 7 个页码
@@ -71,7 +74,7 @@ const getPageNumbers = () => {
 const pageNumbers = getPageNumbers()
 ---
 
-<NonPostLayout title={`第 ${currentPage} 页 - ${config.head.title}`}>
+<NonPostLayout title={`第 ${currentPage} 页 - ${appConfig.head.title}`}>
   {
     posts.map((post) => {
       const postId = post.id.replace(/\.md$/, '')
@@ -101,6 +104,8 @@ const pageNumbers = getPageNumbers()
           href={currentPage === 2 ? '/' : `/page/${currentPage - 1}`}
           class="px-4 py-2 rounded transition-colors"
           style="background-color: var(--color-alt); color: var(--color-t);"
+          onmouseover="this.style.backgroundColor='var(--color-bg-l)'"
+          onmouseout="this.style.backgroundColor='var(--color-alt)'"
         >
           ← 上一页
         </a>
@@ -125,6 +130,16 @@ const pageNumbers = getPageNumbers()
                 ? 'background-color: var(--color-link); color: #fff;'
                 : 'background-color: var(--color-alt); color: var(--color-t);'
             }
+            onmouseover={
+              pageNum !== currentPage
+                ? "this.style.backgroundColor='var(--color-bg-l)'"
+                : ''
+            }
+            onmouseout={
+              pageNum !== currentPage
+                ? "this.style.backgroundColor='var(--color-alt)'"
+                : ''
+            }
           >
             {pageNum}
           </a>
@@ -138,6 +153,8 @@ const pageNumbers = getPageNumbers()
           href={`/page/${currentPage + 1}`}
           class="px-4 py-2 rounded transition-colors"
           style="background-color: var(--color-alt); color: var(--color-t);"
+          onmouseover="this.style.backgroundColor='var(--color-bg-l)'"
+          onmouseout="this.style.backgroundColor='var(--color-alt)'"
         >
           下一页 →
         </a>
