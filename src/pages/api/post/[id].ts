@@ -1,7 +1,7 @@
 import { getPostById, toPageData } from '@/adapter/content'
+import { composeFrontmatter, parseFrontmatter } from '@/shared/yaml'
 import type { APIRoute, GetStaticPaths } from 'astro'
 import { unlink, writeFile } from 'fs/promises'
-import matter from 'gray-matter'
 import { getPageList } from './list'
 
 export const GET: APIRoute = async ({ params }) => {
@@ -65,7 +65,7 @@ export const POST: APIRoute = async (ctx) => {
   const markdownContent = contentData.content || ''
 
   // 尝试解析 Markdown 中的 frontmatter
-  const parsed = matter(markdownContent)
+  const parsed = parseFrontmatter(markdownContent)
 
   // 格式化时间为 YYYY-MM-DDTHH:mm 格式
   const formatTime = (timestamp: number) => {
@@ -111,10 +111,10 @@ export const POST: APIRoute = async (ctx) => {
   }
 
   // 使用解析后的 body（不含 frontmatter 的部分）
-  const markdown = matter.stringify(parsed.content, frontmatter)
+  const markdown = composeFrontmatter(frontmatter, parsed.content)
 
   // 保存为 .md 文件
-  await writeFile(`./src/content/posts/${id}.md`, markdown, {
+  await writeFile(`./docs/posts/${id}.md`, markdown, {
     encoding: 'utf-8',
   })
 
@@ -126,7 +126,7 @@ export const DELETE: APIRoute = async (ctx) => {
     path: string
     assets: string[]
   }
-  const pagePath = `./src/content/posts/${id}.md`
+  const pagePath = `./docs/posts/${id}.md`
   const assetsPaths = assets.map((p) =>
     p.replace(`/post-assets`, './public/post-assets'),
   )

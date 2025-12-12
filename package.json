@@ -24,7 +24,6 @@
     "astro": "^5.16.4",
     "dayjs": "^1.11.13",
     "github-slugger": "^2.0.0",
-    "gray-matter": "^4.0.3",
     "idb": "^8.0.0",
     "jsx-dom": "^8.1.5",
     "octokit": "^4.0.2",
