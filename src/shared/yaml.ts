@@ -12,7 +12,7 @@ export interface ParsedFrontmatter {
  * 解析 Markdown 文件的 YAML frontmatter
  * @param markdown 完整的 Markdown 内容
  * @returns 解析后的 frontmatter 数据和正文内容
- * 
+ *
  * @example
  * ```typescript
  * const markdown = `---
@@ -20,10 +20,10 @@ export interface ParsedFrontmatter {
  * tags: ["typescript", "astro"]
  * draft: false
  * ---
- * 
+ *
  * # Content here
  * `
- * 
+ *
  * const { data, content } = parseFrontmatter(markdown)
  * console.log(data.title) // "Hello World"
  * console.log(data.tags) // ["typescript", "astro"]
@@ -90,7 +90,7 @@ export function parseFrontmatter(markdown: string): ParsedFrontmatter {
  * 将对象转换为 YAML frontmatter 字符串
  * @param data frontmatter 数据对象
  * @returns YAML 格式的字符串
- * 
+ *
  * @example
  * ```typescript
  * const yaml = stringifyFrontmatter({
@@ -134,7 +134,7 @@ export function stringifyFrontmatter(data: Record<string, any>): string {
  * @param data frontmatter 数据对象
  * @param content Markdown 正文内容
  * @returns 完整的 Markdown 字符串
- * 
+ *
  * @example
  * ```typescript
  * const markdown = composeFrontmatter(

@@ -9,6 +9,7 @@
 轻量级 YAML frontmatter 解析器，无需 Node.js Buffer 依赖，适用于浏览器环境。
 
 #### `parseFrontmatter(markdown: string): ParsedFrontmatter`
+
 解析 Markdown 文件的 YAML frontmatter。
 
 ```typescript
@@ -30,21 +31,23 @@ console.log(content) // "# Content here\n"
 ```
 
 **支持的数据类型：**
+
 - 字符串（自动去除引号）
 - 数字
 - 布尔值（true/false）
 - 数组 `[item1, item2]`
 
 #### `stringifyFrontmatter(data: Record<string, any>): string`
+
 将对象转换为 YAML frontmatter 字符串。
 
 ```typescript
 import { stringifyFrontmatter } from '@/shared/yaml'
 
 const yaml = stringifyFrontmatter({
-  title: "Hello World",
-  tags: ["typescript", "astro"],
-  draft: false
+  title: 'Hello World',
+  tags: ['typescript', 'astro'],
+  draft: false,
 })
 // 输出:
 // ---
@@ -55,14 +58,15 @@ const yaml = stringifyFrontmatter({
 ```
 
 #### `composeFrontmatter(data: Record<string, any>, content: string): string`
+
 将 frontmatter 数据和内容组合成完整的 Markdown。
 
 ```typescript
 import { composeFrontmatter } from '@/shared/yaml'
 
 const markdown = composeFrontmatter(
-  { title: "Hello", draft: false },
-  "# Content here"
+  { title: 'Hello', draft: false },
+  '# Content here',
 )
 // 输出完整的 Markdown 文件，包含 frontmatter
 ```
