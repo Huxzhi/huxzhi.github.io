@@ -1,6 +1,5 @@
 import config from '@/../urodele.config'
 import { getLocalUser } from '@/shared/storage'
-import matter from 'gray-matter'
 import { Octokit } from 'octokit'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 
@@ -13,6 +12,67 @@ const getOc = () => {
   // if (!token) return undefined;
   const octokit = new Octokit({ auth: token })
   return octokit
+}
+
+// Simple YAML frontmatter parser for browser
+function parseFrontmatter(markdown: string): {
+  data: Record<string, any>
+  content: string
+} {
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/
+  const match = markdown.match(frontmatterRegex)
+
+  if (!match) {
+    return { data: {}, content: markdown }
+  }
+
+  const [, yamlContent, body] = match
+  const data: Record<string, any> = {}
+
+  // Parse simple YAML (key: value pairs)
+  yamlContent.split('\n').forEach((line) => {
+    const colonIndex = line.indexOf(':')
+    if (colonIndex > 0) {
+      const key = line.slice(0, colonIndex).trim()
+      let value: any = line.slice(colonIndex + 1).trim()
+
+      // Remove quotes
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1)
+      }
+
+      // Parse arrays [item1, item2]
+      if (value.startsWith('[') && value.endsWith(']')) {
+        value = value
+          .slice(1, -1)
+          .split(',')
+          .map((v: string) => {
+            v = v.trim()
+            if (
+              (v.startsWith('"') && v.endsWith('"')) ||
+              (v.startsWith("'") && v.endsWith("'"))
+            ) {
+              return v.slice(1, -1)
+            }
+            return v
+          })
+      }
+      // Parse boolean
+      else if (value === 'true') value = true
+      else if (value === 'false') value = false
+      // Parse number
+      else if (!isNaN(Number(value)) && value !== '') {
+        value = Number(value)
+      }
+
+      data[key] = value
+    }
+  })
+
+  return { data, content: body }
 }
 
 export const readPageByPath: ReadPageByPath = async (_id) => {
@@ -40,8 +100,8 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
   }
   const markdownContent = new TextDecoder('utf-8').decode(bytes)
 
-  // Parse frontmatter from Markdown
-  const parsed = matter(markdownContent)
+  // Parse frontmatter from Markdown (browser-compatible)
+  const parsed = parseFrontmatter(markdownContent)
   const frontmatter = parsed.data
 
   // Parse time from new format (created/updated strings) or old format (createTime/updateTime numbers)
