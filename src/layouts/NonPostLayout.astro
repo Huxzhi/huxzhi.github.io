@@ -5,6 +5,7 @@ import ProfileCard from '@/components/ProfileCard.astro'
 import RecentPosts from '@/components/RecentPosts.astro'
 import TagCard from '@/components/TagCard.astro'
 import { expandTags } from '@/shared/tag'
+import { getCreateTime } from '@/shared/time'
 import type { Fragment } from 'astro/runtime/server/index.js'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
@@ -60,7 +61,7 @@ const totalWordsInWan = (totalWords / 10000).toFixed(1)
 // Archive statistics
 const postsByYear = publishedPosts.reduce(
   (acc, post) => {
-    const year = new Date(post.data.createTime).getFullYear()
+    const year = new Date(getCreateTime(post.data)).getFullYear()
     acc[year] = (acc[year] || 0) + 1
     return acc
   },
@@ -69,12 +70,12 @@ const postsByYear = publishedPosts.reduce(
 
 // Recent posts
 const recentPosts = publishedPosts
-  .sort((a, b) => b.data.createTime - a.data.createTime)
+  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
   .slice(0, 5)
   .map((p) => ({
     id: p.id.replace(/\.md$/, ''),
     title: p.data.title,
-    createTime: p.data.createTime,
+    createTime: getCreateTime(p.data),
   }))
 ---
 

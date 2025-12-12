@@ -4,6 +4,7 @@ import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { expandTags } from '@/shared/tag'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
+import { getCreateTime } from '../../shared/time'
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('posts')
@@ -82,7 +83,7 @@ const pageNumbers = getPageNumbers()
           postId={postId}
           title={post.data.title}
           summary={summary}
-          createTime={post.data.createTime}
+          createTime={getCreateTime(post.data)}
           tags={tags}
         />
       )

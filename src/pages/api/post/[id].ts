@@ -61,25 +61,57 @@ export const POST: APIRoute = async (ctx) => {
     contentData = JSON.parse(text)
   }
 
-  // contentData.content 现在直接是 Markdown 字符串
+  // contentData.content 现在可能包含完整的 Markdown（含 frontmatter）
   const markdownContent = contentData.content || ''
 
-  // 构建 Markdown 文件内容
+  // 尝试解析 Markdown 中的 frontmatter
+  const parsed = matter(markdownContent)
+
+  // 格式化时间为 YYYY-MM-DDTHH:mm 格式
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
+
+  // 合并 frontmatter：优先使用 Markdown 中的，其次使用 contentData 中的
   const frontmatter: Record<string, any> = {
-    title: contentData.title || 'Untitled',
-    tags: Array.isArray(contentData.tags) ? contentData.tags : [],
-    createTime: contentData.createTime || Date.now(),
-    updateTime: Date.now(),
-    draft: contentData.draft === true,
+    title: parsed.data.title || contentData.title || 'Untitled',
+    tags: Array.isArray(parsed.data.tags)
+      ? parsed.data.tags
+      : Array.isArray(contentData.tags)
+      ? contentData.tags
+      : [],
+    created: formatTime(
+      parsed.data.createTime || contentData.createTime || Date.now(),
+    ),
+    updated: formatTime(Date.now()),
+    draft:
+      parsed.data.draft !== undefined
+        ? parsed.data.draft
+        : contentData.draft === true,
   }
 
   // 只添加有值的可选字段
-  if (contentData.category !== undefined && contentData.category !== null) {
-    frontmatter.category = contentData.category
+  const category =
+    parsed.data.category !== undefined
+      ? parsed.data.category
+      : contentData.category
+  if (category !== undefined && category !== null) {
+    frontmatter.category = category
   }
 
-  // 使用 gray-matter 格式化
-  const markdown = matter.stringify(markdownContent, frontmatter)
+  const cover = parsed.data.cover || contentData.cover
+  if (cover) {
+    frontmatter.cover = cover
+  }
+
+  // 使用解析后的 body（不含 frontmatter 的部分）
+  const markdown = matter.stringify(parsed.content, frontmatter)
 
   // 保存为 .md 文件
   await writeFile(`./src/content/posts/${id}.md`, markdown, {

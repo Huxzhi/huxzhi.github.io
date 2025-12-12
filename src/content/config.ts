@@ -6,8 +6,10 @@ const posts = defineCollection({
     title: z.string(),
     tags: z.array(z.string()).default([]),
     category: z.string().optional(), // 新增分类字段
-    createTime: z.number(),
-    updateTime: z.number().optional(),
+    created: z.string().optional(), // 新格式：YYYY-MM-DDTHH:mm
+    updated: z.string().optional(), // 新格式：YYYY-MM-DDTHH:mm
+    createTime: z.number().optional(), // 旧格式：保持向后兼容
+    updateTime: z.number().optional(), // 旧格式：保持向后兼容
     draft: z.boolean().default(false),
     cover: z
       .object({

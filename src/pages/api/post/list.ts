@@ -1,5 +1,6 @@
 import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/shared/tag'
+import { getCreateTime, getUpdateTime } from '@/shared/time'
 import type { ShortPageData } from '@/shared/type'
 import { getEntry } from 'astro:content'
 
@@ -75,8 +76,8 @@ export const getPageList = async (
         path: postId,
         title: post.data.title,
         tags: expandedTags,
-        createTime: post.data.createTime,
-        updateTime: post.data.updateTime || post.data.createTime,
+        createTime: getCreateTime(post.data),
+        updateTime: getUpdateTime(post.data),
         draft: post.data.draft,
         cover: post.data.cover,
         intro,

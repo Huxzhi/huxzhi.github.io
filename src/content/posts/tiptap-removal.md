@@ -1,11 +1,10 @@
 ---
-title: Tiptap 移除完成
-tags: [changelog, codemirror, refactor]
-createTime: 1733756400000
+title: 移除所有 Tiptap 相关代码和依赖
+tags: []
+created: '2025-12-12T15:14'
+updated: '2025-12-12T15:14'
 draft: false
 ---
-
-# Tiptap 移除完成
 
 ## 概述
 

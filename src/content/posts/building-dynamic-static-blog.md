@@ -1,10 +1,11 @@
 ---
-title: Untitled
+title: Astro 生成纯静态网页
 tags: []
-createTime: 1765517244554
-updateTime: 1765517244554
+created: '2025-12-12T15:06'
+updated: '2025-12-12T15:06'
 draft: false
 ---
+
 这是一个创新的架构：利用 Astro 生成纯静态网页，通过 CodeMirror 提供编辑器，结合 GitHub API 实现内容的动态修改和存储。
 
 ## 架构概览 gregr egr fgr  

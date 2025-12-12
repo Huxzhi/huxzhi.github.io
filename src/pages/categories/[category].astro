@@ -5,6 +5,7 @@ import { getPostCategory } from '@/shared/category'
 import { expandTags } from '@/shared/tag'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
+import type { getCreateTime } from '../../shared/time'
 
 export const prerender = true
 
@@ -26,7 +27,7 @@ export async function getStaticPaths() {
     props: {
       posts: publishedPosts
         .filter((post) => getPostCategory(post) === category)
-        .sort((a, b) => b.data.createTime - a.data.createTime),
+        .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data)),
       category,
       count: categoryCounts.get(category) || 0,
     },
@@ -69,7 +70,7 @@ const extractSummary = (body: string | undefined) => {
           postId={postId}
           title={post.data.title}
           summary={summary}
-          createTime={post.data.createTime}
+          createTime={getCreateTime(post.data)}
           tags={tags}
         />
       )

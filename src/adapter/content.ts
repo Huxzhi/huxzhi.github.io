@@ -74,12 +74,52 @@ export async function getAllCategories(): Promise<string[]> {
  * 转换为 PageData 格式（用于 API）
  */
 export function toPageData(entry: CollectionEntry<'posts'>): PageData {
+  // 解析时间：优先使用新格式 created/updated，否则使用旧格式 createTime/updateTime
+  const parseTime = (timeStr?: string, fallbackTimestamp?: number): number => {
+    if (timeStr) {
+      const parsed = new Date(timeStr).getTime()
+      if (!isNaN(parsed)) return parsed
+    }
+    return fallbackTimestamp || Date.now()
+  }
+
+  const createTime = parseTime(entry.data.created, entry.data.createTime)
+  const updateTime = parseTime(
+    entry.data.updated,
+    entry.data.updateTime || entry.data.createTime,
+  )
+
+  // 重新构建完整的 Markdown（包含 frontmatter）
+  const frontmatter = {
+    title: entry.data.title || 'Untitled',
+    tags: entry.data.tags || [],
+    created: entry.data.created,
+    updated: entry.data.updated,
+    draft: entry.data.draft || false,
+    ...(entry.data.category !== undefined && entry.data.category !== null
+      ? { category: entry.data.category }
+      : {}),
+    ...(entry.data.cover ? { cover: entry.data.cover } : {}),
+  }
+
+  // 构建完整的 Markdown 内容（frontmatter + body）
+  const frontmatterYaml = Object.entries(frontmatter)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return `${key}: [${value.map((v) => JSON.stringify(v)).join(', ')}]`
+      }
+      return `${key}: ${JSON.stringify(value)}`
+    })
+    .join('\n')
+
+  const fullMarkdown = `---\n${frontmatterYaml}\n---\n\n${entry.body || ''}`
+
   return {
-    content: entry.body || '',
+    content: fullMarkdown,
     tags: entry.data.tags || [],
     title: entry.data.title || 'Untitled',
-    createTime: entry.data.createTime || Date.now(),
-    updateTime: entry.data.updateTime || entry.data.createTime || Date.now(),
+    createTime: createTime,
+    updateTime: updateTime,
     draft: entry.data.draft || false,
     category: entry.data.category,
     id: entry.id,

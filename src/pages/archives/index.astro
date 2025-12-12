@@ -2,6 +2,7 @@
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getCollection } from 'astro:content'
 import { expandTags } from '@/shared/tag'
+import { getCreateTime } from '@/shared/time'
 
 const allPosts = await getCollection('posts')
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
@@ -9,14 +10,14 @@ const publishedPosts = allPosts.filter((post) => !post.data.draft)
 // Group posts by year
 const postsByYear = publishedPosts.reduce(
   (acc, post) => {
-    const year = new Date(post.data.createTime).getFullYear()
+    const year = new Date(getCreateTime(post.data)).getFullYear()
     if (!acc[year]) {
       acc[year] = []
     }
     acc[year].push({
       id: post.id.replace(/\.md$/, ''),
       title: post.data.title,
-      createTime: post.data.createTime,
+      createTime: getCreateTime(post.data),
       cover: post.data.cover,
     })
     return acc

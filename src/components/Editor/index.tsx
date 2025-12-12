@@ -207,9 +207,19 @@ export const mount = async (selector: string, operationSelector: string) => {
     const markdownContent = editor.getValue()
     const { assets } = await getLocalUploadImages(editor)
 
-    // 从 Markdown 内容中提取标题
-    const titleMatch = markdownContent.match(/^#\s+(.+)$/m)
-    const title = titleMatch ? titleMatch[1] : 'Untitled'
+    // 标题获取优先级：original title > markdown h1 > filename
+    let title = initial?.title
+    if (!title) {
+      const titleMatch = markdownContent.match(/^#\s+(.+)$/m)
+      title = titleMatch ? titleMatch[1] : undefined
+    }
+    if (!title && pagePath) {
+      // 从文件路径提取文件名（不含扩展名）
+      title = pagePath.replace(/\.md$/, '').split('/').pop() || 'Untitled'
+    }
+    if (!title) {
+      title = 'Untitled'
+    }
 
     const path = (() => {
       if (!isCreate) return pagePath!

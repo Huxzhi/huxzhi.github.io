@@ -3,6 +3,7 @@ import PostLayout from '@/layouts/PostLayout.astro'
 import Card from '@/components/Card.astro'
 import { getPageList } from '@/pages/api/post/list'
 import { getLeafTags } from '@/shared/tag'
+import { getCreateTime, getUpdateTime } from '@/shared/time'
 import { getCollection, getEntry, render } from 'astro:content'
 import { expandTags } from '@/shared/tag'
 
@@ -18,6 +19,8 @@ const post = {
   id: entry.id.replace(/\.md$/, ''),
   ...entry.data,
   tags: expandTags(entry.data.tags),
+  createTime: getCreateTime(entry.data),
+  updateTime: getUpdateTime(entry.data),
 }
 
 // Extract intro from body for meta description

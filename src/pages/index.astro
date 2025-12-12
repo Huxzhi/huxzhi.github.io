@@ -2,13 +2,14 @@
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/shared/tag'
+import { getCreateTime } from '@/shared/time'
 import config from 'urodele.config'
 import PostCard from '@/components/PostCard.astro'
 
 const allPosts = await getAllPosts()
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
 const posts = publishedPosts
-  .sort((a, b) => b.data.createTime - a.data.createTime)
+  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
   .slice(0, 10)
 
 const totalPosts = publishedPosts.length
@@ -34,7 +35,7 @@ const extractSummary = (body: string | undefined) => {
           postId={postId}
           title={post.data.title}
           summary={summary}
-          createTime={post.data.createTime}
+          createTime={getCreateTime(post.data)}
           tags={tags}
         />
       )
