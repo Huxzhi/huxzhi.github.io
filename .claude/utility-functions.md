@@ -2,6 +2,71 @@
 
 本文档总结了项目中所有可复用的工具函数，按功能模块分类整理。
 
+## 📝 YAML 解析 (`src/shared/yaml.ts`)
+
+### 浏览器兼容的 Frontmatter 解析
+
+轻量级 YAML frontmatter 解析器，无需 Node.js Buffer 依赖，适用于浏览器环境。
+
+#### `parseFrontmatter(markdown: string): ParsedFrontmatter`
+解析 Markdown 文件的 YAML frontmatter。
+
+```typescript
+import { parseFrontmatter } from '@/shared/yaml'
+
+const markdown = `---
+title: "Hello World"
+tags: ["typescript", "astro"]
+draft: false
+---
+
+# Content here
+`
+
+const { data, content } = parseFrontmatter(markdown)
+console.log(data.title) // "Hello World"
+console.log(data.tags) // ["typescript", "astro"]
+console.log(content) // "# Content here\n"
+```
+
+**支持的数据类型：**
+- 字符串（自动去除引号）
+- 数字
+- 布尔值（true/false）
+- 数组 `[item1, item2]`
+
+#### `stringifyFrontmatter(data: Record<string, any>): string`
+将对象转换为 YAML frontmatter 字符串。
+
+```typescript
+import { stringifyFrontmatter } from '@/shared/yaml'
+
+const yaml = stringifyFrontmatter({
+  title: "Hello World",
+  tags: ["typescript", "astro"],
+  draft: false
+})
+// 输出:
+// ---
+// title: "Hello World"
+// tags: ["typescript", "astro"]
+// draft: false
+// ---
+```
+
+#### `composeFrontmatter(data: Record<string, any>, content: string): string`
+将 frontmatter 数据和内容组合成完整的 Markdown。
+
+```typescript
+import { composeFrontmatter } from '@/shared/yaml'
+
+const markdown = composeFrontmatter(
+  { title: "Hello", draft: false },
+  "# Content here"
+)
+// 输出完整的 Markdown 文件，包含 frontmatter
+```
+
 ## 📅 时间处理 (`src/shared/time.ts`)
 
 ### 时间格式兼容性
