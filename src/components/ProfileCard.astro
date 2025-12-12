@@ -4,11 +4,12 @@ import Card from './Card.astro'
 
 interface Props {
   totalPosts: number
+  totalCategories: number
   totalTags: number
-  totalYears: number
+  totalWords: string
 }
 
-const { totalPosts, totalTags, totalYears } = Astro.props
+const { totalPosts, totalCategories, totalTags, totalWords } = Astro.props
 
 // Use GitHub avatar and config bio
 const avatarUrl = `https://github.com/${config.github.login}.png?size=200`
@@ -58,7 +59,7 @@ const bio = config.head.bio || '童话只美在真实从不缺'
         class="text-2xl font-bold"
         style="color: var(--color-t);"
       >
-        {totalTags}
+        {totalCategories}
       </div>
       <div
         class="text-xs"
@@ -72,7 +73,7 @@ const bio = config.head.bio || '童话只美在真实从不缺'
         class="text-2xl font-bold"
         style="color: var(--color-t);"
       >
-        {totalYears}
+        {totalTags}
       </div>
       <div
         class="text-xs"
@@ -86,7 +87,7 @@ const bio = config.head.bio || '童话只美在真实从不缺'
         class="text-2xl font-bold"
         style="color: var(--color-t);"
       >
-        30.1
+        {totalWords}
       </div>
       <div
         class="text-xs"

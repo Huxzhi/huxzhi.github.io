@@ -49,6 +49,14 @@ const categories = Array.from(categoryCounts.entries())
   .sort((a, b) => b.count - a.count)
   .slice(0, 10)
 
+// Calculate total word count
+const totalWords = publishedPosts.reduce((sum, post) => {
+  const content = post.body || ''
+  const wordCount = content.replace(/\s+/g, '').length
+  return sum + wordCount
+}, 0)
+const totalWordsInWan = (totalWords / 10000).toFixed(1)
+
 // Archive statistics
 const postsByYear = publishedPosts.reduce(
   (acc, post) => {
@@ -85,8 +93,9 @@ const recentPosts = publishedPosts
     <div class="sticky top-6 space-y-6">
       <ProfileCard
         totalPosts={totalPosts}
+        totalCategories={categoryCounts.size}
         totalTags={allTags.length}
-        totalYears={Object.keys(postsByYear).length}
+        totalWords={totalWordsInWan}
       />
       <CategoryCard categories={categories} />
       <TagCard tags={tagCounts} />

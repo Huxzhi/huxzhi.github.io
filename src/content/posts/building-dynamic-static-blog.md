@@ -1,13 +1,13 @@
 ---
-title: 使用 Astro + CodeMirror + GitHub API 构建动态静态博客
-tags: [astro, codemirror, github-api, tailwind, tutorial]
-createTime: 1733759400000
+title: Untitled
+tags: []
+createTime: 1765517244554
+updateTime: 1765517244554
 draft: false
 ---
-
 这是一个创新的架构：利用 Astro 生成纯静态网页，通过 CodeMirror 提供编辑器，结合 GitHub API 实现内容的动态修改和存储。
 
-## 架构概览
+## 架构概览 gregr egr fgr  
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -26,8 +26,10 @@ draft: false
 ```
 
 ## 核心技术栈
+#个翁/反而问
 
-### 1. Astro - 静态站点生成器
+#跟fgdf 
+
 
 ```javascript
 // astro.config.mjs
@@ -35,7 +37,7 @@ import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  output: 'static',
+  output: 'static',@ #等我
   vite: {
     plugins: [tailwindcss()],
   },
