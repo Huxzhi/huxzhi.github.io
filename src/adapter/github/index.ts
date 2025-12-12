@@ -1,8 +1,7 @@
 import config from '@/../urodele.config'
 import { getLocalUser } from '@/shared/storage'
-import { parseMeta, toMeta } from '@/shared/transform'
-import { Octokit } from 'octokit'
 import matter from 'gray-matter'
+import { Octokit } from 'octokit'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 
 const { repo: REPO, login: OWNER } = config.github
@@ -28,16 +27,23 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
       path: path,
     },
   )
-  // fix github base64
-  const fileData = data as { content: string }
-  const markdownContent = decodeURIComponent(
-    escape(window.atob(fileData.content.replace(/\s/g, ''))),
-  )
   
+  // Decode base64 content (browser-compatible way)
+  const fileData = data as { content: string; encoding: string }
+  const base64Content = fileData.content.replace(/\s/g, '')
+  
+  // Convert base64 to UTF-8 string (browser-compatible)
+  const binaryString = window.atob(base64Content)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  const markdownContent = new TextDecoder('utf-8').decode(bytes)
+
   // Parse frontmatter from Markdown
   const parsed = matter(markdownContent)
   const frontmatter = parsed.data
-  
+
   // Parse time from new format (created/updated strings) or old format (createTime/updateTime numbers)
   const parseTime = (timeStr?: string, fallbackTimestamp?: number): number => {
     if (timeStr) {
@@ -46,7 +52,7 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
     }
     return fallbackTimestamp || Date.now()
   }
-  
+
   return {
     content: markdownContent,
     title: frontmatter.title || 'Untitled',
@@ -89,7 +95,7 @@ export const writePage: WritePage = async (_path, data, assets) => {
     },
   )
   console.log(main, 'main')
-  
+
   // data.content already contains full Markdown with frontmatter from the editor
   const textFile = new File(
     [new Blob([data.content], { type: 'text/markdown' })],
