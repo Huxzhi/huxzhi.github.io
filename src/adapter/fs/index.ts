@@ -1,4 +1,4 @@
-import { toMeta } from '@/shared/transform'
+import { toMeta } from '@/utils/transform'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 
 const PREFIX = location.origin

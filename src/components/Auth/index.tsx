@@ -1,7 +1,7 @@
-import type { UserInfo } from '@/shared/storage.js'
-import { formatSecond } from '@/shared/time.js'
 import { getGlobalData } from '@/utils/data.js'
 import { cn, useAttrRef } from '@/utils/dom'
+import type { UserInfo } from '@/utils/storage.js'
+import { formatSecond } from '@/utils/time.js'
 import * as React from 'jsx-dom'
 import config from 'urodele.config'
 import { useDialog } from '../Dialog'
@@ -255,10 +255,14 @@ const Auth = () => {
   return wrapper()
 }
 
-export const mount = (select: string) => {
-  const root = document.querySelector<HTMLDivElement>(select)
-  if (!root) return
-  root.appendChild(Auth())
+export const mount = (container: HTMLElement) => {
+  if (!container) {
+    // 防空校验
+    console.error('Auth 挂载容器不存在')
+    return
+  }
+
+  container.appendChild(Auth())
 }
 
 const handleDraft = async () => {
@@ -277,7 +281,7 @@ const handleDraft = async () => {
             class="px-4 pb-4 flex justify-between items-center group"
           >
             <div class="flex flex-col">
-              <h1 class="page-title w-[fit-content] text-lg transition-all font-semibold group-hover:underline">
+              <h1 class="page-title w-fit text-lg transition-all font-semibold group-hover:underline">
                 {item.title}
               </h1>
               <p class="text-text text-opacity-60 text-sm">{item.intro}</p>

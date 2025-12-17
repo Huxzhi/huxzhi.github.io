@@ -3,9 +3,9 @@ import Layout from './Layout.astro'
 import Card from '@/components/Card.astro'
 import CategoryCard from '@/components/CategoryCard.astro'
 import { getCollection } from 'astro:content'
-import { expandTags } from '@/shared/tag'
-import { getPostCategory } from '@/shared/category'
-import { getCreateTime } from '@/shared/time'
+import { expandTags } from '@/utils/tag'
+import { getPostCategory } from '@/utils/category'
+import { getCreateTime } from '@/utils/time'
 
 interface Props {
   title: string

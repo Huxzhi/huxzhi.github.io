@@ -1,4 +1,4 @@
-import { getLocalUser, setLocalUser, USER_KEY } from '@/shared/storage'
+import { getLocalUser, setLocalUser, USER_KEY } from '@/utils/storage'
 import { Octokit } from 'octokit'
 import config from 'urodele.config'
 

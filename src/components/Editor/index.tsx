@@ -3,17 +3,17 @@ import * as React from 'jsx-dom'
 import adapter from '@/adapter'
 
 import { createEditor } from '@/editor/codemirror'
-import { debounce, throttle } from '@/shared/debounce'
+import type { PageData } from '@/shared/type'
+import { getGlobalData } from '@/utils/data'
+import { debounce, throttle } from '@/utils/debounce'
+import { getDocAssets, getLocalUploadImages, travelDoc } from '@/utils/doc'
+import { useAttrRef } from '@/utils/dom'
+import { createSaver } from '@/utils/saver'
 import {
   toFilename,
   toUniqueFilename,
   type JSONContent,
-} from '@/shared/transform'
-import type { PageData } from '@/shared/type'
-import { getGlobalData } from '@/utils/data'
-import { getDocAssets, getLocalUploadImages, travelDoc } from '@/utils/doc'
-import { useAttrRef } from '@/utils/dom'
-import { createSaver } from '@/utils/saver'
+} from '@/utils/transform'
 import config from 'urodele.config'
 import { useDialog } from '../Dialog'
 import toast from '../Toast'

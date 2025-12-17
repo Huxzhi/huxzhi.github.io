@@ -6,7 +6,6 @@ import { openDB } from 'idb'
 // };
 export type Data = unknown
 
-// 更改 DB 名称以清除旧的 JSON 格式缓存
 const DB_NAME = 'editor-saver-v2'
 const STORE_NAME = 'history'
 const EMPTY_KEY = 'new'

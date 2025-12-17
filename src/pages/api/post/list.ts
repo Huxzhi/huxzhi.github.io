@@ -1,7 +1,7 @@
 import { getAllPosts } from '@/adapter/content'
-import { expandTags } from '@/shared/tag'
-import { getCreateTime, getUpdateTime } from '@/shared/time'
 import type { ShortPageData } from '@/shared/type'
+import { expandTags } from '@/utils/tag'
+import { getCreateTime, getUpdateTime } from '@/utils/time'
 import { getEntry } from 'astro:content'
 
 // Helper to extract intro from markdown content (first paragraph)

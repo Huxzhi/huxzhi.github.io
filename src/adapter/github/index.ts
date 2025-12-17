@@ -1,6 +1,6 @@
 import config from '@/../urodele.config'
-import { getLocalUser } from '@/shared/storage'
-import { parseFrontmatter } from '@/shared/yaml'
+import { getLocalUser } from '@/utils/storage'
+import { parseFrontmatter } from '@/utils/yaml'
 import { Octokit } from 'octokit'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 

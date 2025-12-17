@@ -1,10 +1,10 @@
 ---
-import Auth from '@/components/Auth/index.astro'
 import config from 'urodele.config'
+import Auth from './Auth/index.astro'
 ---
 
 <header
-  class="top-0 z-20 bg-white dark:bg-gray-900"
+  class="top-0 z-50 bg-white dark:bg-gray-900"
   style="background-color: var(--color-main); box-shadow: var(--shadow-3xl);"
 >
   <nav class="grid grid-cols-3 items-center px-4 py-3 max-w-7xl mx-auto">
@@ -78,8 +78,8 @@ import config from 'urodele.config'
         id="editor-operations"
         class="flex items-center gap-2"
       >
+        <Auth />
       </div>
-      <Auth />
     </div>
   </nav>
 </header>

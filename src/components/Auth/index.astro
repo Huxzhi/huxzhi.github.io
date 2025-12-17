@@ -1,6 +1,39 @@
-<script>
-  import { mount } from "./index";
-  mount("#auth");
-</script>
+<div
+  id="auth"
+  transition:persist
+>
+</div>
 
-<div id="auth"></div>
+<!-- 关键：加 client:load 指令，让脚本在客户端执行（且页面加载时立即执行） -->
+<script>
+  // 初始化 Auth 挂载
+  const initAuth = async () => {
+    // 等待 DOM 就绪
+    if (document.readyState === 'loading') {
+      await new Promise((resolve) =>
+        document.addEventListener('DOMContentLoaded', resolve),
+      )
+    }
+
+    // 获取 DOM 节点
+    const authEl = document.querySelector('#auth')
+    if (!authEl) {
+      console.error('Auth 挂载容器 #auth 不存在')
+      return
+    }
+
+    // 动态导入 mount 函数并挂载
+    const { mount } = await import('./index')
+    const unmount = mount(authEl) // 保存卸载方法
+
+    // 路由切换时卸载旧实例（防内存泄漏）
+    window.addEventListener('astro:page-load', () => {
+      console.log('路由切换，卸载旧实例')
+      unmount?.() // 先卸载旧的
+      mount(authEl) // 重新挂载
+    })
+  }
+
+  // 首次初始化 + 监听路由变化
+  initAuth()
+</script>

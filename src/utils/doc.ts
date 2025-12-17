@@ -1,5 +1,5 @@
 import type { CodeMirrorEditor } from '@/editor/codemirror'
-import { splitFilename, toUniqueFilename } from '../shared/transform'
+import { splitFilename, toUniqueFilename } from '../utils/transform'
 
 export interface JSONContent {
   type: string
