@@ -262,8 +262,19 @@ export const mount = (container: HTMLElement) => {
     return
   }
 
-  container.appendChild(Auth())
+  // 使用包装节点以便可以安全卸载
+  const root = document.createElement('div')
+  root.appendChild(Auth())
+  container.appendChild(root)
+
+  // 返回卸载函数
+  return () => {
+    root.remove()
+  }
 }
+
+// 兼容：把 mount 暴露到全局，供纯前端脚本直接使用
+;(window as any).__authMount = (el: HTMLElement) => mount(el)
 
 const handleDraft = async () => {
   const allPost = await getGlobalData()

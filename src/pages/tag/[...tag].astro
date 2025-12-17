@@ -19,8 +19,8 @@ export const getStaticPaths = async () => {
 }
 ---
 
-<script>
-  import { mount } from '@/components/RelativeTime'
+<script type="module">
+  import { mount } from '/src/components/RelativeTime.js'
 
   mount('data-acc-time')
 </script>

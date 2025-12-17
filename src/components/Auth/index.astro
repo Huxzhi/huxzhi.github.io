@@ -24,13 +24,13 @@
 
     // 动态导入 mount 函数并挂载
     const { mount } = await import('./index')
-    const unmount = mount(authEl) // 保存卸载方法
+    const unmount = mount(authEl as HTMLElement) // 保存卸载方法
 
     // 路由切换时卸载旧实例（防内存泄漏）
     window.addEventListener('astro:page-load', () => {
       console.log('路由切换，卸载旧实例')
       unmount?.() // 先卸载旧的
-      mount(authEl) // 重新挂载
+      mount(authEl as HTMLElement) // 重新挂载
     })
   }
 
