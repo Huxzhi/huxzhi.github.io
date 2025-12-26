@@ -1,6 +1,7 @@
 ---
 import ArchiveList from '@/components/ArchiveList.astro'
 import CategoryCard from '@/components/CategoryCard.astro'
+import LeftSidebar from '@/components/LeftSidebar.astro'
 import ProfileCard from '@/components/ProfileCard.astro'
 import RecentPosts from '@/components/RecentPosts.astro'
 import TagCard from '@/components/TagCard.astro'
@@ -90,19 +91,17 @@ const recentPosts = publishedPosts
   </main>
 
   <!-- Left Sidebar -->
-  <aside class="order-last md:order-first">
-    <div class="sticky top-6 space-y-6">
-      <ProfileCard
-        totalPosts={totalPosts}
-        totalCategories={categoryCounts.size}
-        totalTags={allTags.length}
-        totalWords={totalWordsInWan}
-      />
-      <CategoryCard categories={categories} />
-      <TagCard tags={tagCounts} />
-      <ArchiveList archives={postsByYear} />
-    </div>
-  </aside>
+  <LeftSidebar class="order-last md:order-first">
+    <ProfileCard
+      totalPosts={totalPosts}
+      totalCategories={categoryCounts.size}
+      totalTags={allTags.length}
+      totalWords={totalWordsInWan}
+    />
+    <CategoryCard categories={categories} />
+    <TagCard tags={tagCounts} />
+    <ArchiveList archives={postsByYear} />
+  </LeftSidebar>
 
   <!-- Right Sidebar -->
   <aside class="max-xl:hidden">

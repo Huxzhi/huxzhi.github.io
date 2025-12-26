@@ -1,6 +1,8 @@
 ---
 import Layout from './Layout.astro'
 import Card from '@/components/Card.astro'
+import LeftSidebar from '@/components/LeftSidebar.astro'
+import TableOfContents from '@/components/TableOfContents.astro'
 import CategoryCard from '@/components/CategoryCard.astro'
 import { getCollection } from 'astro:content'
 import { expandTags } from '@/utils/tag'
@@ -63,32 +65,11 @@ const categories = Array.from(categoryCounts.entries())
   description={description}
 >
   <!-- Left Sidebar - ToC -->
-  <aside class="space-y-6 order-last hidden md:block md:order-first">
-    <div class="sticky top-6 space-y-6">
-      <Card title="目录">
-        <nav
-          class="space-y-1 text-sm overflow-y-auto"
-          style="max-height: calc(100vh - 570px);"
-        >
-          {
-            headings.map((heading) => (
-              <a
-                href={`#${heading.slug}`}
-                class="block transition-colors hover:translate-x-1"
-                style={`color: var(--color-t); margin-left: ${(heading.depth - 1) * 12}px;`}
-                onmouseover="this.style.color='var(--color-link)'"
-                onmouseout="this.style.color='var(--color-t)'"
-              >
-                {heading.text}
-              </a>
-            ))
-          }
-        </nav>
-      </Card>
+  <LeftSidebar class="space-y-6 order-last hidden md:block md:order-first">
+    <TableOfContents headings={headings} />
 
-      <CategoryCard categories={categories} />
-    </div>
-  </aside>
+    <CategoryCard categories={categories} />
+  </LeftSidebar>
 
   <!-- Main Content -->
   <main class="space-y-6 flex flex-col order-first md:order-0 min-w-0">

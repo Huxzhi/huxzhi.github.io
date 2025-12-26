@@ -1,0 +1,27 @@
+---
+import Card from '@/components/Card.astro'
+
+interface Props {
+  headings?: any[]
+}
+
+const { headings = [] } = Astro.props
+---
+
+<Card title="目录">
+  <nav class="space-y-1 text-sm overflow-y-auto max-h-[30vh]">
+    {
+      headings.map((heading) => (
+        <a
+          href={`#${heading.slug}`}
+          class="block transition-colors whitespace-normal break-all"
+          style={`color: var(--color-t); margin-left: ${(heading.depth - 1) * 12}px; overflow-wrap: anywhere;`}
+          onmouseover="this.style.color='var(--color-link)'"
+          onmouseout="this.style.color='var(--color-t)'"
+        >
+          {heading.text}
+        </a>
+      ))
+    }
+  </nav>
+</Card>
