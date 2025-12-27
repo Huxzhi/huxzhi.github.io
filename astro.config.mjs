@@ -4,6 +4,8 @@ import { defineConfig } from 'astro/config'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import wikiLinkPlugin from 'remark-wiki-link'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 import { fileURLToPath } from 'url'
 import rehypeRenderTask from './src/plugins/rehype-render-task.ts'
 import { remarkExtractTags } from './src/plugins/remark-extract-tags.ts'
@@ -16,6 +18,7 @@ export default defineConfig({
   markdown: {
     // 保持 GFM 启用（默认行为），我们的插件会在其后运行
     remarkPlugins: [
+      remarkMath,
       remarkExtractTags,
       remarkTaskParser, // 在 GFM 之后处理，增强任务列表
       [
@@ -38,6 +41,7 @@ export default defineConfig({
           behavior: 'wrap',
         },
       ],
+      rehypeKatex,
       rehypeRenderTask,
     ],
   },

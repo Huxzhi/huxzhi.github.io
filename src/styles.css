@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* KaTeX styles for math rendering */
+@import "katex/dist/katex.min.css";
+
 @theme {
   --color-bg: #f2f5f8;
   --color-main: #fff;
