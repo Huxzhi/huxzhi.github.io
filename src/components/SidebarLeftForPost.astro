@@ -7,10 +7,9 @@ import ProfileCard from './ProfileCard.astro'
 import TagCard from './TagCard.astro'
 
 const headings = Astro.props.headings
-const className = Astro.props.class ?? ''
 ---
 
-<aside class={`${className}`}>
+<div>
   <ProfileCard />
   <div class="sticky top-6 space-y-6">
     <TableOfContents headings={headings} />
@@ -18,4 +17,4 @@ const className = Astro.props.class ?? ''
     <TagCard />
     <ArchiveList />
   </div>
-</aside>
+</div>

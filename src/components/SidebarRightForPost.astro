@@ -8,46 +8,44 @@ const className = Astro.props.class ?? ''
 const relatedPosts = Astro.props.relatedPosts ?? []
 ---
 
-<aside class="space-y-6 max-xl:hidden">
-  <div class="sticky top-6 space-y-6">
-    {
-      relatedPosts.length > 0 && (
-        <Card title="相关文章">
-          <ul class="space-y-3">
-            {relatedPosts.map(
-              (post: {
-                id: any
-                title: unknown
-                createTime: string | number | Date
-              }) => (
-                <li>
-                  <a
-                    href={`/post/${post.id}`}
-                    class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
-                    style="color: var(--color-t);"
-                    onmouseover="this.style.color='var(--color-link)'"
-                    onmouseout="this.style.color='var(--color-t)'"
-                  >
-                    {post.title}
-                  </a>
-                  <time
-                    class="text-xs block mt-1"
-                    style="color: var(--color-t-l);"
-                  >
-                    {new Date(post.createTime).toLocaleDateString('zh-CN', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </time>
-                </li>
-              ),
-            )}
-          </ul>
-        </Card>
-      )
-    }
+<div class="sticky top-6 space-y-6">
+  {
+    relatedPosts.length > 0 && (
+      <Card title="相关文章">
+        <ul class="space-y-3">
+          {relatedPosts.map(
+            (post: {
+              id: any
+              title: unknown
+              createTime: string | number | Date
+            }) => (
+              <li>
+                <a
+                  href={`/post/${post.id}`}
+                  class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
+                  style="color: var(--color-t);"
+                  onmouseover="this.style.color='var(--color-link)'"
+                  onmouseout="this.style.color='var(--color-t)'"
+                >
+                  {post.title}
+                </a>
+                <time
+                  class="text-xs block mt-1"
+                  style="color: var(--color-t-l);"
+                >
+                  {new Date(post.createTime).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
+                </time>
+              </li>
+            ),
+          )}
+        </ul>
+      </Card>
+    )
+  }
 
-    <RecentPosts />
-  </div>
-</aside>
+  <RecentPosts />
+</div>

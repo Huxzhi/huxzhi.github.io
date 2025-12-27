@@ -10,13 +10,13 @@ import Layout from './Layout.astro'
   description="Huxzhi Blog"
 >
   <!-- Main Content -->
-  <main class="flex flex-col order-first md:order-0 min-w-0">
+  <main>
     <slot />
   </main>
 
   <!-- Left Sidebar -->
-  <SidebarLeft />
+  <SidebarLeft slot="left" />
 
   <!-- Right Sidebar -->
-  <SidebarRight />
+  <SidebarRight slot="right" />
 </Layout>

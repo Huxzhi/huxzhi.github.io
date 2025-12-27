@@ -49,10 +49,14 @@ import SidebarRightForPost from '../components/SidebarRightForPost.astro'
 
   <!-- Left Sidebar - ToC -->
   <SidebarLeftForPost
-    class="space-y-6 order-last hidden md:block md:order-first"
+    slot="left"
+    class="space-y-6"
     headings={headings}
   />
 
   <!-- Right Sidebar - Related Posts -->
-  <SidebarRightForPost relatedPosts={relatedPosts} />
+  <SidebarRightForPost
+    slot="right"
+    relatedPosts={relatedPosts}
+  />
 </Layout>
