@@ -1,0 +1,19 @@
+---
+// Simple, reusable left sidebar wrapper. Accepts any extra classes passed via `class` prop.
+import TableOfContents from '@/components/TableOfContents.astro'
+import ArchiveList from './ArchiveList.astro'
+import CategoryCard from './CategoryCard.astro'
+import TagCard from './TagCard.astro'
+
+const headings = Astro.props.headings
+const className = Astro.props.class ?? ''
+---
+
+<aside class={`w-60 ${className}`}>
+  <div class="sticky top-6 space-y-6">
+    <TableOfContents headings={headings} />
+    <CategoryCard />
+    <TagCard />
+    <ArchiveList />
+  </div>
+</aside>

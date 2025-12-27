@@ -1,16 +1,9 @@
 ---
 import Layout from './Layout.astro'
-import Card from '@/components/Card.astro'
-import SidebarLeft from '@/components/SidebarLeft.astro'
-import TableOfContents from '@/components/TableOfContents.astro'
-import TagCard from '@/components/TagCard.astro'
-import ArchiveList from '@/components/ArchiveList.astro'
 
-import CategoryCard from '@/components/CategoryCard.astro'
-import { getCollection } from 'astro:content'
 import { expandTags } from '@/utils/tag'
-import { getPostCategory } from '@/utils/category'
 import { getCreateTime } from '@/utils/time'
+import { getCollection } from 'astro:content'
 
 interface Props {
   title: string
@@ -40,107 +33,27 @@ const relatedPosts = publishedPosts
     createTime: getCreateTime(p.data),
   }))
 
-// Get recent posts for right sidebar
-const recentPosts = publishedPosts
-  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
-  .slice(0, 5)
-  .map((p) => ({
-    id: p.id.replace(/\.md$/, ''),
-    title: p.data.title,
-    createTime: getCreateTime(p.data),
-  }))
-
 // Use consolidated site stats (cached)
 import { getSiteStats } from '@/utils/siteStats'
-const siteStats = await getSiteStats()
-
-const tagCounts = siteStats.tagCounts
-const postsByYear = siteStats.postsByYear
-const categories = siteStats.categories
+import SidebarLeftForPost from '../components/SidebarLeftForPost.astro'
+import SidebarRightForPost from '../components/SidebarRightForPost.astro'
 ---
 
 <Layout
   title={title}
   description={description}
 >
-  <!-- Left Sidebar - ToC -->
-  <SidebarLeft class="space-y-6 order-last hidden md:block md:order-first">
-    <TableOfContents headings={headings} />
-
-    <CategoryCard categories={categories} />
-    <TagCard tags={tagCounts} />
-    <ArchiveList archives={postsByYear} />
-  </SidebarLeft>
-
   <!-- Main Content -->
   <main class="space-y-6 flex flex-col order-first md:order-0 min-w-0">
     <slot />
   </main>
 
-  <!-- Right Sidebar - Related Posts -->
-  <aside class="space-y-6 max-xl:hidden">
-    <div class="sticky top-6 space-y-6">
-      {
-        relatedPosts.length > 0 && (
-          <Card title="相关文章">
-            <ul class="space-y-3">
-              {relatedPosts.map((post) => (
-                <li>
-                  <a
-                    href={`/post/${post.id}`}
-                    class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
-                    style="color: var(--color-t);"
-                    onmouseover="this.style.color='var(--color-link)'"
-                    onmouseout="this.style.color='var(--color-t)'"
-                  >
-                    {post.title}
-                  </a>
-                  <time
-                    class="text-xs block mt-1"
-                    style="color: var(--color-t-l);"
-                  >
-                    {new Date(post.createTime).toLocaleDateString('zh-CN', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </time>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        )
-      }
+  <!-- Left Sidebar - ToC -->
+  <SidebarLeftForPost
+    class="space-y-6 order-last hidden md:block md:order-first"
+    headings={headings}
+  />
 
-      <Card title="最近文章">
-        <ul class="space-y-3">
-          {
-            recentPosts.map((post) => (
-              <li>
-                <a
-                  href={`/post/${post.id}`}
-                  class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
-                  style="color: var(--color-t);"
-                  onmouseover="this.style.color='var(--color-link)'"
-                  onmouseout="this.style.color='var(--color-t)'"
-                >
-                  {post.title}
-                </a>
-                <time
-                  class="text-xs block mt-1"
-                  style="color: var(--color-t-l);"
-                >
-                  {new Date(post.createTime).toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })}
-                </time>
-              </li>
-            ))
-          }
-        </ul>
-      </Card>
-    </div>
-  </aside>
+  <!-- Right Sidebar - Related Posts -->
+  <SidebarRightForPost relatedPosts={relatedPosts} />
 </Layout>

@@ -23,14 +23,14 @@ if (!posts) {
 }
 ---
 
-{posts.length > 0 && (
-  <Card title="最近文章">
-    <ul
-      class="divide-y"
-      style="border-color: var(--color-alt);"
-    >
-      {
-        posts.map((post) => (
+{
+  posts.length > 0 && (
+    <Card title="最近文章">
+      <ul
+        class="divide-y"
+        style="border-color: var(--color-alt);"
+      >
+        {posts.map((post) => (
           <li
             class="py-4 first:pt-0"
             style="border-color: var(--color-alt);"
@@ -55,8 +55,8 @@ if (!posts) {
               })}
             </time>
           </li>
-        ))
-      }
-    </ul>
-  </Card>
-)}
+        ))}
+      </ul>
+    </Card>
+  )
+}

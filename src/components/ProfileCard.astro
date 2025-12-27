@@ -1,7 +1,7 @@
 ---
+import { getSiteStats } from '@/utils/siteStats'
 import config from 'urodele.config'
 import Card from './Card.astro'
-import { getSiteStats } from '@/utils/siteStats'
 
 interface Props {
   totalPosts?: number
@@ -13,7 +13,12 @@ interface Props {
 const props = Astro.props as Props
 let { totalPosts, totalCategories, totalTags, totalWords } = props
 
-if (totalPosts === undefined || totalCategories === undefined || totalTags === undefined || totalWords === undefined) {
+if (
+  totalPosts === undefined ||
+  totalCategories === undefined ||
+  totalTags === undefined ||
+  totalWords === undefined
+) {
   const site = await getSiteStats()
   totalPosts = totalPosts ?? site.totalPosts
   totalCategories = totalCategories ?? site.categories?.length ?? 0

@@ -1,10 +1,22 @@
 ---
+import ArchiveList from './ArchiveList.astro'
+import CategoryCard from './CategoryCard.astro'
+import ProfileCard from './ProfileCard.astro'
+import TagCard from './TagCard.astro'
+
 // Generic left sidebar wrapper. Accepts children via slot and optional class prop.
-const className = Astro.props.class ?? ''
+const {
+  totalPosts,
+
+  categories,
+  tagCounts,
+  postsByYear,
+} = Astro.props
 ---
 
-<aside class={`w-60 ${className} order-last md:order-first`}>
-  <div class="sticky top-6 space-y-6">
-    <slot />
-  </div>
+<aside class="order-last md:order-first">
+  <ProfileCard />
+  <CategoryCard />
+  <TagCard />
+  <ArchiveList />
 </aside>
