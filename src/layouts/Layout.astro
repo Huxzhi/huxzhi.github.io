@@ -65,16 +65,20 @@ const { title, description } = Astro.props
     <!-- Main Content (provided by child layouts) -->
 
     <div
-      class="min-h-screen grid mx-auto gap-6 py-6 px-4 md:grid-cols-[240px_1fr] md:max-w-5xl xl:grid-cols-[240px_1fr_240px] xl:max-w-7xl"
+      class="min-h-screen grid mx-auto gap-6 py-6 px-4 md:grid-cols-[240px_1fr] md:max-w-5xl xl:grid-cols-[240px_1fr_240px] 2xl:max-w-[1376px]"
     >
-      <div style="display:block; grid-column-start:1; grid-column-end:1; order:-1; min-width:0; height:0; max-height:0;"></div>
+      <!-- 为了解决cls 累计布局偏移（CLS）问题 ，目前内容少还没有发现有这个问题
+            加这个 col-start-1 有问题，目前没有加 https://blog.skk.moe/post/fix-blog-cls/ -->
+
+      <div class="left-placeholder col-end-1 -order-1 max-h-0 min-w-0 h-0">
+      </div>
       <main class="flex flex-col order-first md:order-0 min-w-0">
         <slot />
       </main>
-      <aside class="order-last hidden md:block md:order-first">
+      <aside class="min-w-0 -order-1 max-md:order-1">
         <slot name="left" />
       </aside>
-      <aside class="max-xl:hidden">
+      <aside class="min-w-0 order-1 max-xl:hidden">
         <slot name="right" />
       </aside>
     </div>
