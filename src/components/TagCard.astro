@@ -2,10 +2,10 @@
 import Card from './Card.astro'
 
 interface Props {
-  tags: Array<{ tag: string; count: number }>
+  tags?: { tag: string; count?: number }[]
 }
 
-const { tags } = Astro.props
+const { tags = [] } = Astro.props
 ---
 
 <Card title="标签">
