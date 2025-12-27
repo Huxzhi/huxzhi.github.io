@@ -8,23 +8,25 @@ interface Props {
 const { tags = [] } = Astro.props
 ---
 
-<Card title="标签">
-  <div class="flex flex-wrap gap-2">
-    {
-      tags.map(({ tag }) => (
-        <a
-          href={`/tag/${tag}`}
-          class="tag-link text-xs transition-colors"
-          style="color: var(--color-t);"
-          onmouseover="this.style.color='var(--color-link)'"
-          onmouseout="this.style.color='var(--color-t)'"
-        >
-          {tag}
-        </a>
-      ))
-    }
-  </div>
-</Card>
+{tags.length > 0 && (
+  <Card title="标签">
+    <div class="flex flex-wrap gap-2">
+      {
+        tags.map(({ tag }) => (
+          <a
+            href={`/tag/${tag}`}
+            class="tag-link text-xs transition-colors"
+            style="color: var(--color-t);"
+            onmouseover="this.style.color='var(--color-link)'"
+            onmouseout="this.style.color='var(--color-t)'"
+          >
+            {tag}
+          </a>
+        ))
+      }
+    </div>
+  </Card>
+)}
 
 <style>
   .tag-link::before {
