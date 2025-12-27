@@ -65,5 +65,35 @@ export async function getSiteStats(): Promise<SiteStats> {
     postsByYear,
   }
 
+  // Also write per-post and aggregated overview into public/ for quick access
+  try {
+    const perPost = publishedPosts.map((post) => ({
+      id: post.id.replace(/\.md$/, ''),
+      title: post.data.title || '',
+      tags: expandTags(post.data.tags),
+      category: post.data.category ?? '未分类',
+      wordCount: (post.body || '').replace(/\s+/g, '').length,
+      createTime: getCreateTime(post.data),
+      description: post.data.description || '',
+      draft: !!post.data.draft,
+    }))
+
+    const overview = {
+      generatedAt: new Date().toISOString(),
+      stats: cached,
+      posts: perPost,
+    }
+
+    const fs = await import('fs/promises')
+    const path = await import('path')
+    await fs.mkdir(path.default.join(process.cwd(), 'public'), { recursive: true })
+    await fs.writeFile(path.default.join(process.cwd(), 'public', 'site-overview.json'), JSON.stringify(overview, null, 2), 'utf8')
+    await fs.writeFile(path.default.join(process.cwd(), 'public', 'site-stats.json'), JSON.stringify(cached, null, 2), 'utf8')
+  } catch (e) {
+    // non-fatal (e.g., during certain runtimes), don't break the build
+    // eslint-disable-next-line no-console
+    console.warn('Could not write site overview files:', e)
+  }
+
   return cached
 }
