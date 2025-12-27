@@ -50,40 +50,13 @@ const recentPosts = publishedPosts
     createTime: getCreateTime(p.data),
   }))
 
-// Statistics for tags
-const allTags = [
-  ...new Set(publishedPosts.flatMap((p) => expandTags(p.data.tags))),
-]
-const tagCounts = allTags
-  .map((tag) => ({
-    tag,
-    count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag))
-      .length,
-  }))
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 10)
+// Use consolidated site stats (cached)
+import { getSiteStats } from '@/utils/siteStats'
+const siteStats = await getSiteStats()
 
-// Archive statistics
-const postsByYear = publishedPosts.reduce(
-  (acc, post) => {
-    const year = new Date(getCreateTime(post.data)).getFullYear()
-    acc[year] = (acc[year] || 0) + 1
-    return acc
-  },
-  {} as Record<number, number>,
-)
-
-// Get categories with counts
-const categoryCounts = new Map<string, number>()
-publishedPosts.forEach((post) => {
-  const category = getPostCategory(post)
-  categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
-})
-
-const categories = Array.from(categoryCounts.entries())
-  .map(([name, count]) => ({ name, count }))
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 8)
+const tagCounts = siteStats.tagCounts
+const postsByYear = siteStats.postsByYear
+const categories = siteStats.categories
 ---
 
 <Layout

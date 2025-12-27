@@ -1,15 +1,11 @@
 ---
-import ArchiveList from '@/components/ArchiveList.astro'
-import CategoryCard from '@/components/CategoryCard.astro'
-import LeftSidebar from '@/components/LeftSidebar.astro'
-import ProfileCard from '@/components/ProfileCard.astro'
-import RecentPosts from '@/components/RecentPosts.astro'
-import TagCard from '@/components/TagCard.astro'
 import { expandTags } from '@/utils/tag'
 import { getCreateTime } from '@/utils/time'
 import type { Fragment } from 'astro/runtime/server/index.js'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
+import SidebarLeft from '../components/SidebarLeft.astro'
+import SidebarRight from '../components/SidebarRight.astro'
 import Layout from './Layout.astro'
 
 interface Props {
@@ -20,56 +16,20 @@ interface Props {
 
 const { title, description, showFooter } = Astro.props
 
-// Load data for sidebars
+// Load consolidated site stats (cached)
+import { getSiteStats } from '@/utils/siteStats'
+
+const siteStats = await getSiteStats()
+
+const totalPosts = siteStats.totalPosts
+const categories = siteStats.categories
+const tagCounts = siteStats.tagCounts
+const totalWordsInWan = siteStats.totalWordsInWan
+const postsByYear = siteStats.postsByYear
+
+// Recent posts (still computed per page)
 const allPosts = await getCollection('posts')
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
-
-const totalPosts = publishedPosts.length
-
-// Statistics for tags
-const allTags = [
-  ...new Set(publishedPosts.flatMap((p) => expandTags(p.data.tags))),
-]
-const tagCounts = allTags
-  .map((tag) => ({
-    tag,
-    count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag))
-      .length,
-  }))
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 10)
-
-// Statistics for categories
-const categoryCounts = new Map<string, number>()
-publishedPosts.forEach((post) => {
-  const category = post.data.category || config.categories.uncategorized
-  categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
-})
-
-const categories = Array.from(categoryCounts.entries())
-  .map(([name, count]) => ({ name, count }))
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 10)
-
-// Calculate total word count
-const totalWords = publishedPosts.reduce((sum, post) => {
-  const content = post.body || ''
-  const wordCount = content.replace(/\s+/g, '').length
-  return sum + wordCount
-}, 0)
-const totalWordsInWan = (totalWords / 10000).toFixed(1)
-
-// Archive statistics
-const postsByYear = publishedPosts.reduce(
-  (acc, post) => {
-    const year = new Date(getCreateTime(post.data)).getFullYear()
-    acc[year] = (acc[year] || 0) + 1
-    return acc
-  },
-  {} as Record<number, number>,
-)
-
-// Recent posts
 const recentPosts = publishedPosts
   .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
   .slice(0, 5)
@@ -91,22 +51,16 @@ const recentPosts = publishedPosts
   </main>
 
   <!-- Left Sidebar -->
-  <LeftSidebar class="order-last md:order-first">
-    <ProfileCard
-      totalPosts={totalPosts}
-      totalCategories={categoryCounts.size}
-      totalTags={allTags.length}
-      totalWords={totalWordsInWan}
-    />
-    <CategoryCard categories={categories} />
-    <TagCard tags={tagCounts} />
-    <ArchiveList archives={postsByYear} />
-  </LeftSidebar>
+  <SidebarLeft />
+  totalPosts={totalPosts}
+  totalCategories={categoryCounts.size}
+  totalTags={allTags.length}
+  totalWords={totalWordsInWan}
+  categories={categories}
+  tagCounts={tagCounts}
+  postsByYear={postsByYear}
+  />
 
   <!-- Right Sidebar -->
-  <aside class="max-xl:hidden">
-    <div class="sticky top-6 space-y-6">
-      <RecentPosts posts={recentPosts} />
-    </div>
-  </aside>
+  <SidebarRight posts={recentPosts} />
 </Layout>
