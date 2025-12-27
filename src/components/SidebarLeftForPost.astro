@@ -3,13 +3,15 @@
 import TableOfContents from '@/components/TableOfContents.astro'
 import ArchiveList from './ArchiveList.astro'
 import CategoryCard from './CategoryCard.astro'
+import ProfileCard from './ProfileCard.astro'
 import TagCard from './TagCard.astro'
 
 const headings = Astro.props.headings
 const className = Astro.props.class ?? ''
 ---
 
-<aside class={`w-60 ${className}`}>
+<aside class={`${className}`}>
+  <ProfileCard />
   <div class="sticky top-6 space-y-6">
     <TableOfContents headings={headings} />
     <CategoryCard />
