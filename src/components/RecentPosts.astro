@@ -1,5 +1,6 @@
 ---
 import Card from './Card.astro'
+import { getSiteStats } from '@/utils/siteStats'
 
 interface Post {
   id: string
@@ -8,44 +9,54 @@ interface Post {
 }
 
 interface Props {
-  posts: Post[]
+  posts?: Post[]
 }
 
-const { posts } = Astro.props
+const props = Astro.props as Props
+let { posts } = props
+if (!posts) {
+  const site = await getSiteStats()
+  posts = (site.posts ?? [])
+    .sort((a, b) => b.createTime - a.createTime)
+    .slice(0, 5)
+    .map((p) => ({ id: p.id, title: p.title, createTime: p.createTime }))
+}
 ---
 
-<Card title="最近文章">
-  <ul
-    class="divide-y"
-    style="border-color: var(--color-alt);"
-  >
-    {
-      posts.map((post) => (
-        <li
-          class="py-4 first:pt-0"
-          style="border-color: var(--color-alt);"
-        >
-          <a
-            href={`/post/${post.id}`}
-            class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
-            style="color: var(--color-t);"
-            onmouseover="this.style.color='var(--color-link)'"
-            onmouseout="this.style.color='var(--color-t)'"
+{posts.length > 0 && (
+  <Card title="最近文章">
+    <ul
+      class="divide-y"
+      style="border-color: var(--color-alt);"
+    >
+      {
+        posts.map((post) => (
+          <li
+            class="py-4 first:pt-0"
+            style="border-color: var(--color-alt);"
           >
-            {post.title}
-          </a>
-          <time
-            class="text-xs block mt-1"
-            style="color: var(--color-t-l);"
-          >
-            {new Date(post.createTime).toLocaleDateString('zh-CN', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-            })}
-          </time>
-        </li>
-      ))
-    }
-  </ul>
-</Card>
+            <a
+              href={`/post/${post.id}`}
+              class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
+              style="color: var(--color-t);"
+              onmouseover="this.style.color='var(--color-link)'"
+              onmouseout="this.style.color='var(--color-t)'"
+            >
+              {post.title}
+            </a>
+            <time
+              class="text-xs block mt-1"
+              style="color: var(--color-t-l);"
+            >
+              {new Date(post.createTime).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })}
+            </time>
+          </li>
+        ))
+      }
+    </ul>
+  </Card>
+)}
