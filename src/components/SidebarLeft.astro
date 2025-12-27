@@ -1,0 +1,10 @@
+---
+// Generic left sidebar wrapper. Accepts children via slot and optional class prop.
+const className = Astro.props.class ?? ''
+---
+
+<aside class={`w-60 ${className}`}>
+  <div class="sticky top-6 space-y-6">
+    <slot />
+  </div>
+</aside>
