@@ -2,12 +2,24 @@ import { getCollection } from 'astro:content'
 import { expandTags } from './tag'
 import { getCreateTime } from './time'
 
+type SitePost = {
+  id: string
+  title: string
+  tags: string[]
+  category: string
+  wordCount: number
+  createTime: number
+  description: string
+  draft: boolean
+}
+
 type SiteStats = {
   totalPosts: number
   categories: { name: string; count: number }[]
   tagCounts: { tag: string; count: number }[]
   totalWordsInWan: string
   postsByYear: Record<number, number>
+  posts?: SitePost[]
 }
 
 let cached: SiteStats | null = null
@@ -21,11 +33,14 @@ export async function getSiteStats(): Promise<SiteStats> {
   const totalPosts = publishedPosts.length
 
   // Tags
-  const allTags = [...new Set(publishedPosts.flatMap((p) => expandTags(p.data.tags)))]
+  const allTags = [
+    ...new Set(publishedPosts.flatMap((p) => expandTags(p.data.tags))),
+  ]
   const tagCounts = allTags
     .map((tag) => ({
       tag,
-      count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag)).length,
+      count: publishedPosts.filter((p) => expandTags(p.data.tags).includes(tag))
+        .length,
     }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 10)
@@ -74,9 +89,12 @@ export async function getSiteStats(): Promise<SiteStats> {
       category: post.data.category ?? '未分类',
       wordCount: (post.body || '').replace(/\s+/g, '').length,
       createTime: getCreateTime(post.data),
-      description: post.data.description || '',
+      description: post.data?.description || '',
       draft: !!post.data.draft,
     }))
+
+    // attach per-post data to cached so callers can use siteStats.posts
+    if (cached) cached.posts = perPost
 
     const overview = {
       generatedAt: new Date().toISOString(),
@@ -86,9 +104,19 @@ export async function getSiteStats(): Promise<SiteStats> {
 
     const fs = await import('fs/promises')
     const path = await import('path')
-    await fs.mkdir(path.default.join(process.cwd(), 'public'), { recursive: true })
-    await fs.writeFile(path.default.join(process.cwd(), 'public', 'site-overview.json'), JSON.stringify(overview, null, 2), 'utf8')
-    await fs.writeFile(path.default.join(process.cwd(), 'public', 'site-stats.json'), JSON.stringify(cached, null, 2), 'utf8')
+    await fs.mkdir(path.default.join(process.cwd(), 'public'), {
+      recursive: true,
+    })
+    await fs.writeFile(
+      path.default.join(process.cwd(), 'public', 'site-overview.json'),
+      JSON.stringify(overview, null, 2),
+      'utf8',
+    )
+    await fs.writeFile(
+      path.default.join(process.cwd(), 'public', 'site-stats.json'),
+      JSON.stringify(cached, null, 2),
+      'utf8',
+    )
   } catch (e) {
     // non-fatal (e.g., during certain runtimes), don't break the build
     // eslint-disable-next-line no-console
