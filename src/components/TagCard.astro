@@ -1,29 +1,33 @@
 ---
 import Card from './Card.astro'
+import { getSiteStats } from '@/utils/siteStats'
 
 interface Props {
   tags?: { tag: string; count?: number }[]
 }
 
-const { tags = [] } = Astro.props
+const props = Astro.props as Props
+let { tags } = props
+if (!tags) {
+  const site = await getSiteStats()
+  tags = site.tagCounts ?? []
+}
 ---
 
 {tags.length > 0 && (
   <Card title="标签">
     <div class="flex flex-wrap gap-2">
-      {
-        tags.map(({ tag }) => (
-          <a
-            href={`/tag/${tag}`}
-            class="tag-link text-xs transition-colors"
-            style="color: var(--color-t);"
-            onmouseover="this.style.color='var(--color-link)'"
-            onmouseout="this.style.color='var(--color-t)'"
-          >
-            {tag}
-          </a>
-        ))
-      }
+      {tags.map(({ tag }) => (
+        <a
+          href={`/tag/${tag}`}
+          class="tag-link text-xs transition-colors"
+          style="color: var(--color-t);"
+          onmouseover="this.style.color='var(--color-link)'"
+          onmouseout="this.style.color='var(--color-t)'"
+        >
+          {tag}
+        </a>
+      ))}
     </div>
   </Card>
 )}
