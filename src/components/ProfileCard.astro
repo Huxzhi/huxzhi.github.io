@@ -1,15 +1,25 @@
 ---
 import config from 'urodele.config'
 import Card from './Card.astro'
+import { getSiteStats } from '@/utils/siteStats'
 
 interface Props {
-  totalPosts: number
-  totalCategories: number
-  totalTags: number
-  totalWords: string
+  totalPosts?: number
+  totalCategories?: number
+  totalTags?: number
+  totalWords?: string
 }
 
-const { totalPosts, totalCategories, totalTags, totalWords } = Astro.props
+const props = Astro.props as Props
+let { totalPosts, totalCategories, totalTags, totalWords } = props
+
+if (totalPosts === undefined || totalCategories === undefined || totalTags === undefined || totalWords === undefined) {
+  const site = await getSiteStats()
+  totalPosts = totalPosts ?? site.totalPosts
+  totalCategories = totalCategories ?? site.categories?.length ?? 0
+  totalTags = totalTags ?? site.tagCounts?.length ?? 0
+  totalWords = totalWords ?? site.totalWordsInWan ?? '0.0'
+}
 
 // Use GitHub avatar and config bio
 const avatarUrl = `https://github.com/${config.github.login}.png?size=200`

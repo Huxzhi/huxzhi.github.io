@@ -1,49 +1,13 @@
 ---
-import { expandTags } from '@/utils/tag'
-import { getCreateTime } from '@/utils/time'
 import type { Fragment } from 'astro/runtime/server/index.js'
-import { getCollection } from 'astro:content'
-import config from 'urodele.config'
 import SidebarLeft from '../components/SidebarLeft.astro'
 import SidebarRight from '../components/SidebarRight.astro'
 import Layout from './Layout.astro'
-
-interface Props {
-  title?: string
-  description?: string
-  showFooter?: boolean
-}
-
-const { title, description, showFooter } = Astro.props
-
-// Load consolidated site stats (cached)
-import { getSiteStats } from '@/utils/siteStats'
-
-const siteStats = await getSiteStats()
-
-const totalPosts = siteStats.totalPosts
-const categories = siteStats.categories
-const tagCounts = siteStats.tagCounts
-const totalWordsInWan = siteStats.totalWordsInWan
-const postsByYear = siteStats.postsByYear
-
-// Recent posts (still computed per page)
-const allPosts = await getCollection('posts')
-const publishedPosts = allPosts.filter((post) => !post.data.draft)
-const recentPosts = publishedPosts
-  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
-  .slice(0, 5)
-  .map((p) => ({
-    id: p.id.replace(/\.md$/, ''),
-    title: p.data.title,
-    createTime: getCreateTime(p.data),
-  }))
 ---
 
 <Layout
-  title={title}
-  description={description}
-  showFooter={showFooter}
+  title="Huxzhi Blog"
+  description="Huxzhi Blog"
 >
   <!-- Main Content -->
   <main class="flex flex-col order-first md:order-0 min-w-0">
@@ -51,16 +15,13 @@ const recentPosts = publishedPosts
   </main>
 
   <!-- Left Sidebar -->
-  <SidebarLeft />
-  totalPosts={totalPosts}
-  totalCategories={categoryCounts.size}
-  totalTags={allTags.length}
-  totalWords={totalWordsInWan}
-  categories={categories}
-  tagCounts={tagCounts}
-  postsByYear={postsByYear}
-  />
+  <SidebarLeft>
+    <ProfileCard />
+    <CategoryCard />
+    <TagCard />
+    <ArchiveList />
+  </SidebarLeft>
 
   <!-- Right Sidebar -->
-  <SidebarRight posts={recentPosts} />
+  <SidebarRight />
 </Layout>
