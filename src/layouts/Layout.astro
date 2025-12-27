@@ -1,6 +1,6 @@
 ---
-import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
+import Header from '@/components/Header.astro'
 import { ClientRouter } from 'astro:transitions'
 import config from 'urodele.config'
 import '../styles.css'
@@ -9,10 +9,9 @@ import '../styles/task-list.css'
 interface Props {
   title?: string
   description?: string
-  showFooter?: boolean
 }
 
-const { title, description, showFooter = true } = Astro.props
+const { title, description } = Astro.props
 ---
 
 <!doctype html>
@@ -58,9 +57,6 @@ const { title, description, showFooter = true } = Astro.props
     />
     <title>{title || config.head.title}</title>
     <ClientRouter />
-    <script is:inline>
-      console.log('Huxzhi Blog - Built with Astro + CodeMirror + GitHub API')
-    </script>
   </head>
   <body style="background-color: var(--color-bg);">
     <!-- Header Navigation (includes Auth) -->
@@ -71,10 +67,18 @@ const { title, description, showFooter = true } = Astro.props
     <div
       class="min-h-screen grid mx-auto gap-6 py-6 px-4 md:grid-cols-[240px_1fr] md:max-w-5xl xl:grid-cols-[240px_1fr_240px] xl:max-w-7xl"
     >
-      <slot />
+      <div style="display:block; grid-column-start:1; grid-column-end:1; order:-1; min-width:0; height:0; max-height:0;"></div>
+      <main class="flex flex-col order-first md:order-0 min-w-0">
+        <slot />
+      </main>
+      <aside class="order-last hidden md:block md:order-first">
+        <slot name="left" />
+      </aside>
+      <aside class="max-xl:hidden">
+        <slot name="right" />
+      </aside>
     </div>
 
-    <!-- Footer -->
-    {showFooter && <Footer />}
+    <Footer />
   </body>
 </html>
