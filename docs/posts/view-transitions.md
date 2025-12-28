@@ -1,3 +1,7 @@
+---
+title: View Transitions 使用指南
+---
+
 # View Transitions 使用指南
 
 本项目已启用 Astro View Transitions，提供平滑的页面切换体验。
