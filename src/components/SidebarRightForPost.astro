@@ -8,8 +8,8 @@ const className = Astro.props.class ?? ''
 const relatedPosts = Astro.props.relatedPosts ?? []
 ---
 
-<Fragment class="sticky top-6">
-  <div class="space-y-6">
+<Fragment>
+  <div class="sticky top-6 space-y-6">
     {
       relatedPosts.length > 0 && (
         <Card title="相关文章">
