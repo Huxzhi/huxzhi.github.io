@@ -39,8 +39,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
+  } 
   
+ .toc-nav::-webkit-scrollbar-button {
+  height: 0;
+}
+
 }
 

@@ -9,15 +9,16 @@ const { headings = [] } = Astro.props
 ---
 
 <Card title="目录">
-  <nav class="space-y-1 text-sm overflow-y-auto max-h-[30vh]">
+  <nav
+    class="toc-nav space-y-1 text-sm overflow-y-auto max-h-[30vh]"
+    style="scrollbar-width: thin;scrollbar-color: #b5b5b5 #fff ;  "
+  >
     {
       headings.map((heading) => (
         <a
           href={`#${heading.slug}`}
-          class="block transition-colors whitespace-normal break-all"
-          style={`color: var(--color-t); margin-left: ${(heading.depth - 1) * 12}px; overflow-wrap: anywhere;`}
-          onmouseover="this.style.color='var(--color-link)'"
-          onmouseout="this.style.color='var(--color-t)'"
+          class="block transition-colors duration-150 whitespace-normal break-all py-1 px-2 rounded-md hover:bg-(--hover-bg)  focus-visible:ring-2  text-t"
+          style={`margin-left: ${(heading.depth - 1) * 12}px;`}
         >
           {heading.text}
         </a>
