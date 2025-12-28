@@ -2,10 +2,10 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeSlug from 'rehype-slug'
-import wikiLinkPlugin from 'remark-wiki-link'
-import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import rehypeSlug from 'rehype-slug'
+import remarkMath from 'remark-math'
+import wikiLinkPlugin from 'remark-wiki-link'
 import { fileURLToPath } from 'url'
 import rehypeRenderTask from './src/plugins/rehype-render-task.ts'
 import { remarkExtractTags } from './src/plugins/remark-extract-tags.ts'
@@ -16,7 +16,6 @@ export default defineConfig({
   output: import.meta.env.DEV ? 'server' : 'static',
   integrations: [],
   markdown: {
-    // 保持 GFM 启用（默认行为），我们的插件会在其后运行
     remarkPlugins: [
       remarkMath,
       remarkExtractTags,
