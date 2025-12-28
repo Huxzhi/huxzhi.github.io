@@ -29,7 +29,51 @@ export interface ParsedFrontmatter {
  * console.log(data.tags) // ["typescript", "astro"]
  * ```
  */
+export type FrontmatterHook = (markdown: string) => string
+
+let frontmatterHook: FrontmatterHook | undefined
+
+export function setFrontmatterHook(fn: FrontmatterHook | undefined) {
+  frontmatterHook = fn
+}
+
+function defaultTitleHook(markdown: string): string {
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/
+  const match = markdown.match(frontmatterRegex)
+
+  // Try to extract a title from the first heading in the body
+  const extractTitleFromBody = (body: string) => {
+    const headingMatch = body.match(/^#\s+(.+)$/m)
+    if (headingMatch) return headingMatch[1].trim()
+    return 'Untitled'
+  }
+
+  if (!match) {
+    // No frontmatter at all -> create one with title from first heading (or 'Untitled')
+    const title = extractTitleFromBody(markdown)
+    return `---\ntitle: ${JSON.stringify(title)}\n---\n\n${markdown}`
+  }
+
+  const [, yamlContent, body] = match
+
+  // If title already exists, return original
+  if (/^\s*title\s*:/m.test(yamlContent)) return markdown
+
+  // Otherwise insert title into YAML
+  const title = extractTitleFromBody(body)
+  const newYaml = `title: ${JSON.stringify(title)}\n${yamlContent}`
+  return markdown.replace(frontmatterRegex, `---\n${newYaml}\n---\n${body}`)
+}
+
 export function parseFrontmatter(markdown: string): ParsedFrontmatter {
+  // Apply hook (default to auto-fill title) if provided
+  if (frontmatterHook) {
+    markdown = frontmatterHook(markdown)
+  } else {
+    // Use default behavior to auto-fill title
+    markdown = defaultTitleHook(markdown)
+  }
+
   const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/
   const match = markdown.match(frontmatterRegex)
 
