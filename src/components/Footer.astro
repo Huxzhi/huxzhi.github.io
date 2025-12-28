@@ -1,9 +1,34 @@
 ---
-import config from "urodele.config";
+import config from 'urodele.config'
 ---
 
-<footer class="mt-8 flex justify-center">
-  <small class="w-full max-w-[720px] min-h-12 flex justify-center items-center opacity-80">
-    <a href={config.footer.copyrightUrl} target="_blank">{config.footer.copyright}</a>
-  </small>
+<footer class="flex justify-between bg-main p-8 text-t-l">
+  <div>
+    <a
+      href={config.footer.copyrightUrl}
+      target="_blank"
+      >{config.footer.copyright}</a
+    >
+  </div>
+
+  <div>
+    Powered by <a
+      class="text-t"
+      href="https://astro.build/"
+      target="_blank"
+      >Astro</a
+    > & <a
+      class="text-t"
+      href="https://urodele.js.org/"
+      target="_blank"
+      >Urodele</a
+    >
+    <span class="mx-2 after:content-['|']"></span>
+    Designed by <a
+      class="text-t"
+      href="https://blog.skk.moe"
+      target="_blank"
+      >Sukka</a
+    >
+  </div>
 </footer>
