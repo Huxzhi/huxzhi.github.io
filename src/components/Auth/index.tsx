@@ -1,6 +1,6 @@
+import type { UserInfo } from '@/hooks/useStorage.js'
 import { getGlobalData } from '@/utils/data.js'
 import { cn, useAttrRef } from '@/utils/dom'
-import type { UserInfo } from '@/utils/storage.js'
 import { formatSecond } from '@/utils/time.js'
 import * as React from 'jsx-dom'
 import config from 'urodele.config'
