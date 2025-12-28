@@ -65,7 +65,7 @@ const { title, description } = Astro.props
     <!-- Main Content (provided by child layouts) -->
 
     <div
-      class="min-h-screen grid mx-auto gap-6 py-6 px-4 md:grid-cols-[240px_1fr] md:max-w-5xl xl:grid-cols-[240px_1fr_240px] 2xl:max-w-[1376px]"
+      class="min-h-screen max-w-[992px] grid mx-auto gap-6 py-6 px-4 md:grid-cols-[12fr_25fr] xl:grid-cols-[23fr_54fr_23fr] xl:max-w-[1376px]"
     >
       <!-- 为了解决cls 累计布局偏移（CLS）问题 ，目前内容少还没有发现有这个问题
             加这个 col-start-1 有问题，目前没有加 https://blog.skk.moe/post/fix-blog-cls/ -->
