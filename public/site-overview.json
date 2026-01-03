@@ -1,214 +1,46 @@
 {
-  "generatedAt": "2025-12-28T08:16:05.413Z",
+  "generatedAt": "2026-01-03T06:02:17.911Z",
   "stats": {
-    "totalPosts": 11,
+    "totalPosts": 3,
     "categories": [
       {
-        "name": "技术向",
-        "count": 7
-      },
-      {
         "name": "未分类",
-        "count": 4
-      }
-    ],
-    "tagCounts": [
-      {
-        "tag": "frontend",
-        "count": 4
-      },
-      {
-        "tag": "performance",
         "count": 3
-      },
-      {
-        "tag": "css",
-        "count": 2
-      },
-      {
-        "tag": "design",
-        "count": 2
-      },
-      {
-        "tag": "features",
-        "count": 1
-      },
-      {
-        "tag": "guide",
-        "count": 1
-      },
-      {
-        "tag": "tags",
-        "count": 1
-      },
-      {
-        "tag": "javascript",
-        "count": 1
-      },
-      {
-        "tag": "programming",
-        "count": 1
-      },
-      {
-        "tag": "types",
-        "count": 1
       }
     ],
-    "totalWordsInWan": "5.7",
+    "tagCounts": [],
+    "totalWordsInWan": "0.5",
     "postsByYear": {
-      "2024": 9,
-      "2025": 2
+      "2026": 3
     },
     "posts": [
       {
-        "id": "tiptap-removal",
-        "title": "移除所有 Tiptap 相关代码和依赖",
+        "id": "cls偏移问题",
+        "title": "CLS 累计布局偏移（CLS）问题",
         "tags": [],
         "category": "未分类",
-        "wordCount": 2855,
-        "createTime": 1765520040000,
+        "wordCount": 964,
+        "createTime": 1767420137911,
         "description": "",
         "draft": false
       },
       {
-        "id": "hierarchical-tags",
-        "title": "层级标签使用指南 (Obsidian 风格)",
-        "tags": [
-          "features",
-          "guide",
-          "tags"
-        ],
-        "category": "未分类",
-        "wordCount": 2481,
-        "createTime": 1733756400000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "typescript-advanced-types",
-        "title": "TypeScript 高级类型技巧与实战",
-        "tags": [
-          "javascript",
-          "programming",
-          "types",
-          "typescript"
-        ],
-        "category": "技术向",
-        "wordCount": 6632,
-        "createTime": 1733497200000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "astro-islands-architecture",
-        "title": "Astro Islands 架构深度解析",
-        "tags": [
-          "architecture",
-          "astro",
-          "frontend",
-          "performance"
-        ],
-        "category": "技术向",
-        "wordCount": 4451,
-        "createTime": 1733670000000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "react-server-components-guide",
-        "title": "React Server Components 完全指南",
-        "tags": [
-          "nextjs",
-          "react",
-          "rsc",
-          "server-components"
-        ],
-        "category": "技术向",
-        "wordCount": 6977,
-        "createTime": 1733324400000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "css-grid-layout-guide",
-        "title": "CSS Grid 布局完全指南",
-        "tags": [
-          "css",
-          "design",
-          "grid",
-          "layout"
-        ],
-        "category": "技术向",
-        "wordCount": 6222,
-        "createTime": 1733238000000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "tailwind-css-best-practices",
-        "title": "Tailwind CSS 最佳实践与常见误区",
-        "tags": [
-          "css",
-          "design",
-          "frontend",
-          "tailwind"
-        ],
-        "category": "技术向",
-        "wordCount": 6589,
-        "createTime": 1733583600000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "welcome-to-urodele",
-        "title": "Welcome to Urodele",
-        "tags": [
-          "blog",
-          "urodele"
-        ],
-        "category": "未分类",
-        "wordCount": 306,
-        "createTime": 1704067200000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "building-dynamic-static-blog",
-        "title": "Astro 生成纯静态网页",
+        "id": "view-transitions",
+        "title": "View Transitions 使用指南",
         "tags": [],
         "category": "未分类",
-        "wordCount": 8352,
-        "createTime": 1765519560000,
+        "wordCount": 496,
+        "createTime": 1767420137911,
         "description": "",
         "draft": false
       },
       {
-        "id": "vite-build-optimization",
-        "title": "Vite 构建优化实战指南",
-        "tags": [
-          "build",
-          "frontend",
-          "performance",
-          "vite"
-        ],
-        "category": "技术向",
-        "wordCount": 5809,
-        "createTime": 1733410800000,
-        "description": "",
-        "draft": false
-      },
-      {
-        "id": "web-performance-optimization",
-        "title": "Web 性能优化核心指标与实践",
-        "tags": [
-          "frontend",
-          "optimization",
-          "performance",
-          "web-vitals"
-        ],
-        "category": "技术向",
-        "wordCount": 6823,
-        "createTime": 1733151600000,
+        "id": "内容访问层架构说明",
+        "title": "内容访问层架构说明",
+        "tags": [],
+        "category": "未分类",
+        "wordCount": 3633,
+        "createTime": 1767420137911,
         "description": "",
         "draft": false
       }
@@ -216,154 +48,32 @@
   },
   "posts": [
     {
-      "id": "tiptap-removal",
-      "title": "移除所有 Tiptap 相关代码和依赖",
+      "id": "cls偏移问题",
+      "title": "CLS 累计布局偏移（CLS）问题",
       "tags": [],
       "category": "未分类",
-      "wordCount": 2855,
-      "createTime": 1765520040000,
+      "wordCount": 964,
+      "createTime": 1767420137911,
       "description": "",
       "draft": false
     },
     {
-      "id": "hierarchical-tags",
-      "title": "层级标签使用指南 (Obsidian 风格)",
-      "tags": [
-        "features",
-        "guide",
-        "tags"
-      ],
-      "category": "未分类",
-      "wordCount": 2481,
-      "createTime": 1733756400000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "typescript-advanced-types",
-      "title": "TypeScript 高级类型技巧与实战",
-      "tags": [
-        "javascript",
-        "programming",
-        "types",
-        "typescript"
-      ],
-      "category": "技术向",
-      "wordCount": 6632,
-      "createTime": 1733497200000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "astro-islands-architecture",
-      "title": "Astro Islands 架构深度解析",
-      "tags": [
-        "architecture",
-        "astro",
-        "frontend",
-        "performance"
-      ],
-      "category": "技术向",
-      "wordCount": 4451,
-      "createTime": 1733670000000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "react-server-components-guide",
-      "title": "React Server Components 完全指南",
-      "tags": [
-        "nextjs",
-        "react",
-        "rsc",
-        "server-components"
-      ],
-      "category": "技术向",
-      "wordCount": 6977,
-      "createTime": 1733324400000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "css-grid-layout-guide",
-      "title": "CSS Grid 布局完全指南",
-      "tags": [
-        "css",
-        "design",
-        "grid",
-        "layout"
-      ],
-      "category": "技术向",
-      "wordCount": 6222,
-      "createTime": 1733238000000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "tailwind-css-best-practices",
-      "title": "Tailwind CSS 最佳实践与常见误区",
-      "tags": [
-        "css",
-        "design",
-        "frontend",
-        "tailwind"
-      ],
-      "category": "技术向",
-      "wordCount": 6589,
-      "createTime": 1733583600000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "welcome-to-urodele",
-      "title": "Welcome to Urodele",
-      "tags": [
-        "blog",
-        "urodele"
-      ],
-      "category": "未分类",
-      "wordCount": 306,
-      "createTime": 1704067200000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "building-dynamic-static-blog",
-      "title": "Astro 生成纯静态网页",
+      "id": "view-transitions",
+      "title": "View Transitions 使用指南",
       "tags": [],
       "category": "未分类",
-      "wordCount": 8352,
-      "createTime": 1765519560000,
+      "wordCount": 496,
+      "createTime": 1767420137911,
       "description": "",
       "draft": false
     },
     {
-      "id": "vite-build-optimization",
-      "title": "Vite 构建优化实战指南",
-      "tags": [
-        "build",
-        "frontend",
-        "performance",
-        "vite"
-      ],
-      "category": "技术向",
-      "wordCount": 5809,
-      "createTime": 1733410800000,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "web-performance-optimization",
-      "title": "Web 性能优化核心指标与实践",
-      "tags": [
-        "frontend",
-        "optimization",
-        "performance",
-        "web-vitals"
-      ],
-      "category": "技术向",
-      "wordCount": 6823,
-      "createTime": 1733151600000,
+      "id": "内容访问层架构说明",
+      "title": "内容访问层架构说明",
+      "tags": [],
+      "category": "未分类",
+      "wordCount": 3633,
+      "createTime": 1767420137911,
       "description": "",
       "draft": false
     }

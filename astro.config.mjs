@@ -1,4 +1,3 @@
-// @ts-check
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -7,14 +6,16 @@ import rehypeSlug from 'rehype-slug'
 import remarkMath from 'remark-math'
 import wikiLinkPlugin from 'remark-wiki-link'
 import { fileURLToPath } from 'url'
-import rehypeRenderTask from './src/plugins/rehype-render-task.ts'
-import { remarkExtractTags } from './src/plugins/remark-extract-tags.ts'
-import remarkTaskParser from './src/plugins/remark-task-parser.ts'
+import rehypeRenderTask from './src/editor/plugins/rehype-render-task.ts'
+import { remarkExtractTags } from './src/editor/plugins/remark-extract-tags.ts'
+import remarkTaskParser from './src/editor/plugins/remark-task-parser.ts'
+
+import db from '@astrojs/db'
 
 // https://astro.build/config
 export default defineConfig({
   output: import.meta.env.DEV ? 'server' : 'static',
-  integrations: [],
+  integrations: [db()],
   markdown: {
     remarkPlugins: [
       remarkMath,

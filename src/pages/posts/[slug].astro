@@ -7,8 +7,8 @@ import { getCreateTime, getUpdateTime } from '@/utils/time'
 import { getCollection, getEntry, render } from 'astro:content'
 import { expandTags } from '@/utils/tag'
 
-const id = Astro.params.id as string
-const entry = await getEntry('posts', id)
+const slug = Astro.params.slug as string
+const entry = await getEntry('posts', slug)
 export const prerender = true
 
 if (!entry) {
