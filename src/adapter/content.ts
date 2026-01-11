@@ -75,9 +75,15 @@ export async function getAllCategories(): Promise<string[]> {
  */
 export function toPageData(entry: CollectionEntry<'posts'>): PageData {
   // 解析时间：优先使用新格式 created/updated，否则使用旧格式 createTime/updateTime
-  const parseTime = (timeStr?: string, fallbackTimestamp?: number): number => {
-    if (timeStr) {
-      const parsed = new Date(timeStr).getTime()
+  const parseTime = (
+    timeValue?: string | Date,
+    fallbackTimestamp?: number,
+  ): number => {
+    if (timeValue) {
+      if (timeValue instanceof Date) {
+        return timeValue.getTime()
+      }
+      const parsed = new Date(timeValue).getTime()
       if (!isNaN(parsed)) return parsed
     }
     return fallbackTimestamp || Date.now()
@@ -124,6 +130,14 @@ export function toPageData(entry: CollectionEntry<'posts'>): PageData {
     category: entry.data.category,
     id: entry.id,
     path: entry.id,
-    cover: entry.data.cover,
+    cover: entry.data.cover
+      ? {
+          src:
+            typeof entry.data.cover.src === 'string'
+              ? entry.data.cover.src
+              : entry.data.cover.src.src,
+          alt: entry.data.cover.alt,
+        }
+      : undefined,
   }
 }

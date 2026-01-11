@@ -114,7 +114,7 @@ export const POST: APIRoute = async (ctx) => {
   const markdown = composeFrontmatter(frontmatter, parsed.content)
 
   // 保存为 .md 文件
-  await writeFile(`./docs/posts/${id}.md`, markdown, {
+  await writeFile(`./src/blog/${id}.md`, markdown, {
     encoding: 'utf-8',
   })
 
@@ -126,7 +126,7 @@ export const DELETE: APIRoute = async (ctx) => {
     path: string
     assets: string[]
   }
-  const pagePath = `./docs/posts/${id}.md`
+  const pagePath = `./src/blog/${id}.md`
   const assetsPaths = assets.map((p) =>
     p.replace(`/post-assets`, './public/post-assets'),
   )

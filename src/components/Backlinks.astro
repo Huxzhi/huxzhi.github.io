@@ -1,0 +1,137 @@
+---
+/**
+ * 反向链接组件 - 显示引用当前文章的其他文章
+ *
+ * 使用示例：
+ * <Backlinks postId={post.id} />
+ */
+import { getPostById } from '@/adapter/content'
+import { getBacklinks } from '@/utils/backlinks'
+
+interface Props {
+  postId: string
+  title?: string
+}
+
+const { postId, title = '被以下文章引用' } = Astro.props
+
+// 获取反向链接
+const backlinkIds = await getBacklinks(postId)
+
+// 获取反向链接文章的详细信息
+const backlinkPosts = await Promise.all(
+  backlinkIds.map(async (id) => {
+    const post = await getPostById(id)
+    return post
+  }),
+)
+
+// 过滤掉不存在的文章
+const validBacklinks = backlinkPosts.filter((post) => post !== undefined)
+---
+
+{
+  validBacklinks.length > 0 && (
+    <section class="backlinks-section">
+      <h2 class="backlinks-title">{title}</h2>
+      <ul class="backlinks-list">
+        {validBacklinks.map((post) => (
+          <li class="backlink-item">
+            <a
+              href={`/post/${post!.id}`}
+              class="backlink-link"
+            >
+              <span class="backlink-icon">←</span>
+              <span class="backlink-text">{post!.data.title}</span>
+            </a>
+            {post!.data.category && (
+              <span class="backlink-category">{post!.data.category}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .backlinks-section {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: var(--surface-2, #f5f5f5);
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--primary, #3b82f6);
+  }
+
+  .backlinks-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-1, #1f2937);
+  }
+
+  .backlinks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .backlink-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .backlink-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-2, #4b5563);
+    transition: color 0.2s ease;
+    flex: 1;
+  }
+
+  .backlink-link:hover {
+    color: var(--primary, #3b82f6);
+  }
+
+  .backlink-icon {
+    font-size: 1rem;
+    opacity: 0.6;
+  }
+
+  .backlink-text {
+    font-size: 0.95rem;
+  }
+
+  .backlink-category {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--primary, #3b82f6);
+    color: white;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .backlinks-section {
+      background: var(--surface-2, #1f2937);
+      border-left-color: var(--primary, #60a5fa);
+    }
+
+    .backlinks-title {
+      color: var(--text-1, #f9fafb);
+    }
+
+    .backlink-link {
+      color: var(--text-2, #d1d5db);
+    }
+
+    .backlink-link:hover {
+      color: var(--primary, #60a5fa);
+    }
+  }
+</style>

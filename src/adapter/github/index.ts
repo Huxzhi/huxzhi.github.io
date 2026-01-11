@@ -17,7 +17,7 @@ const getOc = () => {
 
 export const readPageByPath: ReadPageByPath = async (_id) => {
   const id = _id.replace(/\/$/, '')
-  const path = `docs/posts/${id}.md`
+  const path = `src/blog/${id}.md`
   const octokit = getOc()
   const { data } = await octokit.request(
     'GET /repos/{owner}/{repo}/contents/{path}',
@@ -108,7 +108,7 @@ export const writePage: WritePage = async (_path, data, assets) => {
         file,
       })),
       {
-        path: `docs/posts/${path}.md`,
+        path: `src/blog/${path}.md`,
         file: textFile,
       },
     ].map(async ({ file, path }) => {
@@ -191,7 +191,7 @@ export const deletePageByPath: DeletePageByPath = async (_path, assets) => {
       sha: null,
     })),
     {
-      path: `docs/posts/${path}.md`,
+      path: `src/blog/${path}.md`,
       mode: '100644' as const,
       sha: null,
     },

@@ -1,5 +1,5 @@
 import { defineCollection, reference, z } from 'astro:content'
-import { postsWithBacklinks } from '../loaders/posts-with-backlinks'
+import { postsWithBacklinks } from './loaders/posts-with-backlinks'
 
 const posts = defineCollection({
   loader: postsWithBacklinks({ pattern: '**/*.md', base: './src/blog' }),

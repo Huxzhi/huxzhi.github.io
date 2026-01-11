@@ -1,5 +1,5 @@
+import type { PageData } from '@/shared/type'
 import { slug } from 'github-slugger'
-import type { PageData } from './type'
 
 export interface JSONContent {
   type: string
