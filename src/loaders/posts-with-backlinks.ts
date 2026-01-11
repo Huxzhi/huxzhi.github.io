@@ -93,8 +93,8 @@ export function postsWithBacklinks(options: {
         const links = extractLinks(body)
 
         // 从 frontmatter 也获取手动定义的链接
-        const manualLinks = Array.isArray(entry.data?.links)
-          ? entry.data.links
+        const manualLinks = Array.isArray(entry.data?.outlinks)
+          ? entry.data.outlinks
           : []
 
         const allLinks = [...new Set([...links, ...manualLinks])]
@@ -127,16 +127,16 @@ export function postsWithBacklinks(options: {
         backlinksMap.set(id, [...new Set(backlinks)])
       }
 
-      // 5. 更新每篇文章的 data，添加 links 和 backlinks
+      // 5. 更新每篇文章的 data，添加 outlinks 和 inlinks
       for (const [id, entry] of entries) {
-        const links = outgoingLinks.get(id) || []
-        const backlinks = backlinksMap.get(id) || []
+        const outlinks = outgoingLinks.get(id) || []
+        const inlinks = backlinksMap.get(id) || []
 
         // 直接修改 entry.data
         entry.data = {
           ...entry.data,
-          links,
-          backlinks,
+          outlinks,
+          inlinks,
         }
       }
 

@@ -1,6 +1,6 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import Card from '@/components/Card.astro'
+import Card from '@/components/NonPost/Card.astro'
 import { getAllTags } from '@/pages/api/post/list'
 
 const tags = (await getAllTags()).sort()

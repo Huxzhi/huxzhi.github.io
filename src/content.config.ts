@@ -20,8 +20,8 @@ const posts = defineCollection({
         })
         .optional(),
       // 双向链接支持
-      links: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
-      backlinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
+      outlinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
+      inlinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
       relatedPosts: z.array(reference('posts')).optional(), // Astro 5: 使用 reference
       tasks: z
         .array(

@@ -4,7 +4,7 @@ import { getAllPosts } from '@/adapter/content'
 import { expandTags } from '@/utils/tag'
 import { getCreateTime } from '@/utils/time'
 import config from 'urodele.config'
-import PostCard from '@/components/PostCard.astro'
+import PostCard from '@/components/post/PostCard.astro'
 
 const allPosts = await getAllPosts()
 const publishedPosts = allPosts.filter((post) => !post.data.draft)

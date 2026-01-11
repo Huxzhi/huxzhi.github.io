@@ -51,7 +51,7 @@ export async function getBacklinks(postId: string): Promise<string[]> {
  * 获取指定文章的出链
  */
 export function getOutgoingLinks(post: CollectionEntry<'posts'>): string[] {
-  return post.data.links || []
+  return post.data.outlinks || []
 }
 
 /**
