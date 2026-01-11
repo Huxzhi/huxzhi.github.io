@@ -15,8 +15,8 @@ import {
   type JSONContent,
 } from '@/utils/transform'
 import config from 'urodele.config'
-import { useDialog } from '../Dialog'
-import toast from '../Toast'
+import { useDialog } from '../NonPost/Dialog'
+import toast from '../NonPost/Toast'
 
 const { readPageByPath, writePage, deletePageByPath } = adapter
 

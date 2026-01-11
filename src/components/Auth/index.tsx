@@ -4,7 +4,8 @@ import { cn, useAttrRef } from '@/utils/dom'
 import { formatSecond } from '@/utils/time.js'
 import * as React from 'jsx-dom'
 import config from 'urodele.config'
-import { useDialog } from '../Dialog'
+
+import { useDialog } from '../NonPost/Dialog.js'
 import { getUserInfo, login, logout } from './auth.js'
 
 const Login = () => {

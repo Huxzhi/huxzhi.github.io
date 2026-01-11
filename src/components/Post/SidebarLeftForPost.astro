@@ -1,18 +1,16 @@
 ---
-// Simple, reusable left sidebar wrapper. Accepts any extra classes passed via `class` prop.
-import TableOfContents from '@/components/post/TableOfContents.astro'
-import ArchiveList from './ArchiveList.astro'
-import CategoryCard from './CategoryCard.astro'
-import ProfileCard from './ProfileCard.astro'
-import TagCard from './TagCard.astro'
-
+import ArchiveList from '../NonPost/ArchiveList.astro'
+import CategoryCard from '../NonPost/CategoryCard.astro'
+import ProfileCard from '../NonPost/ProfileCard.astro'
+import TagCard from '../NonPost/TagCard.astro'
+import TableOfContents from '../Post/TableOfContents.astro'
 const headings = Astro.props.headings
 ---
 
 <Fragment>
   <ProfileCard />
   <div class="sticky top-6 space-y-6">
-    <TableOfContents headings={headings} />
+    {headings && headings.length > 0 && <TableOfContents headings={headings} />}
     <CategoryCard />
     <TagCard />
     <ArchiveList />

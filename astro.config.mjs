@@ -7,6 +7,7 @@ import rehypeSlug from 'rehype-slug'
 import remarkMath from 'remark-math'
 import wikiLinkPlugin from 'remark-wiki-link'
 import { fileURLToPath } from 'url'
+import rehypeRemoveDuplicateH1 from './src/plugins/rehype-remove-duplicate-h1.ts'
 import rehypeRenderTask from './src/plugins/rehype-render-task.ts'
 import { remarkExtractTags } from './src/plugins/remark-extract-tags.ts'
 import remarkTaskParser from './src/plugins/remark-task-parser.ts'
@@ -42,6 +43,7 @@ export default defineConfig({
       ],
       rehypeKatex,
       rehypeRenderTask,
+      rehypeRemoveDuplicateH1,
     ],
   },
   server: {
