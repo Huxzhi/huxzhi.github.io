@@ -1,17 +1,16 @@
-import { defineCollection, reference, z } from 'astro:content'
-import { postsWithBacklinks } from './loaders/posts-with-backlinks'
+import { glob } from 'astro/loaders'
+import { defineCollection, z } from 'astro:content'
 
 const posts = defineCollection({
-  loader: postsWithBacklinks({ pattern: '**/*.md', base: './src/blog' }),
+  loader: glob({ pattern: '**/*.md', base: './src/blog' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      slug: z.string(),
       tags: z.array(z.string()).default([]),
       category: z.string().optional(),
       created: z.coerce.date().optional(), // Astro 5: 使用 date 类型
       updated: z.coerce.date().optional(), // Astro 5: 使用 date 类型
-      createTime: z.number().optional(), // 向后兼容
-      updateTime: z.number().optional(), // 向后兼容
       draft: z.boolean().default(false),
       cover: z
         .object({
@@ -19,10 +18,10 @@ const posts = defineCollection({
           alt: z.string().optional(),
         })
         .optional(),
+      link: z.string().optional(), // 完整路由链接
       // 双向链接支持
       outlinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
       inlinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
-      relatedPosts: z.array(reference('posts')).optional(), // Astro 5: 使用 reference
       tasks: z
         .array(
           z.object({

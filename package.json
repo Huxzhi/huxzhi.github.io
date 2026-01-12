@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "preprocess": "node scripts/preprocess-content.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

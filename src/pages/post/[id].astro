@@ -2,10 +2,9 @@
 import PostLayout from '@/layouts/PostLayout.astro'
 import Card from '@/components/NonPost/Card.astro'
 import { getPageList } from '@/pages/api/post/list'
-import { getLeafTags } from '@/utils/tag'
+
 import { getCreateTime, getUpdateTime } from '@/utils/time'
 import { getCollection, getEntry, render } from 'astro:content'
-import { expandTags } from '@/utils/tag'
 
 const id = Astro.params.id as string
 const entry = await getEntry('posts', id)
@@ -19,7 +18,7 @@ const { Content, headings } = await render(entry)
 const post = {
   id: entry.id.replace(/\.md$/, ''),
   ...entry.data,
-  tags: expandTags(entry.data.tags),
+  tags: entry.data.tags,
   createTime: getCreateTime(entry.data),
   updateTime: getUpdateTime(entry.data),
 }
@@ -35,8 +34,7 @@ const curIndex = allPosts.findIndex((p) => p.id === post.id)
 const prev = allPosts[curIndex + 1]
 const next = allPosts[curIndex - 1]
 
-// Get only leaf tags for display (deepest level)
-const displayTags = getLeafTags(post.tags)
+const displayTags = post.tags
 
 export const getStaticPaths = async () => {
   const posts = await getCollection('posts')

@@ -1,6 +1,5 @@
 import { getAllPosts } from '@/adapter/content'
 import type { ShortPageData } from '@/shared/type'
-import { expandTags } from '@/utils/tag'
 import { getCreateTime, getUpdateTime } from '@/utils/time'
 import { getEntry } from 'astro:content'
 
@@ -65,7 +64,7 @@ export const getPageList = async (
 
   const pageData = await Promise.all(
     allPosts.map(async (post) => {
-      const expandedTags = expandTags(post.data.tags)
+      const expandedTags = post.data.tags
       const intro = extractIntro(post.body)
 
       // Remove .md extension from id
@@ -101,7 +100,7 @@ export const getSinglePageData = async (id: string) => {
     throw new Error(`Post not found: ${id}`)
   }
 
-  const expandedTags = expandTags(entry.data.tags)
+  const expandedTags = entry.data.tags
   const intro = extractIntro(entry.body)
 
   return {

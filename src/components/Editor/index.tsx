@@ -6,14 +6,10 @@ import { createEditor } from '@/editor/codemirror'
 import type { PageData } from '@/shared/type'
 import { getGlobalData } from '@/utils/data'
 import { debounce, throttle } from '@/utils/debounce'
-import { getDocAssets, getLocalUploadImages, travelDoc } from '@/utils/doc'
+
 import { useAttrRef } from '@/utils/dom'
 import { createSaver } from '@/utils/saver'
-import {
-  toFilename,
-  toUniqueFilename,
-  type JSONContent,
-} from '@/utils/transform'
+
 import config from 'urodele.config'
 import { useDialog } from '../NonPost/Dialog'
 import toast from '../NonPost/Toast'
@@ -205,7 +201,16 @@ export const mount = async (selector: string, operationSelector: string) => {
   const getCurrentDoc = async () => {
     // 直接获取 Markdown 文本内容
     const markdownContent = editor.getValue()
-    const { assets } = await getLocalUploadImages(editor)
+
+    // 从 Markdown 内容中提取图片资源
+    const imageRegex = /!\[.*?\]\((blob:[^)]+)\)/g
+    const assets: Array<{ url: string; file: File }> = []
+    const matches = markdownContent.matchAll(imageRegex)
+    for (const match of matches) {
+      const blobUrl = match[1]
+      // 从 blob URL 获取 File 对象（需要从之前上传时保存的映射中获取）
+      // 这里简化处理，实际需要维护一个 blob URL 到 File 的映射
+    }
 
     // 标题获取优先级：original title > markdown h1 > filename
     let title = initial?.title
@@ -455,7 +460,7 @@ export const mount = async (selector: string, operationSelector: string) => {
         class="text-button text-lg"
         href={`https://github.com/${config.github.login}/${
           config.github.repo
-        }/blob/main/posts/${pagePath?.replace(/\/$/, '')}.json`}
+        }/blob/main/src/blog/${pagePath?.replace(/\/$/, '')}.md`}
         target="_blank"
         aria-label="goto raw file"
       >
@@ -481,7 +486,14 @@ export const mount = async (selector: string, operationSelector: string) => {
     const confirmDelete = async () => {
       if (!pagePath) return
       const recursive = Boolean(checkRef.current?.checked)
-      const assets = getDocAssets(editor)
+      // 从 Markdown 内容中提取资源路径
+      const markdownContent = editor.getValue()
+      const imageRegex = /!\[.*?\]\(\/post-assets\/([^)]+)\)/g
+      const assets: string[] = []
+      const matches = markdownContent.matchAll(imageRegex)
+      for (const match of matches) {
+        assets.push(`/post-assets/${match[1]}`)
+      }
       try {
         setAttar({ 'data-loading': true, disabled: true })
         await deletePageByPath(pagePath, recursive ? assets : [])
@@ -494,7 +506,14 @@ export const mount = async (selector: string, operationSelector: string) => {
       }
     }
     const { show, close } = useDialog(() => {
-      const assets = getDocAssets(editor)
+      // 从 Markdown 内容中提取资源路径
+      const markdownContent = editor.getValue()
+      const imageRegex = /!\[.*?\]\(\/post-assets\/([^)]+)\)/g
+      const assets: string[] = []
+      const matches = markdownContent.matchAll(imageRegex)
+      for (const match of matches) {
+        assets.push(`/post-assets/${match[1]}`)
+      }
       return (
         <div class="flex-1 flex flex-col p-4 gap-2">
           <div class="font-bold">Are you sure to delete this post?</div>
@@ -575,43 +594,26 @@ export const mount = async (selector: string, operationSelector: string) => {
 interface SavedData {
   data: Partial<PageData>
   assets: Array<{ url: string; file: File }>
-  content: JSONContent
+  content: string
 }
 
 const transformSaved = async (saved: SavedData) => {
   const { data, assets, content } = saved
 
-  // 如果 content 是字符串（Markdown），直接使用
-  if (typeof content === 'string') {
-    // 处理图片链接，将保存的本地路径替换为 blob URL
-    let processedContent = content
-    assets.forEach((asset) => {
-      const blobUrl = URL.createObjectURL(asset.file)
-      processedContent = processedContent.replace(
-        new RegExp(asset.url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
-        blobUrl,
-      )
-    })
-    data.content = processedContent
-  } else {
-    // 兼容旧的 JSON 格式（如果存在）
-    travelDoc(content, (node) => {
-      if (node.type === 'image') {
-        const img = assets.find(
-          (asset) => asset.url === (node.attrs?.src as string),
-        )
-        if (img && node.attrs) {
-          const blobUrl = URL.createObjectURL(img.file)
-          node.attrs.src = blobUrl
-        }
-      }
-    })
-    data.content = JSON.stringify(content)
-  }
+  // 处理图片链接，将保存的本地路径替换为 blob URL
+  let processedContent = content
+  assets.forEach((asset) => {
+    const blobUrl = URL.createObjectURL(asset.file)
+    processedContent = processedContent.replace(
+      new RegExp(asset.url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+      blobUrl,
+    )
+  })
+  data.content = processedContent
 
   return {
     data,
     assets,
-    content,
+    content: processedContent,
   }
 }

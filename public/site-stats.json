@@ -1,4 +1,5 @@
 {
+  "generatedAt": "2026-01-12T07:39:21.912Z",
   "totalPosts": 3,
   "categories": [
     {
@@ -6,41 +7,30 @@
       "count": 3
     }
   ],
-  "tagCounts": [],
+  "tagCounts": [
+    {
+      "tag": "HTML",
+      "count": 1
+    },
+    {
+      "tag": "HTML/cls",
+      "count": 1
+    },
+    {
+      "tag": "Astro",
+      "count": 1
+    },
+    {
+      "tag": "Astro/view",
+      "count": 1
+    },
+    {
+      "tag": "",
+      "count": 1
+    }
+  ],
   "totalWordsInWan": "0.5",
   "postsByYear": {
-    "2026": 3
-  },
-  "posts": [
-    {
-      "id": "cls偏移问题",
-      "title": "CLS 累计布局偏移（CLS）问题",
-      "tags": [],
-      "category": "未分类",
-      "wordCount": 964,
-      "createTime": 1768135848572,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "view-transitions",
-      "title": "View Transitions 使用指南",
-      "tags": [],
-      "category": "未分类",
-      "wordCount": 516,
-      "createTime": 1768135848572,
-      "description": "",
-      "draft": false
-    },
-    {
-      "id": "内容访问层架构说明",
-      "title": "内容访问层架构说明",
-      "tags": [],
-      "category": "未分类",
-      "wordCount": 3633,
-      "createTime": 1768135848572,
-      "description": "",
-      "draft": false
-    }
-  ]
+    "2025": 3
+  }
 }

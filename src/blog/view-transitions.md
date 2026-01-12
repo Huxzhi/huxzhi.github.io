@@ -1,5 +1,11 @@
 ---
-title: View Transitions 使用指南
+title: "View Transitions 使用指南"
+slug: "view-transitions"
+tags: ["Astro", "Astro/view"]
+created: "2025-09-05T09:05"
+updated: "2025-09-05T09:05"
+draft: false
+wordCount: 539
 ---
 
 # View Transitions 使用指南
@@ -9,6 +15,8 @@ title: View Transitions 使用指南
 ```html
 <ClientRouter />
 ```
+
+#Astro/view-transitions
 
 > 启用视图过渡动画（SPA 模式）
 > 导入 `<ClientRouter />` 组件并将其添加到公共 `<head>` 或共享布局组件中。Astro 将根据旧页面和新页面之间的相似之处创建默认的页面动画，并为不支持的浏览器提供回退行为。

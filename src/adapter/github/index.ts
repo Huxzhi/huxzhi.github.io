@@ -19,14 +19,11 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
   const id = _id.replace(/\/$/, '')
   const path = `src/blog/${id}.md`
   const octokit = getOc()
-  const { data } = await octokit.request(
-    'GET /repos/{owner}/{repo}/contents/{path}',
-    {
-      owner: OWNER,
-      repo: REPO,
-      path: path,
-    },
-  )
+  const { data } = await octokit.rest.repos.getContent({
+    owner: OWNER,
+    repo: REPO,
+    path: path,
+  })
 
   // Decode base64 content (browser-compatible way)
   const fileData = data as { content: string; encoding: string }
@@ -81,19 +78,13 @@ function fileToBase64(file: File) {
 export const writePage: WritePage = async (_path, data, assets) => {
   const path = _path.replace(/\/$/, '')
   const octokit = getOc()
-  const { data: user } = await octokit.request({ url: '/user' })
+  const { data: user } = await octokit.rest.users.getAuthenticated()
   const userName = user.login
-  const main = await octokit.request(
-    'GET /repos/{owner}/{repo}/git/ref/{ref}',
-    {
-      owner: userName,
-      ref: 'heads/main',
-      repo: REPO,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-    },
-  )
+  const main = await octokit.rest.git.getRef({
+    owner: userName,
+    repo: REPO,
+    ref: 'heads/main',
+  })
   console.log(main, 'main')
 
   // data.content already contains full Markdown with frontmatter from the editor
@@ -114,56 +105,44 @@ export const writePage: WritePage = async (_path, data, assets) => {
     ].map(async ({ file, path }) => {
       const fileURI =
         typeof file === 'string' ? btoa(file) : await fileToBase64(file)
-      const blob = await octokit.request(
-        'POST /repos/{owner}/{repo}/git/blobs',
-        {
-          owner: userName,
-          repo: REPO,
-          content: fileURI,
-          encoding: 'base64',
-        },
-      )
+      const blob = await octokit.rest.git.createBlob({
+        owner: userName,
+        repo: REPO,
+        content: fileURI,
+        encoding: 'base64',
+      })
       console.log(blob, 'blob')
       return {
         path,
         sha: blob.data.sha,
-        mode: '100644',
-        type: 'blob',
-      } as const
+        mode: '100644' as const,
+        type: 'blob' as const,
+      }
     }),
   )
-  const newTree = await octokit.request(
-    'POST /repos/{owner}/{repo}/git/trees',
-    {
-      owner: userName,
-      repo: REPO,
-      tree,
-      base_tree: main.data.object.sha,
-    },
-  )
+  const newTree = await octokit.rest.git.createTree({
+    owner: userName,
+    repo: REPO,
+    tree,
+    base_tree: main.data.object.sha,
+  })
   console.log(newTree, 'new tree')
 
-  const commit = await octokit.request(
-    'POST /repos/{owner}/{repo}/git/commits',
-    {
-      owner: userName,
-      repo: REPO,
-      message: `update by urodele`,
-      tree: newTree.data.sha,
-      parents: [main.data.object.sha],
-    },
-  )
+  const commit = await octokit.rest.git.createCommit({
+    owner: userName,
+    repo: REPO,
+    message: `update by urodele`,
+    tree: newTree.data.sha,
+    parents: [main.data.object.sha],
+  })
 
   console.log(commit, 'commit')
-  const res = await octokit.request(
-    'PATCH /repos/{owner}/{repo}/git/refs/{ref}',
-    {
-      owner: userName,
-      repo: REPO,
-      ref: main.data.ref.replace(/^refs\//, ''),
-      sha: commit.data.sha,
-    },
-  )
+  const res = await octokit.rest.git.updateRef({
+    owner: userName,
+    repo: REPO,
+    ref: main.data.ref.replace(/^refs\//, ''),
+    sha: commit.data.sha,
+  })
   console.log(res, 'res')
 }
 
@@ -171,19 +150,13 @@ export const deletePageByPath: DeletePageByPath = async (_path, assets) => {
   console.log(_path, assets)
   const path = _path.replace(/\/$/, '')
   const octokit = getOc()
-  const { data: user } = await octokit.request({ url: '/user' })
+  const { data: user } = await octokit.rest.users.getAuthenticated()
   const userName = user.login
-  const main = await octokit.request(
-    'GET /repos/{owner}/{repo}/git/ref/{ref}',
-    {
-      owner: userName,
-      ref: 'heads/main',
-      repo: REPO,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-    },
-  )
+  const main = await octokit.rest.git.getRef({
+    owner: userName,
+    repo: REPO,
+    ref: 'heads/main',
+  })
   const tree = [
     ...assets.map((p) => ({
       path: p.replace('/post-assets', 'public/post-assets'),
@@ -196,45 +169,28 @@ export const deletePageByPath: DeletePageByPath = async (_path, assets) => {
       sha: null,
     },
   ]
-  const newTree = await octokit.request(
-    'POST /repos/{owner}/{repo}/git/trees',
-    {
-      owner: userName,
-      repo: REPO,
-      base_tree: main.data.object.sha,
-      tree: tree,
-    },
-  )
+  const newTree = await octokit.rest.git.createTree({
+    owner: userName,
+    repo: REPO,
+    base_tree: main.data.object.sha,
+    tree: tree,
+  })
   console.log(newTree, 'new tree')
 
-  const commit = await octokit.request(
-    'POST /repos/{owner}/{repo}/git/commits',
-    {
-      owner: userName,
-      repo: REPO,
-      message: `deleted by urodele`,
-      tree: newTree.data.sha,
-      parents: [main.data.object.sha],
-    },
-  )
+  const commit = await octokit.rest.git.createCommit({
+    owner: userName,
+    repo: REPO,
+    message: `deleted by urodele`,
+    tree: newTree.data.sha,
+    parents: [main.data.object.sha],
+  })
 
   console.log(commit, 'commit')
-  const res = await octokit.request(
-    'PATCH /repos/{owner}/{repo}/git/refs/{ref}',
-    {
-      owner: userName,
-      repo: REPO,
-      ref: main.data.ref.replace(/^refs\//, ''),
-      sha: commit.data.sha,
-    },
-  )
+  const res = await octokit.rest.git.updateRef({
+    owner: userName,
+    repo: REPO,
+    ref: main.data.ref.replace(/^refs\//, ''),
+    sha: commit.data.sha,
+  })
   console.log(res, 'res')
 }
-
-// async function getFileSHA(file: File) {
-//   const buffer = await file.arrayBuffer();
-//   const hashBuffer = await crypto.subtle.digest("SHA-1", buffer);
-//   const hashArray = Array.from(new Uint8Array(hashBuffer));
-//   const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-//   return hashHex;
-// }

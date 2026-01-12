@@ -1,11 +1,11 @@
 ---
-import PostCard from '@/components/post/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getPostCategory } from '@/utils/category'
 import { expandTags } from '@/utils/tag'
 import { getCreateTime } from '@/utils/time'
 import { getCollection } from 'astro:content'
 import config from 'urodele.config'
+import PostCard from '../../components/Post/PostCard.astro'
 
 export const prerender = true
 

@@ -1,7 +1,7 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getAllPosts } from '@/adapter/content'
-import { expandTags } from '@/utils/tag'
+
 import { getCreateTime } from '@/utils/time'
 import config from 'urodele.config'
 import PostCard from '@/components/post/PostCard.astro'
@@ -28,7 +28,7 @@ const extractSummary = (body: string | undefined) => {
     posts.map((post) => {
       const postId = post.id.replace(/\.md$/, '')
       const summary = extractSummary(post.body)
-      const tags = expandTags(post.data.tags)
+      const tags = post.data.tags
 
       return (
         <PostCard

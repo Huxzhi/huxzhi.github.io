@@ -1,10 +1,9 @@
-import { toMeta } from '@/utils/transform'
 import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
 
 const PREFIX = location.origin
 
 export const readPageByPath: ReadPageByPath = async (path) => {
-  // const path = `/pages/${_path}.json`;
+  // Fetch from API endpoint which reads src/blog/${path}.md and returns PageData as JSON
   const json = await (await fetch(`${PREFIX}/api/post/${path}`)).json()
   return json
 }
@@ -16,9 +15,12 @@ export const writePage: WritePage = async (path, data, assets) => {
       form.set('assets', asset.file)
     } else form.append('assets', asset.file)
   })
-  const meta = toMeta({ ...data, updateTime: Date.now() })
   // content 现在是纯 Markdown 字符串，不需要解析
-  const rawString = JSON.stringify({ ...meta, content: data.content })
+  const rawString = JSON.stringify({
+    ...data,
+    updateTime: Date.now(),
+    content: data.content,
+  })
   const strFile = new File(
     [new Blob([rawString], { type: 'text/plain' })],
     'content.json',

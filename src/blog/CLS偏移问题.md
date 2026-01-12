@@ -1,6 +1,14 @@
 ---
-title: CLS 累计布局偏移（CLS）问题
+title: "CLS 累计布局偏移（CLS）问题"
+slug: "cls"
+tags: ["HTML", "HTML/cls"]
+created: "2025-09-05T09:05"
+updated: "2025-09-05T09:05"
+draft: false
+wordCount: 973
 ---
+
+#HTML/cls
 
 [优化博客的累计布局偏移（CLS）问题](https://blog.skk.moe/post/fix-blog-cls/)
 
