@@ -29,8 +29,8 @@ export async function getSiteStats(): Promise<SiteStats> {
   if (cached) return cached
 
   try {
-    let stats: any
-    let postsData: any
+    let stats: SiteStats
+    let postsData: SitePost[]
 
     // 检测是否在服务器端（Node.js）
     if (typeof window === 'undefined') {
