@@ -1,8 +1,8 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import PostCard from '@/components/post/PostCard.astro'
+import PostCard from '@/components/Post/PostCard.astro'
 import { getPostsByTag, getAllTags } from '@/pages/api/post/list'
-import { expandTags } from '@/utils/tag'
+import { expandTags } from '@/utils/tags-util.mjs'
 
 // Rest parameter captures the full path with slashes
 const tagPath = Astro.params.tag as string

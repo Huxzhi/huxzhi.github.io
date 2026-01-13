@@ -62,6 +62,18 @@ export function parseYMAL(yamlContent) {
  * @param {Record<string, any>} data frontmatter 数据对象
  * @returns {string} YAML 格式的字符串
  */
+export function parseFrontmatter(markdown) {
+  const frontmatterRegex = /^---\n([\s\S]*?)\n---/
+  const match = markdown.match(frontmatterRegex)
+  if (match) {
+    const frontmatter = parseYMAL(match[1])
+    const content = markdown.replace(frontmatterRegex, '').trim()
+    return { data: frontmatter, content }
+  } else {
+    return { data: {}, content: markdown.trim() }
+  }
+}
+
 export function stringifyFrontmatter(data) {
   const lines = ['---']
 

@@ -1,12 +1,12 @@
 ---
-import PostCard from '@/components/post/PostCard.astro'
+import PostCard from '@/components/Post/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import { expandTags, sortByPin } from '@/utils/tag'
+import { expandTags } from '@/utils/tags-util.mjs'
 import config from 'urodele.config'
 import { getPageList } from './api/post/list'
 
 const page = Number(Astro.params.page)
-const allPosts = sortByPin(await getPageList())
+const allPosts = await getPageList()
 const pageSize = config.pagination.size
 const posts = allPosts.slice(page * pageSize, (page + 1) * pageSize)
 const totalPages = Math.ceil(allPosts.length / pageSize)
@@ -14,7 +14,7 @@ const totalPages = Math.ceil(allPosts.length / pageSize)
 export const getStaticPaths = async () => {
   const { default: config } = await import('urodele.config')
   const pageSize = config.pagination.size
-  const posts = sortByPin(await getPageList())
+  const posts = await getPageList()
   const pages = Math.ceil(posts.length / pageSize)
   return Array.from({ length: pages }, (_, i) => i)
     .filter((v) => v !== 0)

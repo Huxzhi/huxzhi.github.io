@@ -1,5 +1,5 @@
 import { getPostById, toPageData } from '@/adapter/content'
-import { composeFrontmatter, parseFrontmatter } from '@/utils/yaml'
+import { composeFrontmatter, parseFrontmatter } from '@/utils/yaml.mjs'
 import type { APIRoute, GetStaticPaths } from 'astro'
 import { unlink, writeFile } from 'fs/promises'
 import { getPageList } from './list'

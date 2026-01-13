@@ -1,8 +1,8 @@
 ---
-import PostCard from '@/components/post/PostCard.astro'
+import PostCard from '@/components/Post/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { getAllPosts } from '@/adapter/content'
-import { expandTags } from '@/utils/tag'
+import { expandTags } from '@/utils/tags-util.mjs'
 import { getCreateTime } from '@/utils/time'
 import appConfig from 'urodele.config'
 

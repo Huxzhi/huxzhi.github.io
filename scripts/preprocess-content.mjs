@@ -65,14 +65,11 @@ function normalizeDateTime(dateStr) {
 /**
  * 标准化 frontmatter 以符合 schema
  */
-function normalizeFrontmatter(frontmatter, filename) {
+function normalizeFrontmatter(frontmatter) {
   const normalized = {}
 
-  // title (必需)
-  normalized.title = frontmatter.title || filename.replace(/\.md$/, '')
-
   // slug (必需) - 从文件名生成
-  normalized.slug = frontmatter.slug || generateSlug(filename)
+  normalized.slug = frontmatter.slug || generateSlug(frontmatter.title)
 
   // tags (默认空数组)
   if (frontmatter.tags) {
@@ -158,7 +155,7 @@ function normalizeFrontmatter(frontmatter, filename) {
 /**
  * 处理单个文件
  */
-async function processFile(filePath, filename) {
+async function processFile(filePath) {
   try {
     const content = await readFile(filePath, 'utf-8')
     const match = content.match(frontmatterRegex)
@@ -196,7 +193,7 @@ async function processFile(filePath, filename) {
     }
 
     // 标准化 frontmatter
-    const normalized = normalizeFrontmatter(data, filename)
+    const normalized = normalizeFrontmatter(data)
 
     // 计算字数并添加到 frontmatter
     const wordCount = (body || '').replace(/\s+/g, '').length
@@ -208,11 +205,11 @@ async function processFile(filePath, filename) {
     // 写回文件
     await writeFile(filePath, newContent, 'utf-8')
 
-    console.log(`✓ Processed: ${filename}`)
-    return { success: true, filename }
+    console.log(`✓ Processed: ${filePath}`)
+    return { success: true, filePath }
   } catch (error) {
-    console.error(`✗ Error processing ${filename}:`, error.message)
-    return { success: false, filename, error: error.message }
+    console.error(`✗ Error processing ${filePath}:`, error.message)
+    return { success: false, filePath, error: error.message }
   }
 }
 

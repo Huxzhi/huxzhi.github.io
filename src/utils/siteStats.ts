@@ -45,7 +45,8 @@ export async function getSiteStats(): Promise<SiteStats> {
       ])
 
       stats = JSON.parse(statsContent)
-      postsData = JSON.parse(postsContent)
+      const postsJson = JSON.parse(postsContent)
+      postsData = Array.isArray(postsJson) ? postsJson : postsJson.posts || []
     } else {
       // 客户端：使用 fetch
       const [statsRes, postsRes] = await Promise.all([
@@ -58,7 +59,8 @@ export async function getSiteStats(): Promise<SiteStats> {
       }
 
       stats = await statsRes.json()
-      postsData = await postsRes.json()
+      const postsJson = await postsRes.json()
+      postsData = Array.isArray(postsJson) ? postsJson : postsJson.posts || []
     }
 
     cached = {
@@ -67,7 +69,7 @@ export async function getSiteStats(): Promise<SiteStats> {
       tagCounts: stats.tagCounts,
       totalWordsInWan: stats.totalWordsInWan,
       postsByYear: stats.postsByYear,
-      posts: postsData.posts,
+      posts: postsData,
     }
 
     return cached
