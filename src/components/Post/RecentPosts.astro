@@ -3,9 +3,9 @@ import Card from '../NonPost/Card.astro'
 import { getSiteStats } from '@/utils/siteStats'
 
 interface Post {
-  id: string
+  slug: string
   title: string
-  createTime: number
+  created: number
 }
 
 interface Props {
@@ -17,9 +17,9 @@ let { posts } = props
 if (!posts) {
   const site = await getSiteStats()
   posts = (site.posts ?? [])
-    .sort((a, b) => b.createTime - a.createTime)
+    .sort((a, b) => b.created - a.created)
     .slice(0, 5)
-    .map((p) => ({ id: p.id, title: p.title, createTime: p.createTime }))
+    .map((p) => ({ slug: p.slug, title: p.title, created: p.created }))
 }
 ---
 
@@ -36,7 +36,7 @@ if (!posts) {
             style="border-color: var(--color-alt);"
           >
             <a
-              href={`/post/${post.id}`}
+              href={`/post/${post.slug}`}
               class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
               style="color: var(--color-t);"
               onmouseover="this.style.color='var(--color-link)'"
@@ -48,7 +48,7 @@ if (!posts) {
               class="text-xs block mt-1"
               style="color: var(--color-t-l);"
             >
-              {new Date(post.createTime).toLocaleDateString('zh-CN', {
+              {new Date(post.created).toLocaleDateString('zh-CN', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',

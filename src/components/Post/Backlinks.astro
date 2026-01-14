@@ -1,137 +1,72 @@
 ---
+import { getCollection } from 'astro:content'
+import Card from '../NonPost/Card.astro'
+
 /**
  * 反向链接组件 - 显示引用当前文章的其他文章
  *
  * 使用示例：
- * <Backlinks postId={post.id} />
+ * <Backlinks postSlug={post.slug} />
  */
-import { getPostById } from '@/adapter/content'
-import { getBacklinks } from '@/utils/backlinks'
 
 interface Props {
-  postId: string
+  postSlug: string
   title?: string
 }
 
-const { postId, title = '被以下文章引用' } = Astro.props
+const { postSlug, title = '被以下文章引用' } = Astro.props
 
 // 获取反向链接
-const backlinkIds = await getBacklinks(postId)
+const postsYaml = await getCollection('postsYaml')
 
-// 获取反向链接文章的详细信息
-const backlinkPosts = await Promise.all(
-  backlinkIds.map(async (id) => {
-    const post = await getPostById(id)
-    return post
-  }),
-)
+// 找到当前文章
+const currentPost = postsYaml.find((p) => p.data.slug === postSlug)
+const inLinks = currentPost?.data.inLinks || []
 
-// 过滤掉不存在的文章
-const validBacklinks = backlinkPosts.filter((post) => post !== undefined)
+// 根据 inLinks 中的 slug 找到对应的文章
+const validBacklinks = inLinks
+  .map((slug) => postsYaml.find((p) => p.data.slug === slug))
+  .filter((post) => post !== undefined)
+  .map((post) => post.data)
 ---
 
 {
   validBacklinks.length > 0 && (
-    <section class="backlinks-section">
-      <h2 class="backlinks-title">{title}</h2>
-      <ul class="backlinks-list">
+    <Card
+      class="backlinks-section"
+      title="反向链接"
+    >
+      <ul
+        class="divide-y"
+        style="border-color: var(--color-alt);"
+      >
         {validBacklinks.map((post) => (
-          <li class="backlink-item">
+          <li
+            class="py-4 first:pt-0"
+            style="border-color: var(--color-alt);"
+          >
             <a
-              href={`/post/${post!.id}`}
-              class="backlink-link"
+              href={`/post/${post.slug}`}
+              class="text-sm line-clamp-2 transition-colors block hover:translate-x-1"
+              style="color: var(--color-t);"
+              onmouseover="this.style.color='var(--color-link)'"
+              onmouseout="this.style.color='var(--color-t)'"
             >
-              <span class="backlink-icon">←</span>
-              <span class="backlink-text">{post!.data.title}</span>
+              {post.title}
             </a>
-            {post!.data.category && (
-              <span class="backlink-category">{post!.data.category}</span>
-            )}
+            <time
+              class="text-xs block mt-1"
+              style="color: var(--color-t-l);"
+            >
+              {new Date(post.created).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })}
+            </time>
           </li>
         ))}
       </ul>
-    </section>
+    </Card>
   )
 }
-
-<style>
-  .backlinks-section {
-    margin-top: 3rem;
-    padding: 1.5rem;
-    background: var(--surface-2, #f5f5f5);
-    border-radius: 0.5rem;
-    border-left: 4px solid var(--primary, #3b82f6);
-  }
-
-  .backlinks-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text-1, #1f2937);
-  }
-
-  .backlinks-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .backlink-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .backlink-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: var(--text-2, #4b5563);
-    transition: color 0.2s ease;
-    flex: 1;
-  }
-
-  .backlink-link:hover {
-    color: var(--primary, #3b82f6);
-  }
-
-  .backlink-icon {
-    font-size: 1rem;
-    opacity: 0.6;
-  }
-
-  .backlink-text {
-    font-size: 0.95rem;
-  }
-
-  .backlink-category {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
-    background: var(--primary, #3b82f6);
-    color: white;
-    border-radius: 0.25rem;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .backlinks-section {
-      background: var(--surface-2, #1f2937);
-      border-left-color: var(--primary, #60a5fa);
-    }
-
-    .backlinks-title {
-      color: var(--text-1, #f9fafb);
-    }
-
-    .backlink-link {
-      color: var(--text-2, #d1d5db);
-    }
-
-    .backlink-link:hover {
-      color: var(--primary, #60a5fa);
-    }
-  }
-</style>

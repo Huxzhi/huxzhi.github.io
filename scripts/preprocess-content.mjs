@@ -97,10 +97,10 @@ async function processFileYaml(filePath) {
 
     data.updated = formatDateTime(fileStats.mtime)
 
-    // 2. 从 body 提取标签并展平
+    // 3. 从 body 提取标签并展平
     const extractedTags = extractTagsFromBody(trimmedBody)
 
-    // 3. 展平自带的标签并合并
+    // 4. 展平自带的标签并合并
     const existingTags = data.tags ? expandTags(data.tags) : []
     const allTags = [...new Set([...extractedTags, ...existingTags])]
 
@@ -187,7 +187,7 @@ async function generateSiteStats(postsData) {
     // Categories
     const categoryCounts = new Map()
     allPosts.forEach((post) => {
-      const category = post.category
+      const category = post.category || '未分类'
       categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
     })
 
@@ -230,7 +230,7 @@ async function generateSiteStats(postsData) {
 
     // 1. 缓存所有文章的 yaml 信息
     await writeFile(
-      join(publicDir, 'posts.json'),
+      join(publicDir, 'posts-yaml.json'),
       JSON.stringify(posts, null, 2),
       'utf8',
     )
@@ -243,7 +243,7 @@ async function generateSiteStats(postsData) {
     )
 
     console.log(`✓ Generated site statistics (${totalPosts} posts)`)
-    console.log(`  - posts.json: ${allPosts.length} posts`)
+    console.log(`  - posts-yaml.json: ${allPosts.length} posts`)
     console.log(`  - site-stats.json: aggregated stats`)
   } catch (error) {
     console.warn('Could not generate site stats:', error.message)

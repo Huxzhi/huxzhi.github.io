@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-14T12:49:00.053Z",
+  "generatedAt": "2026-01-14T13:38:20.673Z",
   "total": 3,
   "posts": [
     {
@@ -10,12 +10,13 @@
         "HTML/cls"
       ],
       "created": "2025-09-05T09:05",
-      "updated": "2026-01-14T21:46",
+      "updated": "2026-01-14T22:22",
       "draft": false,
       "wordCount": 973,
       "outLinks": [
         "https://blog.skk.moe/post/fix-blog-cls/"
-      ]
+      ],
+      "category": "未分类"
     },
     {
       "title": "View Transitions 使用指南",
@@ -25,7 +26,7 @@
         "Astro/view"
       ],
       "created": "2025-09-05T09:05",
-      "updated": "2026-01-14T21:46",
+      "updated": "2026-01-14T22:22",
       "draft": false,
       "wordCount": 539,
       "outLinks": [
@@ -33,15 +34,17 @@
       ],
       "aliases": [
         "view-transitions"
-      ]
+      ],
+      "category": "未分类"
     },
     {
       "title": "内容访问层架构说明",
       "slug": "contents",
       "created": "2025-09-05T09:05",
-      "updated": "2026-01-14T21:46",
+      "updated": "2026-01-14T22:22",
       "draft": false,
       "wordCount": 3633,
+      "category": "未分类",
       "inLinks": [
         "view-transitions"
       ]

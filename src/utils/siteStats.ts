@@ -1,10 +1,10 @@
 type SitePost = {
-  id: string
+  slug: string
   title: string
   tags: string[]
   category: string
   wordCount: number
-  createTime: number
+  created: number
   description: string
   draft: boolean
 }
@@ -41,7 +41,7 @@ export async function getSiteStats(): Promise<SiteStats> {
 
       const [statsContent, postsContent] = await Promise.all([
         fs.readFile(path.join(publicDir, 'site-stats.json'), 'utf-8'),
-        fs.readFile(path.join(publicDir, 'posts.json'), 'utf-8'),
+        fs.readFile(path.join(publicDir, 'posts-yaml.json'), 'utf-8'),
       ])
 
       stats = JSON.parse(statsContent)
@@ -51,7 +51,7 @@ export async function getSiteStats(): Promise<SiteStats> {
       // 客户端：使用 fetch
       const [statsRes, postsRes] = await Promise.all([
         fetch('/site-stats.json'),
-        fetch('/posts.json'),
+        fetch('/posts-yaml.json'),
       ])
 
       if (!statsRes.ok || !postsRes.ok) {

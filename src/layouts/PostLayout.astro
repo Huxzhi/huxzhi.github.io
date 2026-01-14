@@ -1,37 +1,20 @@
 ---
 import Layout from './Layout.astro'
 
-import { expandTags } from '@/utils/tags-util.mjs'
-import { getCreateTime } from '@/utils/time'
 import { getCollection } from 'astro:content'
 
 interface Props {
   title: string
   description?: string
-  postId: string
+  postSlug: string
   headings: any[]
   tags: string[]
 }
 
-const { title, description, postId, headings, tags } = Astro.props
+const { title, description, postSlug, headings, tags } = Astro.props
 
 // Load related posts
 const allPosts = await getCollection('posts')
-const publishedPosts = allPosts.filter((post) => !post.data.draft)
-
-const relatedPosts = publishedPosts
-  .filter(
-    (p) =>
-      p.id.replace(/\.md$/, '') !== postId &&
-      expandTags(p.data.tags).some((tag) => tags.includes(tag)),
-  )
-  .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))
-  .slice(0, 5)
-  .map((p) => ({
-    id: p.id.replace(/\.md$/, ''),
-    title: p.data.title,
-    createTime: getCreateTime(p.data),
-  }))
 
 // Use consolidated site stats (cached)
 import SidebarLeftForPost from '../components/Post/SidebarLeftForPost.astro'
@@ -56,6 +39,6 @@ import SidebarRightForPost from '../components/Post/SidebarRightForPost.astro'
   <!-- Right Sidebar - Related Posts -->
   <SidebarRightForPost
     slot="right"
-    relatedPosts={relatedPosts}
+    postSlug={postSlug}
   />
 </Layout>
