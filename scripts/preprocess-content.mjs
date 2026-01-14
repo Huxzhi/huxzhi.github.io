@@ -39,11 +39,24 @@ function formatDateTime(date) {
  */
 async function processFileYaml(filePath) {
   try {
-    const content = await readFile(filePath, 'utf-8')
+    // 先检查文件大小
     const fileHandle = await open(filePath)
     const fileStats = await fileHandle.stat()
     await fileHandle.close()
 
+    // 跳过超过 20MB 的文件
+    const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
+    if (fileStats.size > MAX_FILE_SIZE) {
+      console.log(`⊘ Skipped (too large): ${filePath}`)
+      return {
+        success: false,
+        filePath,
+        skipped: true,
+        reason: 'File too large',
+      }
+    }
+
+    const content = await readFile(filePath, 'utf-8')
     const match = content.match(frontmatterRegex)
 
     const [, yamlContent, body] = match
@@ -53,6 +66,7 @@ async function processFileYaml(filePath) {
     const trimmedBody = body.trim()
 
     // 1. 提取标题（如果 yaml 中没有）
+    const fileName = filePath.split(/[/\\]/).pop().replace(/\.md$/i, '')
     if (!data.title) {
       // 检查第一行是否是 h1
       const h1Match = trimmedBody.match(/^#\s+(.+)/)
@@ -60,9 +74,20 @@ async function processFileYaml(filePath) {
         data.title = h1Match[1].trim()
       } else {
         // 从文件名提取
-        data.title = filePath.split(/[/\\]/).pop().replace(/\.md$/i, '')
+        data.title = fileName
       }
     }
+
+    // 如果 title 和文件名不同，将文件名添加到别名
+    if (data.title !== fileName) {
+      if (!data.aliases) {
+        data.aliases = []
+      }
+      if (!data.aliases.includes(fileName)) {
+        data.aliases.push(fileName)
+      }
+    }
+
     if (!data.slug) {
       data.slug = generateSlug(data.title)
     }
@@ -128,101 +153,22 @@ async function processFileYaml(filePath) {
     await writeFile(filePath, newContent, 'utf-8')
 
     console.log(`✓ Processed: ${filePath}`)
-    return { success: true, filePath }
+    return { success: true, filePath, data }
   } catch (error) {
     console.error(`✗ Error processing ${filePath}:`, error.message)
     return { success: false, filePath, error: error.message }
   }
 }
 
-async function parseFrontmatterOnly(filePath) {
-  // 只读取文件前面 8KB，通常 frontmatter 不会超过这个大小
-  const fileHandle = await open(filePath, 'r')
-  const buffer = Buffer.alloc(8192)
-
-  try {
-    const { bytesRead } = await fileHandle.read(buffer, 0, 8192, 0)
-    const content = buffer.toString('utf-8', 0, bytesRead)
-
-    // 快速检查是否有 frontmatter
-    if (!content.startsWith('---\n') && !content.startsWith('---\r\n')) {
-      return {}
-    }
-
-    // 找到第二个 ---
-    const startPos = content.indexOf('\n') + 1
-    let endPos = content.indexOf('\n---\n', startPos)
-    if (endPos === -1) {
-      endPos = content.indexOf('\n---\r\n', startPos)
-    }
-
-    if (endPos === -1) {
-      // frontmatter 可能被截断，读取更多内容
-      await fileHandle.close()
-      const fullContent = await readFile(filePath, 'utf-8')
-      const match = fullContent.match(frontmatterRegex)
-      if (!match) return {}
-      return parseYMAL(match[1])
-    }
-
-    const yamlContent = content.slice(startPos, endPos)
-    return parseYMAL(yamlContent)
-  } finally {
-    await fileHandle.close()
-  }
-}
-
-/**
- * 主函数
- */
-async function main() {
-  console.log('Starting content preprocessing...\n')
-
-  try {
-    const files = await readdir(BLOG_DIR)
-    const mdFiles = files.filter((f) => f.endsWith('.md'))
-
-    console.log(`Found ${mdFiles.length} markdown files\n`)
-
-    const results = await Promise.all(
-      mdFiles.map((file) => processFileYaml(join(BLOG_DIR, file))),
-    )
-
-    const successful = results.filter((r) => r.success).length
-    const failed = results.filter((r) => !r.success).length
-
-    console.log(`\n✓ Successfully processed: ${successful} files`)
-    if (failed > 0) {
-      console.log(`✗ Failed: ${failed} files`)
-    }
-
-    // 生成站点统计信息
-    await generateSiteStats(mdFiles)
-  } catch (error) {
-    console.error('Fatal error:', error)
-    process.exit(1)
-  }
-}
-
 /**
  * 生成站点统计信息并写入 public/
  */
-async function generateSiteStats(mdFiles) {
+async function generateSiteStats(postsData) {
   console.log('\nGenerating site statistics...')
 
   try {
-    const allPosts = []
-
-    // 读取所有文章的 yaml frontmatter（优化：只读取 yaml 部分）
-    for (const file of mdFiles) {
-      const filePath = join(BLOG_DIR, file)
-      // 只解析 frontmatter，不需要 body
-      const data = await parseFrontmatterOnly(filePath)
-
-      if (data.draft) continue // 跳过草稿
-
-      allPosts.push(data)
-    }
+    // 过滤掉草稿
+    const allPosts = postsData.filter((data) => !data.draft)
 
     const totalPosts = allPosts.length
 
@@ -302,6 +248,92 @@ async function generateSiteStats(mdFiles) {
   } catch (error) {
     console.warn('Could not generate site stats:', error.message)
   }
+}
+
+/**
+ * 主函数
+ */
+async function main() {
+  console.log('Starting content preprocessing...\n')
+
+  try {
+    const files = await readdir(BLOG_DIR)
+    const mdFiles = files.filter((f) => f.endsWith('.md'))
+
+    console.log(`Found ${mdFiles.length} markdown files\n`)
+
+    const results = await Promise.all(
+      mdFiles.map((file) => processFileYaml(join(BLOG_DIR, file))),
+    )
+
+    const successful = results.filter((r) => r.success).length
+    const failed = results.filter((r) => !r.success).length
+
+    console.log(`\n✓ Successfully processed: ${successful} files`)
+    if (failed > 0) {
+      console.log(`✗ Failed: ${failed} files`)
+    }
+
+    // 提取成功处理的文章数据
+    const postsData = results
+      .filter((r) => r.success && r.data)
+      .map((r) => r.data)
+
+    // 计算双向链接
+    const postsWithBacklinks = buildBacklinks(postsData)
+
+    // 生成站点统计信息
+    await generateSiteStats(postsWithBacklinks)
+  } catch (error) {
+    console.error('Fatal error:', error)
+    process.exit(1)
+  }
+}
+
+/**
+ * 构建双向链接（inLinks）
+ */
+function buildBacklinks(postsData) {
+  // 创建标题和别名到文章的映射
+  const titleMap = new Map()
+  postsData.forEach((post) => {
+    // 映射标题
+    if (post.title) {
+      titleMap.set(post.title, post)
+    }
+    // 映射 slug
+    if (post.slug) {
+      titleMap.set(post.slug, post)
+    }
+    // 映射别名（如果有 aliases 字段）
+    if (post.aliases && Array.isArray(post.aliases)) {
+      post.aliases.forEach((alias) => {
+        titleMap.set(alias, post)
+      })
+    }
+  })
+
+  // 处理每篇文章的 outLinks
+  postsData.forEach((post) => {
+    if (!post.outLinks || post.outLinks.length === 0) return
+
+    post.outLinks.forEach((link) => {
+      // 尝试匹配标题或别名
+      const targetPost = titleMap.get(link)
+      if (targetPost && targetPost !== post) {
+        // 避免自引用
+        // 添加到目标文章的 inLinks（按需创建）
+        if (!targetPost.inLinks) {
+          targetPost.inLinks = []
+        }
+        if (!targetPost.inLinks.includes(post.slug)) {
+          targetPost.inLinks.push(post.slug)
+        }
+      }
+    })
+  })
+
+  return postsData
 }
 
 main()

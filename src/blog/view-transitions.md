@@ -3,10 +3,11 @@ title: "View Transitions 使用指南"
 slug: "view-transitions"
 tags: ["Astro", "Astro/view"]
 created: "2025-09-05T09:05"
-updated: "2026-01-14T21:25"
+updated: "2026-01-14T21:46"
 draft: false
 wordCount: 539
 outLinks: ["内容访问层架构说明"]
+aliases: ["view-transitions"]
 ---
 
 # View Transitions 使用指南
