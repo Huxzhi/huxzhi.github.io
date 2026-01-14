@@ -95,7 +95,7 @@ export async function getSiteStatsOnly(): Promise<Omit<SiteStats, 'posts'>> {
   if (cachedStatsOnly) return cachedStatsOnly
 
   try {
-    let stats: any
+    let stats: SiteStats
 
     // 检测是否在服务器端（Node.js）
     if (typeof window === 'undefined') {

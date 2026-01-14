@@ -23,43 +23,15 @@ function generateSlug(filename) {
 }
 
 /**
- * 标准化时间字符串为目标格式: YYYY-MM-DDTHH:mm
+ * 格式化时间为 YYYY-MM-DDTHH:mm 格式
  */
-function normalizeDateTime(dateStr) {
-  if (!dateStr) return null
-
-  try {
-    let date
-
-    // 处理格式: 2025-11-23'T'21:00
-    if (typeof dateStr === 'string' && dateStr.includes("'T'")) {
-      const cleanStr = dateStr.replace(/'T'/g, 'T')
-      date = new Date(cleanStr)
-    }
-    // 处理时间戳
-    else if (typeof dateStr === 'number' || !isNaN(Number(dateStr))) {
-      date = new Date(Number(dateStr))
-    }
-    // 处理标准 ISO 字符串
-    else {
-      date = new Date(dateStr)
-    }
-
-    if (!isNaN(date.getTime())) {
-      // 格式化为 YYYY-MM-DDTHH:mm
-      const year = date.getFullYear()
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const day = String(date.getDate()).padStart(2, '0')
-      const hours = String(date.getHours()).padStart(2, '0')
-      const minutes = String(date.getMinutes()).padStart(2, '0')
-
-      return `${year}-${month}-${day}T${hours}:${minutes}`
-    }
-  } catch (e) {
-    console.warn(`Invalid date format: ${dateStr} ${e.message}`)
-  }
-
-  return null
+function formatDateTime(date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
 }
 
 /**
@@ -68,11 +40,11 @@ function normalizeDateTime(dateStr) {
 async function processFileYaml(filePath) {
   try {
     const content = await readFile(filePath, 'utf-8')
-    const match = content.match(frontmatterRegex)
+    const fileHandle = await open(filePath)
+    const fileStats = await fileHandle.stat()
+    await fileHandle.close()
 
-    if (!match) {
-      return { data: {}, content }
-    }
+    const match = content.match(frontmatterRegex)
 
     const [, yamlContent, body] = match
 
@@ -91,19 +63,63 @@ async function processFileYaml(filePath) {
         data.title = filePath.split(/[/\\]/).pop().replace(/\.md$/i, '')
       }
     }
+    if (!data.slug) {
+      data.slug = generateSlug(data.title)
+    }
+    if (!data.created) {
+      data.created = formatDateTime(fileStats.birthtime)
+    }
+
+    data.updated = formatDateTime(fileStats.mtime)
 
     // 2. 从 body 提取标签并展平
     const extractedTags = extractTagsFromBody(trimmedBody)
 
-    // 3. 展平自带的标签
-    const existingTags = expandTags(data.tags || [])
+    // 3. 展平自带的标签并合并
+    const existingTags = data.tags ? expandTags(data.tags) : []
+    const allTags = [...new Set([...extractedTags, ...existingTags])]
 
-    // 4. 合并去重
-    data.tags = [...new Set([...extractedTags, ...existingTags])]
+    if (allTags.length > 0) {
+      data.tags = allTags
+    } else {
+      delete data.tags
+    }
 
     // 计算字数并添加到 frontmatter
-    const wordCount = (body || '').replace(/\s+/g, '').length
-    data.wordCount = wordCount
+    data.wordCount = (body || '').replace(/\s+/g, '').length
+
+    // 提取所有出站链接 (仿照 Obsidian Dataview 格式)
+    const outLinks = []
+
+    // 1. 提取 Wiki 风格的 [[]] 链接
+    const wikiLinks = trimmedBody.match(/\[\[([^\]]+)\]\]/g) || []
+    wikiLinks.forEach((link) => {
+      const match = link.match(/\[\[([^\]]+)\]\]/)
+      if (match) {
+        // 处理 [[page|alias]] 格式，只保留 page 部分
+        const linkText = match[1].split('|')[0].trim()
+        outLinks.push(linkText)
+      }
+    })
+
+    // 2. 提取所有 Markdown 格式的链接 [text](url)
+    const mdLinks = trimmedBody.match(/\[([^\]]+)\]\(([^)]+)\)/g) || []
+    mdLinks.forEach((link) => {
+      const match = link.match(/\[([^\]]+)\]\(([^)]+)\)/)
+      if (match) {
+        outLinks.push(match[2]) // 保留完整的 URL 或路径
+      }
+    })
+
+    // 过滤空链接并去重
+    const validOutLinks = [...new Set(outLinks)].filter(
+      (link) => link && link.trim(),
+    )
+    if (validOutLinks.length > 0) {
+      data.outLinks = validOutLinks
+    } else {
+      delete data.outLinks
+    }
 
     // 生成新的 frontmatter
     const newContent = composeFrontmatter(data, trimmedBody)
@@ -205,33 +221,19 @@ async function generateSiteStats(mdFiles) {
 
       if (data.draft) continue // 跳过草稿
 
-      const id = file.replace(/\.md$/, '')
-      const tags = data.tags || []
-
-      allPosts.push({
-        id,
-        title: data.title || id,
-        slug: data.slug || generateSlug(id),
-        tags,
-        category: data.category || '未分类',
-        wordCount: data.wordCount || 0,
-        created: new Date(data.created).getTime() || Date.now(),
-        updated: new Date(data.updated).getTime() || Date.now(),
-        description: data.description || '',
-        draft: !!data.draft,
-      })
+      allPosts.push(data)
     }
 
     const totalPosts = allPosts.length
 
     // Tags
-    const allTags = [...new Set(allPosts.flatMap((p) => p.tags))].filter(
+    const allTags = [...new Set(allPosts.flatMap((p) => p.tags || []))].filter(
       Boolean,
     )
     const tagCounts = allTags
       .map((tag) => ({
         tag,
-        count: allPosts.filter((p) => p.tags.includes(tag)).length,
+        count: allPosts.filter((p) => p.tags?.includes(tag)).length,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10)

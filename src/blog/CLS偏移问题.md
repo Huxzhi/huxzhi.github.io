@@ -3,9 +3,10 @@ title: "CLS偏移问题"
 slug: "cls"
 tags: ["HTML", "HTML/cls"]
 created: "2025-09-05T09:05"
-updated: "2025-09-05T09:05"
+updated: "2026-01-14T21:25"
 draft: false
 wordCount: 973
+outLinks: ["https://blog.skk.moe/post/fix-blog-cls/"]
 ---
 
 #HTML/cls
