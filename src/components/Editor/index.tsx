@@ -177,6 +177,16 @@ export const mount = async (selector: string, operationSelector: string) => {
     updateOutline(pageDat?.content ?? '')
     updateTags(pageDat?.content ?? '')
 
+    // 文件名输入框初始化
+    const filenameInput = document.querySelector(
+      '#filename-input',
+    ) as HTMLInputElement
+    if (filenameInput && pagePath) {
+      // 从 pagePath 提取文件名（不含 .md 扩展名）
+      const filename = pagePath.replace(/\.md$/, '').split('/').pop() || ''
+      filenameInput.value = filename
+    }
+
     // 监听编辑器更新，实时更新标签和大纲
     editor.on(
       'update',
@@ -227,6 +237,22 @@ export const mount = async (selector: string, operationSelector: string) => {
     }
 
     const path = (() => {
+      // 优先使用文件名输入框的值
+      const filenameInput = document.querySelector(
+        '#filename-input',
+      ) as HTMLInputElement
+      const customFilename = filenameInput?.value?.trim()
+
+      if (customFilename) {
+        // 使用用户输入的文件名
+        if (!isCreate) return customFilename + '.md'
+        if (globalData.some((v) => v.title === customFilename)) {
+          return toUniqueFilename(customFilename)
+        }
+        return toFilename(customFilename)
+      }
+
+      // 回退到原有逻辑
       if (!isCreate) return pagePath!
       if (globalData.some((v) => v.title === title)) {
         return toUniqueFilename(title)

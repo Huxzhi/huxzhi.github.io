@@ -33,6 +33,30 @@ import Card from '../../components/NonPost/Card.astro'
         >
           <!-- 编辑器主体 -->
           <Card class="flex-1 max-w-[960px]">
+            <!-- 文件名编辑区 -->
+            <div
+              class="filename-editor mb-4 pb-4 border-b"
+              style="border-color: var(--color-alt);"
+            >
+              <label
+                class="text-xs font-medium mb-2 block"
+                style="color: var(--color-t-l);"
+              >
+                文件名
+              </label>
+              <input
+                id="filename-input"
+                type="text"
+                placeholder="输入文件名（不含 .md 后缀）"
+                class="w-full px-3 py-2 rounded border transition-colors"
+                style="
+                  background-color: var(--color-bg);
+                  color: var(--color-t);
+                  border-color: var(--color-alt);
+                "
+              />
+            </div>
+
             <div
               id="editor"
               class="field-wrapper w-full flex flex-col"
