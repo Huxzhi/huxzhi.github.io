@@ -1,5 +1,5 @@
 ---
-title: "CLS 累计布局偏移（CLS）问题"
+title: "CLS偏移问题"
 slug: "cls"
 tags: ["HTML", "HTML/cls"]
 created: "2025-09-05T09:05"

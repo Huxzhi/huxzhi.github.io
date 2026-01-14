@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-12T07:39:21.912Z",
+  "generatedAt": "2026-01-14T03:47:51.849Z",
   "totalPosts": 3,
   "categories": [
     {
@@ -22,10 +22,6 @@
     },
     {
       "tag": "Astro/view",
-      "count": 1
-    },
-    {
-      "tag": "",
       "count": 1
     }
   ],

@@ -63,99 +63,9 @@ function normalizeDateTime(dateStr) {
 }
 
 /**
- * 标准化 frontmatter 以符合 schema
- */
-function normalizeFrontmatter(frontmatter) {
-  const normalized = {}
-
-  // slug (必需) - 从文件名生成
-  normalized.slug = frontmatter.slug || generateSlug(frontmatter.title)
-
-  // tags (默认空数组)
-  if (frontmatter.tags) {
-    normalized.tags = Array.isArray(frontmatter.tags)
-      ? frontmatter.tags
-      : [frontmatter.tags]
-  } else {
-    normalized.tags = []
-  }
-
-  // category (可选)
-  if (frontmatter.category) {
-    normalized.category = frontmatter.category
-  }
-
-  // 时间字段转换：createTime/updateTime -> created/updated
-  if (frontmatter.created) {
-    const normalized_date = normalizeDateTime(frontmatter.created)
-    if (normalized_date) {
-      normalized.created = normalized_date
-    }
-  } else if (frontmatter.createTime) {
-    // 如果是时间戳，转换为 ISO 字符串
-    const timestamp =
-      typeof frontmatter.createTime === 'number'
-        ? frontmatter.createTime
-        : parseInt(frontmatter.createTime)
-    if (!isNaN(timestamp)) {
-      normalized.created = normalizeDateTime(new Date(timestamp).toISOString())
-    }
-  }
-
-  if (frontmatter.updated) {
-    const normalized_date = normalizeDateTime(frontmatter.updated)
-    if (normalized_date) {
-      normalized.updated = normalized_date
-    }
-  } else if (frontmatter.updateTime) {
-    const timestamp =
-      typeof frontmatter.updateTime === 'number'
-        ? frontmatter.updateTime
-        : parseInt(frontmatter.updateTime)
-    if (!isNaN(timestamp)) {
-      normalized.updated = new Date(timestamp).toISOString()
-    }
-  }
-
-  // draft (默认 false)
-  normalized.draft =
-    frontmatter.draft === true || frontmatter.draft === 'true' ? true : false
-
-  // cover (可选)
-  if (frontmatter.cover) {
-    if (typeof frontmatter.cover === 'object') {
-      normalized.cover = frontmatter.cover
-    } else if (typeof frontmatter.cover === 'string') {
-      normalized.cover = { src: frontmatter.cover }
-    }
-  }
-
-  // link (可选)
-  if (frontmatter.link) {
-    normalized.link = frontmatter.link
-  }
-
-  // outlinks, inlinks (可选，默认空数组)
-  if (frontmatter.outlinks && Array.isArray(frontmatter.outlinks)) {
-    normalized.outlinks = frontmatter.outlinks
-  }
-
-  if (frontmatter.inlinks && Array.isArray(frontmatter.inlinks)) {
-    normalized.inlinks = frontmatter.inlinks
-  }
-
-  // tasks (可选)
-  if (frontmatter.tasks && Array.isArray(frontmatter.tasks)) {
-    normalized.tasks = frontmatter.tasks
-  }
-
-  return normalized
-}
-
-/**
  * 处理单个文件
  */
-async function processFile(filePath) {
+async function processFileYaml(filePath) {
   try {
     const content = await readFile(filePath, 'utf-8')
     const match = content.match(frontmatterRegex)
@@ -168,39 +78,35 @@ async function processFile(filePath) {
 
     const data = parseYMAL(yamlContent)
     // Remove leading whitespace/newlines from body
-    const trimmedBody = body.replace(/^[\r\n\s]+/, '')
+    const trimmedBody = body.trim()
 
-    // 1. 从 body 提取标签并展平
-    const extractedTags = extractTagsFromBody(trimmedBody)
-
-    // 2. 展平自带的标签
-    const existingTags = expandTags(data.tags || [])
-
-    // 3. 合并去重
-    data.tags = [...new Set([...extractedTags, ...existingTags])]
-
-    // 4. 提取标题（如果 yaml 中没有）
+    // 1. 提取标题（如果 yaml 中没有）
     if (!data.title) {
       // 检查第一行是否是 h1
-      const h1Match = trimmedBody.match(/^#\s+(.+)$/m)
+      const h1Match = trimmedBody.match(/^#\s+(.+)/)
       if (h1Match) {
         data.title = h1Match[1].trim()
-      } else if (filePath) {
-        // 从文件路径提取
-        const filename = filePath.split(/[/\\]/).pop() || ''
-        data.title = filename.replace(/\.md$/i, '')
+      } else {
+        // 从文件名提取
+        data.title = filePath.split(/[/\\]/).pop().replace(/\.md$/i, '')
       }
     }
 
-    // 标准化 frontmatter
-    const normalized = normalizeFrontmatter(data)
+    // 2. 从 body 提取标签并展平
+    const extractedTags = extractTagsFromBody(trimmedBody)
+
+    // 3. 展平自带的标签
+    const existingTags = expandTags(data.tags || [])
+
+    // 4. 合并去重
+    data.tags = [...new Set([...extractedTags, ...existingTags])]
 
     // 计算字数并添加到 frontmatter
     const wordCount = (body || '').replace(/\s+/g, '').length
-    normalized.wordCount = wordCount
+    data.wordCount = wordCount
 
     // 生成新的 frontmatter
-    const newContent = composeFrontmatter(normalized, trimmedBody)
+    const newContent = composeFrontmatter(data, trimmedBody)
 
     // 写回文件
     await writeFile(filePath, newContent, 'utf-8')
@@ -210,38 +116,6 @@ async function processFile(filePath) {
   } catch (error) {
     console.error(`✗ Error processing ${filePath}:`, error.message)
     return { success: false, filePath, error: error.message }
-  }
-}
-
-/**
- * 主函数
- */
-async function main() {
-  console.log('Starting content preprocessing...\n')
-
-  try {
-    const files = await readdir(BLOG_DIR)
-    const mdFiles = files.filter((f) => f.endsWith('.md'))
-
-    console.log(`Found ${mdFiles.length} markdown files\n`)
-
-    const results = await Promise.all(
-      mdFiles.map((file) => processFile(join(BLOG_DIR, file), file)),
-    )
-
-    const successful = results.filter((r) => r.success).length
-    const failed = results.filter((r) => !r.success).length
-
-    console.log(`\n✓ Successfully processed: ${successful} files`)
-    if (failed > 0) {
-      console.log(`✗ Failed: ${failed} files`)
-    }
-
-    // 生成站点统计信息
-    await generateSiteStats(mdFiles)
-  } catch (error) {
-    console.error('Fatal error:', error)
-    process.exit(1)
   }
 }
 
@@ -283,6 +157,38 @@ async function parseFrontmatterOnly(filePath) {
 }
 
 /**
+ * 主函数
+ */
+async function main() {
+  console.log('Starting content preprocessing...\n')
+
+  try {
+    const files = await readdir(BLOG_DIR)
+    const mdFiles = files.filter((f) => f.endsWith('.md'))
+
+    console.log(`Found ${mdFiles.length} markdown files\n`)
+
+    const results = await Promise.all(
+      mdFiles.map((file) => processFileYaml(join(BLOG_DIR, file))),
+    )
+
+    const successful = results.filter((r) => r.success).length
+    const failed = results.filter((r) => !r.success).length
+
+    console.log(`\n✓ Successfully processed: ${successful} files`)
+    if (failed > 0) {
+      console.log(`✗ Failed: ${failed} files`)
+    }
+
+    // 生成站点统计信息
+    await generateSiteStats(mdFiles)
+  } catch (error) {
+    console.error('Fatal error:', error)
+    process.exit(1)
+  }
+}
+
+/**
  * 生成站点统计信息并写入 public/
  */
 async function generateSiteStats(mdFiles) {
@@ -305,6 +211,7 @@ async function generateSiteStats(mdFiles) {
       allPosts.push({
         id,
         title: data.title || id,
+        slug: data.slug || generateSlug(id),
         tags,
         category: data.category || '未分类',
         wordCount: data.wordCount || 0,
@@ -318,7 +225,9 @@ async function generateSiteStats(mdFiles) {
     const totalPosts = allPosts.length
 
     // Tags
-    const allTags = [...new Set(allPosts.flatMap((p) => p.tags))]
+    const allTags = [...new Set(allPosts.flatMap((p) => p.tags))].filter(
+      Boolean,
+    )
     const tagCounts = allTags
       .map((tag) => ({
         tag,
