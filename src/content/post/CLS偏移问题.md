@@ -7,7 +7,6 @@ updated: "2026-01-14T22:22"
 draft: false
 wordCount: 973
 outLinks: ["https://blog.skk.moe/post/fix-blog-cls/"]
-category: "未分类"
 ---
 
 #HTML/cls

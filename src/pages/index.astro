@@ -1,12 +1,11 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import { getAllPosts } from '@/adapter/content'
-
+import { getCollection } from 'astro:content'
 import { getCreateTime } from '@/utils/time'
 import config from 'urodele.config'
 import PostCard from '@/components/Post/PostCard.astro'
 
-const allPosts = await getAllPosts()
+const allPosts = await getCollection('posts')
 const publishedPosts = allPosts.filter((post) => !post.data.draft)
 const posts = publishedPosts
   .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data))

@@ -49,6 +49,7 @@ export default defineConfig({
   server: {
     host: true,
   },
+  prefetch: true,
   vite: {
     plugins: [tailwindcss()],
     resolve: {

@@ -2,7 +2,7 @@ import config from '@/../urodele.config'
 import { getLocalUser } from '@/hooks/useStorage'
 import { parseFrontmatter } from '@/utils/yaml.mjs'
 import { Octokit } from 'octokit'
-import type { DeletePageByPath, ReadPageByPath, WritePage } from '../helper'
+import { DeletePageByPath, ReadPageByPath, WritePage } from '../../shared/pageData'
 
 const { repo: REPO, login: OWNER } = config.github
 

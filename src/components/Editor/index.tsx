@@ -1,20 +1,16 @@
 import * as React from 'jsx-dom'
 
-import adapter from '@/adapter'
-
 import { createEditor } from '@/editor/codemirror'
 import type { PageData } from '@/shared/type'
 import { getGlobalData } from '@/utils/data'
 import { debounce, throttle } from '@/utils/debounce'
-
 import { useAttrRef } from '@/utils/dom'
-import { createSaver } from '@/utils/saver'
+import { createSaver } from '@/hooks/useSaver'
+import { deletePageByPath, readPageByPath, writePage } from './github'
 
 import config from 'urodele.config'
 import { useDialog } from '../NonPost/Dialog'
 import toast from '../NonPost/Toast'
-
-const { readPageByPath, writePage, deletePageByPath } = adapter
 
 export const mount = async (selector: string, operationSelector: string) => {
   const root = document.querySelector<HTMLElement>(selector)

@@ -1,10 +1,9 @@
 ---
 import PostLayout from '@/layouts/PostLayout.astro'
 import Card from '@/components/NonPost/Card.astro'
-import { getPageList } from '@/pages/api/post/list'
 
 import { getCreateTime, getUpdateTime } from '@/utils/time'
-import { getCollection, getEntry, render } from 'astro:content'
+import { getCollection, getEntries, getEntry, render } from 'astro:content'
 
 const id = Astro.params.id as string
 const entry = await getEntry('posts', id)
@@ -28,7 +27,7 @@ const intro = entry.body
   ? entry.body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim().slice(0, 150)
   : ''
 
-const allPosts = await getPageList()
+const allPosts = await getCollection('posts')
 
 const curIndex = allPosts.findIndex((p) => p.id === post.id)
 const prev = allPosts[curIndex + 1]
