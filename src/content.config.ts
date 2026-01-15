@@ -1,3 +1,4 @@
+import { glob } from 'astro/loaders'
 import { z } from 'astro/zod'
 import { defineCollection } from 'astro:content'
 import { postLoader } from './plugins/loader-posts'
@@ -30,6 +31,7 @@ const posts = defineCollection({
       outLinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
       inLinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
       aliases: z.array(z.string()).optional().default([]), // 别名列表
+      description: z.string().optional().default(''), // 文章描述或摘要
       tasks: z
         .array(
           z.object({
@@ -54,4 +56,27 @@ const posts = defineCollection({
     }),
 })
 
-export const collections = { posts }
+/**
+ * PostsYaml Collection
+ * 读取由 postLoader 生成的 posts.json 文件
+ * 用于客户端快速访问文章列表（不含完整内容）
+ */
+const postsYaml = defineCollection({
+  loader: glob({ pattern: 'posts.json', base: './public' }),
+  schema: z.object({
+    posts: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        tags: z.array(z.string()).default([]),
+        category: z.string(),
+        wordCount: z.number(),
+        createTime: z.number(),
+        description: z.string(),
+        draft: z.boolean(),
+      }),
+    ),
+  }),
+})
+
+export const collections = { posts, postsYaml }

@@ -3,10 +3,10 @@ import PostCard from '@/components/Post/PostCard.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import { expandTags } from '@/utils/tags-util.mjs'
 import config from 'urodele.config'
-import { getPageList } from './api/post/list'
+import { queryCollection } from '../plugins/loader-posts'
 
 const page = Number(Astro.params.page)
-const allPosts = await getPageList()
+const allPosts = await queryCollection('posts')
 const pageSize = config.pagination.size
 const posts = allPosts.slice(page * pageSize, (page + 1) * pageSize)
 const totalPages = Math.ceil(allPosts.length / pageSize)
@@ -14,7 +14,7 @@ const totalPages = Math.ceil(allPosts.length / pageSize)
 export const getStaticPaths = async () => {
   const { default: config } = await import('urodele.config')
   const pageSize = config.pagination.size
-  const posts = await getPageList()
+  const posts = await queryCollection('posts')
   const pages = Math.ceil(posts.length / pageSize)
   return Array.from({ length: pages }, (_, i) => i)
     .filter((v) => v !== 0)
@@ -30,7 +30,7 @@ export const getStaticPaths = async () => {
   {
     posts.map((post) => {
       const postId = post.id.replace(/\.md$/, '')
-      const summary = post.intro
+      const summary = post.description
       const tags = expandTags(post.tags)
 
       return (
@@ -38,7 +38,7 @@ export const getStaticPaths = async () => {
           postId={postId}
           title={post.title}
           summary={summary}
-          createTime={post.createTime}
+          createTime={post.created}
           tags={tags}
         />
       )

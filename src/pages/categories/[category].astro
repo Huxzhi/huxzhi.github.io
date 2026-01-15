@@ -1,23 +1,22 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import { getPostCategory } from '@/utils/category'
+
 import { expandTags } from '@/utils/tags-util.mjs'
 import { getCreateTime } from '@/utils/time'
-import { getCollection } from 'astro:content'
 import config from 'urodele.config'
 import PostCard from '../../components/Post/PostCard.astro'
+import { queryCollection } from '../../plugins/loader-posts'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts')
-  const publishedPosts = allPosts.filter((post) => !post.data.draft)
+  const publishedPosts = await queryCollection('posts')
 
   // 统计所有分类
   const categoryCounts = new Map<string, number>()
 
   publishedPosts.forEach((post) => {
-    const category = getPostCategory(post)
+    const category = post.data.category || '未分类'
     categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
   })
 
@@ -26,7 +25,7 @@ export async function getStaticPaths() {
     params: { category },
     props: {
       posts: publishedPosts
-        .filter((post) => getPostCategory(post) === category)
+        .filter((post) => (post.data.category || '未分类') === category)
         .sort((a, b) => getCreateTime(b.data) - getCreateTime(a.data)),
       category,
       count: categoryCounts.get(category) || 0,

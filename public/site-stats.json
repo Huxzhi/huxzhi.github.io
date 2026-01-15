@@ -1,5 +1,4 @@
 {
-  "generatedAt": "2026-01-14T13:38:20.673Z",
   "totalPosts": 3,
   "categories": [
     {
@@ -25,8 +24,9 @@
       "count": 1
     }
   ],
-  "totalWordsInWan": "0.5",
+  "totalWordsInWan": "0.51",
   "postsByYear": {
     "2025": 3
-  }
+  },
+  "generatedAt": "2026-01-15T06:15:09.260Z"
 }

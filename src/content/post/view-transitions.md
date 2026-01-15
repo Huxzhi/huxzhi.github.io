@@ -1,13 +1,13 @@
 ---
-title: 'View Transitions 使用指南'
-slug: 'view-transitions'
-tags: ['Astro', 'Astro/view']
-created: '2025-09-05T09:05'
-updated: '2026-01-14T22:22'
+title: "View Transitions 使用指南"
+slug: "view-transitions"
+tags: ["Astro", "Astro/view"]
+created: "2025-09-05T09:05"
+updated: "2026-01-15T14:50"
 draft: false
 wordCount: 539
-outLinks: ['内容访问层架构说明']
-aliases: ['view-transitions']
+outLinks: ["内容访问层架构说明"]
+aliases: ["view-transitions"]
 ---
 
 # View Transitions 使用指南

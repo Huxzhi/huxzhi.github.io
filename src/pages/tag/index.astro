@@ -1,9 +1,12 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import Card from '@/components/NonPost/Card.astro'
-import { getAllTags } from '@/pages/api/post/list'
+import { queryCollection } from '@/plugins/loader-posts'
 
-const tags = (await getAllTags()).sort()
+const tags = (await queryCollection('posts'))
+  .flatMap((post) => post.data.tags || [])
+  .filter((tag, index, self) => self.indexOf(tag) === index)
+  .sort()
 ---
 
 <NonPostLayout title="所有标签">

@@ -5,10 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "npm run preprocess && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "preprocess": "node scripts/preprocess-content.mjs"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "0.9.6-beta.1",

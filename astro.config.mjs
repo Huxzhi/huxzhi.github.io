@@ -60,5 +60,30 @@ export default defineConfig({
         ),
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            // CodeMirror 相关依赖单独分块
+            if (id.includes('codemirror') || id.includes('@codemirror')) {
+              return 'codemirror'
+            }
+            // Node 模块单独分块
+            if (id.includes('node_modules')) {
+              // 较大的库单独分块
+              if (id.includes('katex')) {
+                return 'katex'
+              }
+              if (id.includes('rehype') || id.includes('remark')) {
+                return 'markdown-processors'
+              }
+              // 其他依赖
+              return 'vendor'
+            }
+          },
+        },
+      },
+      chunkSizeWarningLimit: 600, // 提高警告阈值到 600 kB
+    },
   },
 })

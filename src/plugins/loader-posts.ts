@@ -1,7 +1,7 @@
 import { parseYMAL } from '@/utils/yaml.mjs'
 import type { Loader } from 'astro/loaders'
 import { type CollectionKey, getCollection } from 'astro:content'
-import { readFile, readdir, stat } from 'fs/promises'
+import { mkdir, readFile, readdir, stat, writeFile } from 'fs/promises'
 import GithubSlugger from 'github-slugger'
 import { join } from 'path'
 
@@ -32,6 +32,7 @@ export interface PostYamlData {
   outLinks?: string[]
   inLinks?: string[]
   aliases?: string[]
+  description?: string
   tasks?: Array<{
     status: string
     checked: boolean
@@ -111,11 +112,6 @@ export function postLoader(options: PostLoaderOptions): Loader {
             data.title = h1Match ? h1Match[1].trim() : fileName
           }
 
-          // 确保 title 不为空
-          if (!data.title || data.title.trim() === '') {
-            data.title = fileName || 'untitled'
-          }
-
           // 生成或验证 slug
           if (!data.slug || data.slug.trim() === '') {
             data.slug = slugger.slug(data.title)
@@ -127,6 +123,15 @@ export function postLoader(options: PostLoaderOptions): Loader {
           }
           if (data.title !== fileName && !data.aliases.includes(fileName)) {
             data.aliases.push(fileName)
+          }
+
+          if (!data.description) {
+            const firstParagraphMatch = trimmedBody.match(
+              /^(?:#.*\n)?([\s\S]*?)(?:\n\n|$)/,
+            )
+            if (firstParagraphMatch) {
+              data.description = firstParagraphMatch[1].trim()
+            }
           }
 
           // 提取出站链接
@@ -186,6 +191,13 @@ export function postLoader(options: PostLoaderOptions): Loader {
         logger.info(
           `Successfully loaded ${postsData.length} posts with backlinks`,
         )
+
+        // 5. 生成站点统计信息并保存到 public 目录
+        try {
+          await generateSiteStats(postsData, logger)
+        } catch (error) {
+          logger.warn(`Failed to generate site stats: ${error.message}`)
+        }
       } catch (error) {
         logger.error(`Failed to load posts: ${error.message}`)
         throw error
@@ -280,6 +292,107 @@ function formatDateTime(date: Date): string {
   const hours = String(date.getHours()).padStart(2, '0')
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
+/**
+ * 生成站点统计信息并保存到 public 目录
+ */
+async function generateSiteStats(
+  postsData: Array<{
+    id: string
+    data: PostYamlData
+    body: string
+    filePath: string
+  }>,
+  logger: any,
+): Promise<void> {
+  const publicDir = join(process.cwd(), 'public')
+
+  // 确保 public 目录存在
+  try {
+    await mkdir(publicDir, { recursive: true })
+  } catch (error) {
+    // 目录可能已存在
+  }
+
+  // 只统计非草稿文章
+  const publishedPosts = postsData.filter((p) => !p.data.draft)
+
+  // 统计总字数
+  const totalWords = publishedPosts.reduce(
+    (sum, post) => sum + (post.data.wordCount || 0),
+    0,
+  )
+  const totalWordsInWan = (totalWords / 10000).toFixed(2)
+
+  // 统计分类
+  const categoryCount = new Map<string, number>()
+  publishedPosts.forEach((post) => {
+    const category = post.data.category || '未分类'
+    categoryCount.set(category, (categoryCount.get(category) || 0) + 1)
+  })
+  const categories = Array.from(categoryCount.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+
+  // 统计标签
+  const tagCount = new Map<string, number>()
+  publishedPosts.forEach((post) => {
+    if (post.data.tags && Array.isArray(post.data.tags)) {
+      post.data.tags.forEach((tag) => {
+        tagCount.set(tag, (tagCount.get(tag) || 0) + 1)
+      })
+    }
+  })
+  const tagCounts = Array.from(tagCount.entries())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count)
+
+  // 统计按年份分布
+  const postsByYear: Record<number, number> = {}
+  publishedPosts.forEach((post) => {
+    if (post.data.created) {
+      const year = new Date(post.data.created).getFullYear()
+      postsByYear[year] = (postsByYear[year] || 0) + 1
+    }
+  })
+
+  // 构建统计数据
+  const stats = {
+    totalPosts: publishedPosts.length,
+    categories,
+    tagCounts,
+    totalWordsInWan,
+    postsByYear,
+    generatedAt: new Date().toISOString(),
+  }
+
+  // 保存统计数据到 site-stats.json
+  const statsPath = join(publicDir, 'site-stats.json')
+  await writeFile(statsPath, JSON.stringify(stats, null, 2), 'utf-8')
+  logger.info(
+    `Generated site stats: ${publishedPosts.length} posts, ${totalWordsInWan}万字`,
+  )
+
+  // 保存文章列表到 posts.json（用于客户端访问）
+  const postsListData = publishedPosts.map((post) => ({
+    id: post.data.slug,
+    title: post.data.title,
+    tags: post.data.tags || [],
+    category: post.data.category || '未分类',
+    wordCount: post.data.wordCount || 0,
+    createTime: post.data.created ? new Date(post.data.created).getTime() : 0,
+    description: post.data.description || '',
+    draft: post.data.draft || false,
+  }))
+
+  const postsListPath = join(publicDir, 'posts.json')
+  await writeFile(
+    postsListPath,
+    JSON.stringify({ posts: postsListData }, null, 2),
+    'utf-8',
+  )
+  logger.info(`Generated posts list: ${postsListData.length} posts`)
 }
 
 export async function queryCollection(collection: CollectionKey) {

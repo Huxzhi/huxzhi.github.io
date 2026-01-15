@@ -1,16 +1,21 @@
 ---
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
 import PostCard from '@/components/Post/PostCard.astro'
-import { getPostsByTag, getAllTags } from '@/pages/api/post/list'
+import { queryCollection } from '@/plugins/loader-posts'
 import { expandTags } from '@/utils/tags-util.mjs'
 
 // Rest parameter captures the full path with slashes
 const tagPath = Astro.params.tag as string
 
-const posts = await getPostsByTag(tagPath)
+const posts = (await queryCollection('posts'))
+  .map((p) => p.data)
+  .filter((post) => (post.tags || []).includes(tagPath))
 
 export const getStaticPaths = async () => {
-  const allTags = await getAllTags()
+  const allTags = (await queryCollection('posts'))
+    .flatMap((post) => post.data.tags || [])
+    .filter((tag, index, self) => self.indexOf(tag) === index)
+    .sort()
   return allTags.map((tag) => ({
     params: {
       tag: tag,
@@ -43,8 +48,8 @@ export const getStaticPaths = async () => {
       <PostCard
         postId={post.id}
         title={post.title}
-        summary={post.intro || ''}
-        createTime={post.createTime}
+        summary={post.description || ''}
+        createTime={post.created}
         tags={expandTags(post.tags)}
       />
     ))

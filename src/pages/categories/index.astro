@@ -1,27 +1,26 @@
 ---
 import Card from '@/components/NonPost/Card.astro'
 import NonPostLayout from '@/layouts/NonPostLayout.astro'
-import { getPostCategory } from '@/utils/category'
-import { getCollection } from 'astro:content'
-import config from 'urodele.config'
 
-const allPosts = await getCollection('posts')
-const publishedPosts = allPosts.filter((post) => !post.data.draft)
+import config from 'urodele.config'
+import { queryCollection } from '../../plugins/loader-posts'
 
 // 统计分类
 const categoryCounts = new Map<string, number>()
 
-publishedPosts.forEach((post) => {
-  const category = getPostCategory(post)
+const allPosts = await queryCollection('posts')
+for (const post of allPosts) {
+  const category = post.data.category || '未分类'
+
   categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1)
-})
+}
 
 const categories = Array.from(categoryCounts.entries())
   .map(([name, count]) => ({ name, count }))
   .sort((a, b) => b.count - a.count)
 
 const totalCategories = categories.length
-const totalPosts = publishedPosts.length
+const totalPosts = allPosts.length
 ---
 
 <NonPostLayout title={`分类 - ${config.head.title}`}>
