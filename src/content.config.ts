@@ -6,7 +6,7 @@ import { postLoader } from './plugins/loader-posts'
 /**
  * Posts Collection
  * 使用自定义 postLoader 加载 Markdown 文件
- * 自动计算双向链接（inLinks/outLinks）
+ * 自动计算双向链接（inlinks/outlinks）
  */
 const posts = defineCollection({
   loader: postLoader({ base: './src/content/post' }),
@@ -29,7 +29,7 @@ const posts = defineCollection({
       wordCount: z.number().optional().default(0),
       // 双向链接支持
       outLinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
-      inLinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
+      inlinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
       aliases: z.array(z.string()).optional().default([]), // 别名列表
       description: z.string().optional().default(''), // 文章描述或摘要
       tasks: z
@@ -61,22 +61,8 @@ const posts = defineCollection({
  * 读取由 postLoader 生成的 posts.json 文件
  * 用于客户端快速访问文章列表（不含完整内容）
  */
-const postsYaml = defineCollection({
-  loader: glob({ pattern: 'posts.json', base: './public' }),
-  schema: z.object({
-    posts: z.array(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-        tags: z.array(z.string()).default([]),
-        category: z.string(),
-        wordCount: z.number(),
-        createTime: z.number(),
-        description: z.string(),
-        draft: z.boolean(),
-      }),
-    ),
-  }),
+const siteStats = defineCollection({
+  loader: glob({ pattern: 'site-stats.json', base: './public' }),
 })
 
-export const collections = { posts, postsYaml }
+export const collections = { posts, siteStats }

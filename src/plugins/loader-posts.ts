@@ -29,8 +29,8 @@ export interface PostYamlData {
   }
   link?: string
   wordCount: number
-  outLinks?: string[]
-  inLinks?: string[]
+  outlinks?: string[]
+  inlinks?: string[]
   aliases?: string[]
   description?: string
   tasks?: Array<{
@@ -169,10 +169,10 @@ export function postLoader(options: PostLoaderOptions): Loader {
 
         for (const post of postsData) {
           try {
-            const validatedPost = await parseData({
+            const validatedPost = (await parseData({
               id: post.id,
               data: post.data,
-            })
+            })) as PostYamlData
 
             const digest = generateDigest(`${post.id}-${post.data.updated}`)
 
@@ -194,7 +194,7 @@ export function postLoader(options: PostLoaderOptions): Loader {
 
         // 5. 生成站点统计信息并保存到 public 目录
         try {
-          await generateSiteStats(postsData, logger)
+          await generateSiteStats(postsData)
         } catch (error) {
           logger.warn(`Failed to generate site stats: ${error.message}`)
         }
@@ -232,7 +232,7 @@ function extractLinks(content: string): string[] {
   })
 
   // 去重并过滤空链接
-  return [...new Set(links)].filter((link) => link && link.trim())
+  return Array.from(new Set(links)).filter((link) => link && link.trim())
 }
 
 /**
@@ -266,16 +266,17 @@ function calculateBacklinks(
   titleMap: Map<string, PostYamlData>,
 ): void {
   posts.forEach((post) => {
-    if (!post.outLinks || post.outLinks.length === 0) return
+    if (!post.outlinks || post.outlinks.length === 0) return
 
-    post.outLinks.forEach((link: string) => {
+    post.outlinks.forEach((link: string) => {
       const targetPost = titleMap.get(link)
+
       if (targetPost && targetPost !== post) {
-        if (!targetPost.inLinks) {
-          targetPost.inLinks = []
+        if (!targetPost.inlinks) {
+          targetPost.inlinks = []
         }
-        if (!targetPost.inLinks.includes(post.slug!)) {
-          targetPost.inLinks.push(post.slug!)
+        if (!targetPost.inlinks.includes(post.slug!)) {
+          targetPost.inlinks.push(post.slug!)
         }
       }
     })
@@ -298,22 +299,13 @@ function formatDateTime(date: Date): string {
  * 生成站点统计信息并保存到 public 目录
  */
 async function generateSiteStats(
-  postsData: Array<{
-    id: string
-    data: PostYamlData
-    body: string
-    filePath: string
-  }>,
-  logger: any,
+  postsData: { id: string; data: PostYamlData }[],
 ): Promise<void> {
   const publicDir = join(process.cwd(), 'public')
 
   // 确保 public 目录存在
-  try {
-    await mkdir(publicDir, { recursive: true })
-  } catch (error) {
-    // 目录可能已存在
-  }
+
+  await mkdir(publicDir, { recursive: true })
 
   // 只统计非草稿文章
   const publishedPosts = postsData.filter((p) => !p.data.draft)
@@ -370,33 +362,28 @@ async function generateSiteStats(
   // 保存统计数据到 site-stats.json
   const statsPath = join(publicDir, 'site-stats.json')
   await writeFile(statsPath, JSON.stringify(stats, null, 2), 'utf-8')
-  logger.info(
+  console.info(
     `Generated site stats: ${publishedPosts.length} posts, ${totalWordsInWan}万字`,
   )
 
   // 保存文章列表到 posts.json（用于客户端访问）
-  const postsListData = publishedPosts.map((post) => ({
-    id: post.data.slug,
-    title: post.data.title,
-    tags: post.data.tags || [],
-    category: post.data.category || '未分类',
-    wordCount: post.data.wordCount || 0,
-    createTime: post.data.created ? new Date(post.data.created).getTime() : 0,
-    description: post.data.description || '',
-    draft: post.data.draft || false,
-  }))
 
   const postsListPath = join(publicDir, 'posts.json')
+  const postsYamlList: PostYamlData[] = publishedPosts.map((p) => p.data)
+
   await writeFile(
     postsListPath,
-    JSON.stringify({ posts: postsListData }, null, 2),
+    JSON.stringify({ posts: postsYamlList }, null, 2),
     'utf-8',
   )
-  logger.info(`Generated posts list: ${postsListData.length} posts`)
+  console.info(`Generated posts list: ${postsYamlList.length} posts`)
 }
 
 export async function queryCollection(collection: CollectionKey) {
-  return getCollection(collection, ({ data }) => {
-    return data.draft !== true
+  if (collection !== 'posts') {
+    return getCollection(collection)
+  }
+  return getCollection('posts', ({ data }) => {
+    return (data as PostYamlData).draft !== true
   })
 }

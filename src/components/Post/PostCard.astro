@@ -5,11 +5,11 @@ interface Props {
   postId: string
   title: string
   summary: string
-  createTime: number
+  created: number
   tags: string[]
 }
 
-const { postId, title, summary, createTime, tags } = Astro.props
+const { postId, title, summary, created, tags } = Astro.props
 ---
 
 <Card class="transition-shadow min-w-0">
@@ -39,7 +39,7 @@ const { postId, title, summary, createTime, tags } = Astro.props
     <div class="flex items-center gap-4">
       <time>
         {
-          new Date(createTime).toLocaleDateString('zh-CN', {
+          new Date(created).toLocaleDateString('zh-CN', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',

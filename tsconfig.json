@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "jsx": "react",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
      "paths": {
         "@/*":["./src/*"],
         "urodele.config":["./urodele.config.ts"],

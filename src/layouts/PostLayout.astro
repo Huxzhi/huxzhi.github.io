@@ -1,20 +1,14 @@
 ---
 import Layout from './Layout.astro'
 
-import { getCollection } from 'astro:content'
-
 interface Props {
   title: string
   description?: string
-  postSlug: string
   headings: any[]
-  tags: string[]
+  inlinks?: string[]
 }
 
-const { title, description, postSlug, headings, tags } = Astro.props
-
-// Load related posts
-const allPosts = await getCollection('posts')
+const { title, description, headings, inlinks } = Astro.props
 
 // Use consolidated site stats (cached)
 import SidebarLeftForPost from '../components/Post/SidebarLeftForPost.astro'
@@ -39,6 +33,8 @@ import SidebarRightForPost from '../components/Post/SidebarRightForPost.astro'
   <!-- Right Sidebar - Related Posts -->
   <SidebarRightForPost
     slot="right"
-    postSlug={postSlug}
-  />
-</Layout>
+    inlinks={inlinks}
+    <
+    Layout
+  /></Layout
+>

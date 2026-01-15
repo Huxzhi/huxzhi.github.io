@@ -3,54 +3,40 @@ import PostLayout from '@/layouts/PostLayout.astro'
 import Card from '@/components/NonPost/Card.astro'
 
 import { getCreateTime, getUpdateTime } from '@/utils/time'
-import { getCollection, getEntries, getEntry, render } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
+import { queryCollection } from '../../plugins/loader-posts'
+import { render } from 'astro:content'
 
-const id = Astro.params.id as string
-const entry = await getEntry('posts', id)
 export const prerender = true
 
-if (!entry) {
+export const getStaticPaths = async () => {
+  const posts = await queryCollection('posts')
+  return posts.map((p) => ({ params: { slug: p.data.slug } }))
+}
+
+const slug = Astro.params.slug
+const post = await getEntry('posts', slug)
+
+if (!post) {
   return Astro.redirect('/404')
 }
 
-const { Content, headings } = await render(entry)
-const post = {
-  id: entry.id.replace(/\.md$/, ''),
-  ...entry.data,
-  tags: entry.data.tags,
-  createTime: getCreateTime(entry.data),
-  updateTime: getUpdateTime(entry.data),
-}
+const { Content, headings } = await render(post)
 
 // Extract intro from body for meta description
-const intro = entry.body
-  ? entry.body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim().slice(0, 150)
-  : ''
 
 const allPosts = await getCollection('posts')
 
 const curIndex = allPosts.findIndex((p) => p.id === post.id)
 const prev = allPosts[curIndex + 1]
 const next = allPosts[curIndex - 1]
-
-const displayTags = post.tags
-
-export const getStaticPaths = async () => {
-  const posts = await getCollection('posts')
-  return posts.map((p) => ({
-    params: {
-      id: p.id.replace(/\.md$/, ''),
-    },
-  }))
-}
 ---
 
 <PostLayout
-  title={post.title}
-  description={intro}
-  postSlug={post.slug}
+  title={post.data.title}
+  description={post.data.description}
   headings={headings}
-  tags={post.tags}
+  inlinks={post.data.inlinks}
 >
   <Card>
     <article>
@@ -60,7 +46,7 @@ export const getStaticPaths = async () => {
             class="text-3xl lg:text-4xl font-bold"
             style="color: var(--color-title);"
           >
-            {post.title}
+            {post.data.title}
           </h1>
         </div>
         <div
@@ -69,7 +55,7 @@ export const getStaticPaths = async () => {
         >
           <time>
             {
-              new Date(post.createTime).toLocaleDateString('zh-CN', {
+              new Date(post.data.created).toLocaleDateString('zh-CN', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -77,10 +63,10 @@ export const getStaticPaths = async () => {
             }
           </time>
           {
-            post.updateTime && (
+            post.data.updated && (
               <span>
                 更新于{' '}
-                {new Date(post.updateTime).toLocaleDateString('zh-CN', {
+                {new Date(post.data.updated).toLocaleDateString('zh-CN', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -89,9 +75,9 @@ export const getStaticPaths = async () => {
             )
           }
           {
-            displayTags.length > 0 && (
+            post.data.tags && post.data.tags.length > 0 && (
               <span class="min-h-0 flex gap-2 flex-wrap">
-                {displayTags.map((tag) => (
+                {post.data.tags.map((tag) => (
                   <a
                     href={`/tag/${tag}`}
                     class="transition-colors"
@@ -138,7 +124,7 @@ export const getStaticPaths = async () => {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                <span class="truncate">{prev.title}</span>
+                <span class="truncate">{prev.data.title}</span>
               </a>
             ) : (
               <div />
@@ -154,7 +140,7 @@ export const getStaticPaths = async () => {
                 onmouseover="this.style.color='var(--color-link)'"
                 onmouseout="this.style.color='var(--color-t)'"
               >
-                <span class="truncate text-right">{next.title}</span>
+                <span class="truncate text-right">{next.data.title}</span>
                 <svg
                   class="w-5 h-5 shrink-0"
                   fill="none"

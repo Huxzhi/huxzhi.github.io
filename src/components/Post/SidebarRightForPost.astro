@@ -1,12 +1,13 @@
 ---
 import Backlinks from './Backlinks.astro'
 import RecentPosts from './RecentPosts.astro'
+
+const inklinks = Astro.props.inlinks || []
 ---
 
 <Fragment>
   <div class="sticky top-6 space-y-6">
-    <Backlinks postSlug={Astro.props.postSlug} />
-
+    {inklinks.length > 0 && <Backlinks inlinks={inklinks} />}
     <RecentPosts />
   </div>
 </Fragment>

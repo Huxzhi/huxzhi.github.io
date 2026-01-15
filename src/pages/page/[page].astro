@@ -9,7 +9,7 @@ import appConfig from 'urodele.config'
 
 export const prerender = true
 
-export async function getStaticPaths() {
+export async function getStaticPaths({ paginate }) {
   const allPosts = await getCollection('posts')
   const publishedPosts = allPosts
     .filter((post) => !post.data.draft)
@@ -36,13 +36,6 @@ const {
   totalPages = 1,
   totalPosts = 0,
 } = Astro.props
-
-// Extract summary
-const extractSummary = (body: string | undefined) => {
-  if (!body) return ''
-  const text = body.replace(/^#.+$/gm, '').replace(/\n+/g, ' ').trim()
-  return text.slice(0, 150)
-}
 
 // 分页逻辑：最多显示 7 个页码
 const getPageNumbers = () => {
@@ -84,15 +77,15 @@ const pageNumbers = getPageNumbers()
   {
     posts.map((post) => {
       const postId = post.id.replace(/\.md$/, '')
-      const summary = extractSummary(post.body)
+
       const tags = expandTags(post.data.tags)
 
       return (
         <PostCard
           postId={postId}
           title={post.data.title}
-          summary={summary}
-          createTime={getCreateTime(post.data)}
+          summary={post.data.description}
+          created={post.data.created}
           tags={tags}
         />
       )

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content'
+import { getEntry, getCollection } from 'astro:content'
 import Card from '../NonPost/Card.astro'
 
 /**
@@ -10,55 +10,51 @@ import Card from '../NonPost/Card.astro'
  */
 
 interface Props {
-  postSlug: string
+  inlinks: string[]
   title?: string
 }
 
-const { postSlug, title = '被以下文章引用' } = Astro.props
+const { inlinks, title = '被以下文章引用' } = Astro.props
 
-// 获取反向链接
-const postsYaml = await getCollection('postsYaml')
-
+const inlinkList = []
 // 找到当前文章
-const currentPost = postsYaml.find((p) => p.data.slug === postSlug)
-const inLinks = currentPost?.data.inLinks || []
-
-// 根据 inLinks 中的 slug 找到对应的文章
-const validBacklinks = inLinks
-  .map((slug) => postsYaml.find((p) => p.data.slug === slug))
-  .filter((post) => post !== undefined)
-  .map((post) => post.data)
+for (const inlink of inlinks) {
+  const inPost = await getEntry('posts', inlink)
+  if (inPost) {
+    inlinkList.push(inPost)
+  }
+}
 ---
 
 {
-  validBacklinks.length > 0 && (
+  inlinkList.length > 0 && (
     <Card
       class="backlinks-section"
-      title="反向链接"
+      title={title}
     >
       <ul
         class="divide-y"
         style="border-color: var(--color-alt);"
       >
-        {validBacklinks.map((post) => (
+        {inlinkList.map((post) => (
           <li
             class="py-4 first:pt-0"
             style="border-color: var(--color-alt);"
           >
             <a
-              href={`/post/${post.slug}`}
+              href={`/post/${post.data.slug}`}
               class="text-sm line-clamp-2 transition-colors block "
               style="color: var(--color-t);"
               onmouseover="this.style.color='var(--color-link)'"
               onmouseout="this.style.color='var(--color-t)'"
             >
-              {post.title}
+              {post.data.title}
             </a>
             <time
               class="text-xs block mt-1"
               style="color: var(--color-t-l);"
             >
-              {new Date(post.created).toLocaleDateString('zh-CN', {
+              {new Date(post.data.created).toLocaleDateString('zh-CN', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
