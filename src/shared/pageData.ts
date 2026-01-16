@@ -4,7 +4,7 @@ export type ReadPageByPath = (path: string) => Promise<PageData>
 
 export type WritePage = (
   path: string,
-  data: Pick<PageData, 'content' | 'title' | 'tags' | 'createTime' | 'draft'> &
+  data: Pick<PageData, 'content' | 'title' | 'tags' | 'created' | 'draft'> &
     Partial<Pick<PageData, 'path'>>,
   assets: { name: string; url: string; file: File }[],
 ) => Promise<void>

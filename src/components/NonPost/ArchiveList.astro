@@ -7,8 +7,12 @@ interface Props {
 }
 
 const { archives: propArchives } = Astro.props
-const site = propArchives ? null : await getSiteStats()
-const archives = propArchives ?? site?.postsByYear ?? {}
+
+let archives = propArchives
+if (!archives) {
+  const site = await getSiteStats()
+  archives = site.postsByYear ?? {}
+}
 ---
 
 {

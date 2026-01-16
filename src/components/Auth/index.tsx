@@ -1,7 +1,6 @@
 import type { UserInfo } from '@/hooks/useStorage.js'
-import { getGlobalData } from '@/utils/data.js'
 import { cn, useAttrRef } from '@/utils/dom'
-import { formatSecond } from '@/utils/time.js'
+
 import * as React from 'jsx-dom'
 import config from 'urodele.config'
 
@@ -188,13 +187,31 @@ const Profile = (user: UserInfo) => {
   const isHome = location.pathname === '/'
   const isIndex = isHome || /^\/\d+$/.test(location.pathname)
   const isPage = location.pathname.startsWith('/post/')
-  const pageId = location.pathname.replace('/post/', '')
+  const pageSlug = location.pathname.replace('/post/', '')
 
-  console.log('Auth debug:', { isPage, pageId, pathname: location.pathname })
+  // 从 posts.json 查找对应的 path
+  const handleEdit = async () => {
+    try {
+      const response = await fetch('/posts.json')
+      const data = await response.json()
+      const post = data.posts.find((p: any) => p.slug === pageSlug)
 
-  if (canEdit && isHome) {
-    handleDraft()
+      if (post && post.path) {
+        // 使用找到的 path 跳转
+        location.href = `/edit?path=${post.path}`
+      } else {
+        // 如果找不到，降级使用 slug
+        location.href = `/edit?path=${pageSlug}.md`
+      }
+    } catch (error) {
+      console.error('Failed to load posts.json:', error)
+      // 出错时降级使用 slug
+      location.href = `/edit?path=${pageSlug}.md`
+    }
   }
+
+  // 草稿应该在服务端渲染，不需要客户端获取
+
   return (
     <div class="flex gap-2">
       {canEdit && isIndex && (
@@ -215,8 +232,8 @@ const Profile = (user: UserInfo) => {
         </a>
       )}
       {canEdit && isPage && (
-        <a
-          href={`/edit?path=${pageId}`}
+        <button
+          onClick={handleEdit}
           class="text-button inline-flex items-center justify-center w-6 h-6"
           aria-label="edit current post"
         >
@@ -230,7 +247,7 @@ const Profile = (user: UserInfo) => {
             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.35 8.35a.75.75 0 0 0-.214.413l-.978 5.498a.75.75 0 0 0 .874.874l5.498-.978a.75.75 0 0 0 .413-.214l8.35-8.35Z" />
             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
           </svg>
-        </a>
+        </button>
       )}
 
       <div
@@ -276,56 +293,3 @@ export const mount = (container: HTMLElement) => {
 
 // 兼容：把 mount 暴露到全局，供纯前端脚本直接使用
 ;(window as any).__authMount = (el: HTMLElement) => mount(el)
-
-const handleDraft = async () => {
-  const allPost = await getGlobalData()
-  const drafts = allPost.filter((v) => v.draft)
-  const listWrapper = document.querySelector('.content')
-  drafts.forEach((item) => {
-    const dom = (
-      <>
-        <div
-          data-page-draft="verified"
-          class="pt-8 pb-2"
-        >
-          <a
-            href={`/post/${item.id}`}
-            class="px-4 pb-4 flex justify-between items-center group"
-          >
-            <div class="flex flex-col">
-              <h1 class="page-title w-fit text-lg transition-all font-semibold group-hover:underline">
-                {item.title}
-              </h1>
-              <p class="text-text text-opacity-60 text-sm">{item.intro}</p>
-            </div>
-            {item.cover && (
-              <img
-                class="w-16 h-16 rounded object-cover"
-                src={item.cover.src}
-                alt={item.cover.alt}
-              />
-            )}
-          </a>
-          <div class="flex pt-2 gap-2 px-4">
-            {item.tags.map((tag) => (
-              <a
-                href={`/tag/${tag}`}
-                class="text-sm text-gray hover:text-black"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
-          <div
-            data-acc-time={item.createTime}
-            class="text-end text-xs text-gray"
-          >
-            {formatSecond(item.createTime)}
-          </div>
-        </div>
-        <hr />
-      </>
-    )
-    listWrapper?.insertBefore(dom, listWrapper.firstChild)
-  })
-}

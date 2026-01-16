@@ -18,6 +18,7 @@ interface PostLoaderOptions {
 export interface PostYamlData {
   title: string
   slug: string
+  path: string
   tags?: string[]
   category?: string
   created?: string
@@ -107,6 +108,9 @@ export function postLoader(options: PostLoaderOptions): Loader {
           const fileName = file.replace(/\.md$/i, '')
           const slugger = new GithubSlugger()
 
+          // 存储完整路径（相对于 src/content/）
+          data.path = `post/${file}`
+
           if (!data.title) {
             const h1Match = trimmedBody.match(/^#\s+(.+)/)
             data.title = h1Match ? h1Match[1].trim() : fileName
@@ -135,9 +139,9 @@ export function postLoader(options: PostLoaderOptions): Loader {
           }
 
           // 提取出站链接
-          const outLinks = extractLinks(trimmedBody)
-          if (outLinks.length > 0) {
-            data.outLinks = outLinks
+          const outlinks = extractLinks(trimmedBody)
+          if (outlinks.length > 0) {
+            data.outlinks = outlinks
           }
 
           // 添加时间戳
@@ -169,16 +173,16 @@ export function postLoader(options: PostLoaderOptions): Loader {
 
         for (const post of postsData) {
           try {
-            const validatedPost = (await parseData({
+            const validatedPost = await parseData({
               id: post.id,
-              data: post.data,
-            })) as PostYamlData
+              data: post.data as unknown as Record<string, unknown>,
+            })
 
             const digest = generateDigest(`${post.id}-${post.data.updated}`)
 
             store.set({
-              id: validatedPost.slug,
-              data: validatedPost,
+              id: (validatedPost as unknown as PostYamlData).slug,
+              data: validatedPost as Record<string, unknown>,
               body: post.body,
               digest,
               rendered: await renderMarkdown(post.body),
@@ -213,8 +217,8 @@ function extractLinks(content: string): string[] {
   const links: string[] = []
 
   // 1. Wiki 风格的 [[]] 链接
-  const wikiLinks = content.match(/\[\[([^\]]+)\]\]/g) || []
-  wikiLinks.forEach((link) => {
+  const wikiLinks: string[] = content.match(/\[\[([^\]]+)\]\]/g) || []
+  wikiLinks.forEach((link: string) => {
     const match = link.match(/\[\[([^\]]+)\]\]/)
     if (match) {
       const linkText = match[1].split('|')[0].trim()
@@ -223,8 +227,8 @@ function extractLinks(content: string): string[] {
   })
 
   // 2. Markdown 格式的链接 [text](url)
-  const mdLinks = content.match(/\[([^\]]+)\]\(([^)]+)\)/g) || []
-  mdLinks.forEach((link) => {
+  const mdLinks: string[] = content.match(/\[([^\]]+)\]\(([^)]+)\)/g) || []
+  mdLinks.forEach((link: string) => {
     const match = link.match(/\[([^\]]+)\]\(([^)]+)\)/)
     if (match) {
       links.push(match[2])

@@ -1,26 +1,20 @@
 ---
+import { getCollection } from 'astro:content'
 import Card from '../NonPost/Card.astro'
-import { getSiteStats } from '@/utils/siteStats'
 
-interface Post {
-  slug: string
-  title: string
-  created: number
-}
-
-interface Props {
-  posts?: Post[]
-}
-
-const props = Astro.props as Props
-let { posts } = props
-if (!posts) {
-  const site = await getSiteStats()
-  posts = (site.posts ?? [])
-    .sort((a, b) => b.created - a.created)
-    .slice(0, 5)
-    .map((p) => ({ slug: p.slug, title: p.title, created: p.created }))
-}
+const allPosts = await getCollection('posts')
+const posts = allPosts
+  .sort((a, b) => {
+    return (
+      new Date(b.data.created).getTime() - new Date(a.data.created).getTime()
+    )
+  })
+  .slice(0, 5)
+  .map((p) => ({
+    title: p.data.title,
+    slug: p.data.slug,
+    created: p.data.created,
+  }))
 ---
 
 {

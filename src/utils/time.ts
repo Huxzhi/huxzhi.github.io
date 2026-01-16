@@ -8,46 +8,34 @@ dayjs.extend(isToday)
 dayjs.extend(isYesterday)
 
 /**
- * 解析时间为时间戳
- * 支持新格式（created/updated Date 对象或字符串）和旧格式（createTime/updateTime 数字）
+ * 从 post.data 中获取创建时间
  */
-export function parseTime(
-  timeValue?: string | Date,
-  fallbackTimestamp?: number,
-): number {
-  if (timeValue) {
-    if (timeValue instanceof Date) {
-      return timeValue.getTime()
+export function getCreateTime(data: { created?: string | Date }): number {
+  if (data.created) {
+    if (data.created instanceof Date) {
+      return data.created.getTime()
     }
-    const parsed = new Date(timeValue).getTime()
+    const parsed = new Date(data.created).getTime()
     if (!isNaN(parsed)) return parsed
   }
-  return fallbackTimestamp || Date.now()
+  return Date.now()
 }
 
 /**
- * 从 post.data 中获取创建时间（兼容新旧格式）
- */
-export function getCreateTime(data: {
-  created?: string | Date
-  createTime?: number
-}): number {
-  return parseTime(data.created, data.createTime)
-}
-
-/**
- * 从 post.data 中获取更新时间（兼容新旧格式）
+ * 从 post.data 中获取更新时间
  */
 export function getUpdateTime(data: {
   updated?: string | Date
-  updateTime?: number
-  created?: string
-  createTime?: number
+  created?: string | Date
 }): number {
-  return parseTime(
-    data.updated,
-    data.updateTime || parseTime(data.created, data.createTime),
-  )
+  if (data.updated) {
+    if (data.updated instanceof Date) {
+      return data.updated.getTime()
+    }
+    const parsed = new Date(data.updated).getTime()
+    if (!isNaN(parsed)) return parsed
+  }
+  return getCreateTime(data)
 }
 
 export function formatSecond(timestamp: number): string {

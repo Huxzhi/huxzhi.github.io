@@ -21,7 +21,22 @@ if (!post) {
   return Astro.redirect('/404')
 }
 
-const { Content, headings } = await render(post)
+// 尝试使用预渲染内容，如果不存在则使用 render()
+const usePrerendered = post.rendered?.html
+let htmlContent: string | undefined
+let ContentComponent: any
+let headings: any[]
+
+if (usePrerendered) {
+  // 使用预渲染的 HTML
+  htmlContent = post.rendered.html
+  headings = (post.rendered.metadata?.headings as any[]) || []
+} else {
+  // 降级：使用 render() 获取组件
+  const rendered = await render(post)
+  ContentComponent = rendered.Content
+  headings = rendered.headings || []
+}
 
 // Extract intro from body for meta description
 
@@ -93,8 +108,21 @@ const next = allPosts[curIndex - 1]
       </header>
 
       <div class="prose dark:prose-invert max-w-none">
-        <Content />
+        {
+          htmlContent ? (
+            <Fragment set:html={htmlContent} />
+          ) : (
+            <ContentComponent />
+          )
+        }
       </div>
+
+      <style>
+        /* 隐藏文章内容中的第一个 h1（因为已经在 header 中显示了标题） */
+        .prose > :global(h1:first-child) {
+          display: none;
+        }
+      </style>
 
       <!-- Navigation -->
       <nav

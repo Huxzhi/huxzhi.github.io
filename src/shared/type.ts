@@ -1,11 +1,10 @@
 export type PageData = {
   path: string
-  id: string
   content: string
   tags: string[]
   title: string
-  createTime: number
-  updateTime: number
+  created: string
+  updated: string
   draft: boolean
   category?: string
   cover?: {
@@ -14,7 +13,7 @@ export type PageData = {
   }
 }
 
-export type PageDetail = Omit<PageData, 'path' | 'id'> & {
+export type PageDetail = Omit<PageData, 'path'> & {
   intro: string
   html: string
 }

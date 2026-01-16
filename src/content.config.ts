@@ -14,6 +14,7 @@ const posts = defineCollection({
     z.object({
       title: z.string(),
       slug: z.string(),
+      path: z.string().optional(), // 完整路径（相对于 src/content/）
       tags: z.array(z.string()).default([]),
       category: z.string().optional().default('未分类'),
       created: z.string().optional(), // 使用字符串格式 YYYY-MM-DDTHH:mm
@@ -28,7 +29,7 @@ const posts = defineCollection({
       link: z.string().optional(),
       wordCount: z.number().optional().default(0),
       // 双向链接支持
-      outLinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
+      outlinks: z.array(z.string()).optional().default([]), // 出链：本文引用的其他文章
       inlinks: z.array(z.string()).optional().default([]), // 反向链接：引用本文的其他文章
       aliases: z.array(z.string()).optional().default([]), // 别名列表
       description: z.string().optional().default(''), // 文章描述或摘要

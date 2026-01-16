@@ -2,11 +2,11 @@ import * as React from 'jsx-dom'
 
 import { createEditor } from '@/editor/codemirror'
 import type { PageData } from '@/shared/type'
-import { getGlobalData } from '@/utils/data'
+
+import { createSaver } from '@/hooks/useSaver'
 import { debounce, throttle } from '@/utils/debounce'
 import { useAttrRef } from '@/utils/dom'
-import { createSaver } from '@/hooks/useSaver'
-import { deletePageByPath, readPageByPath, writePage } from './github'
+import { deletePageByPath, readPageByPath, writePage } from '../Auth/github'
 
 import config from 'urodele.config'
 import { useDialog } from '../NonPost/Dialog'
@@ -21,8 +21,6 @@ export const mount = async (selector: string, operationSelector: string) => {
   const url = new URL(location.href)
   const isCreate = url.searchParams.has('new')
   const pagePath = url.searchParams.get('path') ?? undefined
-
-  const globalData = await getGlobalData()
 
   const saver = createSaver()
 
@@ -114,7 +112,7 @@ export const mount = async (selector: string, operationSelector: string) => {
         .replace(/`[^`]+`/g, '')
 
       const tagRegex = /#([^\s#]+)/g
-      const matches = cleanMarkdown.matchAll(tagRegex)
+      const matches = Array.from(cleanMarkdown.matchAll(tagRegex))
       const tags = new Set<string>()
 
       for (const match of matches) {
@@ -183,6 +181,30 @@ export const mount = async (selector: string, operationSelector: string) => {
       filenameInput.value = filename
     }
 
+    // 监听文件名输入框变化，同步更新 URL
+    if (filenameInput) {
+      filenameInput.addEventListener(
+        'input',
+        debounce((e) => {
+          const newFilename = (e.target as HTMLInputElement).value.trim()
+          if (newFilename) {
+            const url = new URL(location.href)
+            // 保留原始 path 的目录部分，只替换文件名
+            let newPathValue = newFilename.endsWith('.md')
+              ? newFilename
+              : newFilename + '.md'
+            if (pagePath && pagePath.includes('/')) {
+              const dir = pagePath.substring(0, pagePath.lastIndexOf('/'))
+              newPathValue = `${dir}/${newPathValue}`
+            }
+            url.searchParams.set('newPath', newPathValue)
+            // 更新 URL 但不刷新页面
+            window.history.replaceState({}, '', url.toString())
+          }
+        }, 300),
+      )
+    }
+
     // 监听编辑器更新，实时更新标签和大纲
     editor.on(
       'update',
@@ -209,14 +231,8 @@ export const mount = async (selector: string, operationSelector: string) => {
     const markdownContent = editor.getValue()
 
     // 从 Markdown 内容中提取图片资源
-    const imageRegex = /!\[.*?\]\((blob:[^)]+)\)/g
-    const assets: Array<{ url: string; file: File }> = []
-    const matches = markdownContent.matchAll(imageRegex)
-    for (const match of matches) {
-      const blobUrl = match[1]
-      // 从 blob URL 获取 File 对象（需要从之前上传时保存的映射中获取）
-      // 这里简化处理，实际需要维护一个 blob URL 到 File 的映射
-    }
+    const assets: Array<{ name: string; url: string; file: File }> = []
+    // TODO: 实际需要维护一个 blob URL 到 File 的映射
 
     // 标题获取优先级：original title > markdown h1 > filename
     let title = initial?.title
@@ -233,7 +249,14 @@ export const mount = async (selector: string, operationSelector: string) => {
     }
 
     const path = (() => {
-      // 优先使用文件名输入框的值
+      // 优先使用 URL 中的 newPath 参数（文件名已修改）
+      const url = new URL(location.href)
+      const newPath = url.searchParams.get('newPath')
+      if (newPath) {
+        return newPath
+      }
+
+      // 其次使用文件名输入框的值
       const filenameInput = document.querySelector(
         '#filename-input',
       ) as HTMLInputElement
@@ -241,26 +264,21 @@ export const mount = async (selector: string, operationSelector: string) => {
 
       if (customFilename) {
         // 使用用户输入的文件名
-        if (!isCreate) return customFilename + '.md'
-        if (globalData.some((v) => v.title === customFilename)) {
-          return toUniqueFilename(customFilename)
-        }
-        return toFilename(customFilename)
+        return customFilename.endsWith('.md')
+          ? customFilename
+          : customFilename + '.md'
       }
 
       // 回退到原有逻辑
       if (!isCreate) return pagePath!
-      if (globalData.some((v) => v.title === title)) {
-        return toUniqueFilename(title)
-      }
-      return toFilename(title)
+      return title.endsWith('.md') ? title : title + '.md'
     })()
 
-    const data: any = {
+    const data: Partial<PageData> = {
       content: markdownContent,
       title: title,
       tags: [],
-      createTime: initial?.createTime ?? Date.now(),
+      created: initial?.created ?? new Date().toISOString(),
       draft: false,
     }
 
@@ -272,7 +290,11 @@ export const mount = async (selector: string, operationSelector: string) => {
     return {
       path,
       content: markdownContent,
-      data,
+      data: {
+        ...data,
+        title: title,
+        tags: data.tags || [],
+      } as PageData,
       assets,
     }
   }
@@ -512,7 +534,7 @@ export const mount = async (selector: string, operationSelector: string) => {
       const markdownContent = editor.getValue()
       const imageRegex = /!\[.*?\]\(\/post-assets\/([^)]+)\)/g
       const assets: string[] = []
-      const matches = markdownContent.matchAll(imageRegex)
+      const matches = Array.from(markdownContent.matchAll(imageRegex))
       for (const match of matches) {
         assets.push(`/post-assets/${match[1]}`)
       }
@@ -532,7 +554,7 @@ export const mount = async (selector: string, operationSelector: string) => {
       const markdownContent = editor.getValue()
       const imageRegex = /!\[.*?\]\(\/post-assets\/([^)]+)\)/g
       const assets: string[] = []
-      const matches = markdownContent.matchAll(imageRegex)
+      const matches = Array.from(markdownContent.matchAll(imageRegex))
       for (const match of matches) {
         assets.push(`/post-assets/${match[1]}`)
       }
@@ -615,7 +637,7 @@ export const mount = async (selector: string, operationSelector: string) => {
 
 interface SavedData {
   data: Partial<PageData>
-  assets: Array<{ url: string; file: File }>
+  assets: Array<{ name: string; url: string; file: File }>
   content: string
 }
 

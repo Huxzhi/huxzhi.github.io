@@ -2,7 +2,11 @@ import config from '@/../urodele.config'
 import { getLocalUser } from '@/hooks/useStorage'
 import { parseFrontmatter } from '@/utils/yaml.mjs'
 import { Octokit } from 'octokit'
-import { DeletePageByPath, ReadPageByPath, WritePage } from '../../shared/pageData'
+import {
+  DeletePageByPath,
+  ReadPageByPath,
+  WritePage,
+} from '../../shared/pageData'
 
 const { repo: REPO, login: OWNER } = config.github
 
@@ -16,8 +20,8 @@ const getOc = () => {
 }
 
 export const readPageByPath: ReadPageByPath = async (_id) => {
-  const id = _id.replace(/\/$/, '')
-  const path = `src/blog/${id}.md`
+  // _id 现在是完整路径如 "post/CLS偏移问题.md"
+  const path = `src/content/${_id}`
   const octokit = getOc()
   const { data } = await octokit.rest.repos.getContent({
     owner: OWNER,
@@ -41,24 +45,14 @@ export const readPageByPath: ReadPageByPath = async (_id) => {
   const parsed = parseFrontmatter(markdownContent)
   const frontmatter = parsed.data
 
-  // Parse time from new format (created/updated strings) or old format (createTime/updateTime numbers)
-  const parseTime = (timeStr?: string, fallbackTimestamp?: number): number => {
-    if (timeStr) {
-      const parsed = new Date(timeStr).getTime()
-      if (!isNaN(parsed)) return parsed
-    }
-    return fallbackTimestamp || Date.now()
-  }
-
   return {
     content: markdownContent,
     title: frontmatter.title || 'Untitled',
     tags: frontmatter.tags || [],
-    createTime: parseTime(frontmatter.created, frontmatter.createTime),
-    updateTime: parseTime(frontmatter.updated, frontmatter.updateTime),
+    created: frontmatter.created || new Date().toISOString(),
+    updated: frontmatter.updated || new Date().toISOString(),
     draft: frontmatter.draft || false,
     category: frontmatter.category,
-    id,
     path,
   }
 }
